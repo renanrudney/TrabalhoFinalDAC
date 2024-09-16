@@ -1,0 +1,123 @@
+CREATE DATABASE DACDB;
+
+CREATE SCHEMA cliente;
+CREATE SCHEMA funcionario;
+CREATE SCHEMA reserva_cud;
+CREATE SCHEMA reserva_read;
+CREATE SCHEMA voo;
+
+/* MS Funcionario */
+CREATE TABLE Funcionario.Funcionario(
+	id_usuario INT,
+	nome VARCHAR(50),
+	cpf VARCHAR(11),
+	email VARCHAR(30),
+	telefone VARCHAR(9),
+	ativo BOOL,
+	CONSTRAINT pk_funcionario PRIMARY KEY (id_usuario)
+);
+
+/* MS Cliente */
+CREATE TABLE Cliente.Endereco(
+	id SERIAL,
+	rua VARCHAR(30),
+	numero INT,
+	complemento VARCHAR(30),
+	cep VARCHAR(8),
+	cidade VARCHAR(30),
+	estado VARCHAR(2),
+	CONSTRAINT pk_endereco PRIMARY KEY (id)
+);
+
+CREATE TABLE Cliente.Cliente(
+	id_usuario INT,
+	id_endereco INT,
+	cpf VARCHAR(11),
+	nome VARCHAR(50),
+	email VARCHAR(30),
+	milhas DOUBLE PRECISION,
+	CONSTRAINT pk_cliente PRIMARY KEY (id_usuario),
+	CONSTRAINT fk_cliente FOREIGN KEY (id_endereco) REFERENCES Cliente.Endereco(id)
+);
+
+CREATE TABLE Cliente.Transacao(
+	id SERIAL,
+	id_cliente INT,
+	data_hora TIMESTAMP,
+	qtd_milhas DOUBLE PRECISION,
+	entrada BOOL,
+	descricao VARCHAR(100),
+	CONSTRAINT pk_transacao PRIMARY KEY (id),
+	CONSTRAINT fk_transacao FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id_usuario)
+);
+
+/* MS Voos */
+/* Pré-cadastrado (criar inserts conforme necessidade) */
+CREATE TABLE Voo.Aeroporto(
+	cod VARCHAR(3),
+	nome VARCHAR(30),
+	cidade VARCHAR(30),
+	estado VARCHAR(2),
+	CONSTRAINT pk_aeroporto PRIMARY KEY (cod)
+);
+
+CREATE TABLE Voo.Voo(
+	cod VARCHAR(8),
+	aeroporto_origem VARCHAR(3),
+	aeroporto_destino VARCHAR(3),
+	data VARCHAR(10),
+	valor_passagem DOUBLE PRECISION,
+	qtd_poltronas_total INT,
+	qtd_poltronas_ocupadas INT,
+	CONSTRAINT pk_voo PRIMARY KEY (cod),
+	CONSTRAINT fk1_voo FOREIGN KEY (aeroporto_origem) REFERENCES Voo.Aeroporto(cod),
+	CONSTRAINT fk2_voo FOREIGN KEY (aeroporto_destino) REFERENCES Voo.Aeroporto(cod)
+);
+
+/* MS Reserva para CUD */
+CREATE TABLE Reserva_cud.Estado_reserva(
+	cod SERIAL,
+	sigla VARCHAR(5),
+	descricao VARCHAR(50),
+	CONSTRAINT pk_estado_reserva PRIMARY KEY (cod)
+);
+
+CREATE TABLE Reserva_cud.Reserva(
+	cod VARCHAR(6),
+	cod_estado INT,
+	cod_voo VARCHAR(8),
+	id_cliente INT,
+	data_hora TIMESTAMP,
+	CONSTRAINT pk_reserva PRIMARY KEY (cod),
+	CONSTRAINT fk_reserva FOREIGN KEY (cod_estado) REFERENCES Reserva_cud.Estado_reserva(cod)
+);
+
+CREATE TABLE Reserva_cud.Log_reserva(
+	id SERIAL,
+	cod_reserva VARCHAR(6),
+	estado_origem INT,
+	estado_destino INT,
+	data_hora TIMESTAMP,
+	CONSTRAINT pk_log_reserva PRIMARY KEY (id),
+	CONSTRAINT fk1_log_reserva FOREIGN KEY (cod_reserva) REFERENCES Reserva_cud.Reserva(cod),
+	CONSTRAINT fk2_log_reserva FOREIGN KEY (estado_origem) REFERENCES Reserva_cud.Estado_reserva(cod),
+	CONSTRAINT fk3_log_reserva FOREIGN KEY (estado_destino) REFERENCES Reserva_cud.Estado_reserva(cod)
+);
+
+/* MS Reserva para Read */
+CREATE TABLE Reserva_read.Estado_reserva(
+	cod SERIAL,
+	sigla VARCHAR(5),
+	descricao VARCHAR(50),
+	CONSTRAINT pk_estado_reserva PRIMARY KEY (cod)
+);
+
+CREATE TABLE Reserva_read.Reserva(
+	cod VARCHAR(6),
+	cod_estado INT,
+	cod_voo VARCHAR(8),
+	id_cliente INT,
+	data_hora TIMESTAMP,
+	CONSTRAINT pk_reserva PRIMARY KEY (cod),
+	CONSTRAINT fk_reserva FOREIGN KEY (cod_estado) REFERENCES Reserva_read.Estado_reserva(cod)
+);
