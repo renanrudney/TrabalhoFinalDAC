@@ -1,0 +1,17 @@
+services:
+
+  pg16:
+    image: postgres:16-alpine
+    container_name: dac-pg16
+    hostname: dac-pg16
+    volumes:
+      - empresa-area:/var/lib/postgresql/data
+      - /home/albano/github/TrabalhoFinalDAC/postgresql/init.sql:/tmp/init.sql
+      - /home/albano/github/TrabalhoFinalDAC/postgresql/docker-entrypoint.sh:/docker-entrypoint-initdb.d/docker-entrypoint.sh
+    ports:
+      - "30001:5432"
+    environment:
+      POSTGRES_PASSWORD: "grupodac"
+
+volumes:
+  empresa-area:
