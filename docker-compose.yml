@@ -1,18 +1,45 @@
 services:
-
-  pg16:
+  empresa-aerea-pg16:
     image: postgres:16-alpine
     container_name: dac-pg16
     hostname: dac-pg16
     volumes:
-      - empresa-aerea:/var/lib/postgresql/data
+      - empresa-aerea-pg:/var/lib/postgresql/data
       - /home/albano/github/TrabalhoFinalDAC/postgresql/init.sql:/tmp/init.sql
       - /home/albano/github/TrabalhoFinalDAC/postgresql/docker-entrypoint.sh:/docker-entrypoint-initdb.d/docker-entrypoint.sh
     ports:
       - "30001:5432"
     environment:
-      POSTGRES_PASSWORD: "grupodac"
+      DBPOSTGRES: dacdb
+      POSTGRES_USER: admdac
+      POSTGRES_PASSWORD: "dacsecret"
+    networks:
+      - dac-net
+
+  empresa-aerea-mongo:
+    image: mongo
+    container_name: dac-mongo
+    hostname: dac-mongo 
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admdac
+      MONGO_INITDB_ROOT_PASSWORD: "dacsecret"
+    ports:
+      - "30002:27017"
+    volumes:
+      - empresa-aerea-mongo:/data/db
+      - ./mongodb/init.js:/docker-entrypoint-initdb.d/init.js
+    networks:
+      - dac-net
 
 volumes:
-  empresa-aerea:
-    name: empresa-aerea
+  empresa-aerea-pg:
+    driver: local
+    name: empresa-aerea-pg
+  empresa-aerea-mongo:
+    driver: local
+    name: empresa-aerea-mongo 
+
+
+networks:
+  dac-net:
+    name: "dac-net"
