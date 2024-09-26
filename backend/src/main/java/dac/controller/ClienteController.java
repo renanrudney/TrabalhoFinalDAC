@@ -19,87 +19,88 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import dac.dto.ClienteDTO;
-import dac.entity.ms_Cliente.Cliente;
+import dac.entity.ms_cliente.Cliente;
 import dac.repository.ClienteRepository;
 
 @CrossOrigin
 @RestController
-public class ClienteController 
-{
+public class ClienteController {
 	@Autowired
 	ModelMapper mapper;
 	@Autowired
 	ClienteRepository repoCliente;
-	
+
 	@GetMapping("/Cliente")
-	public List<ClienteDTO> buscarTodosClientes()
-	{
+	public List<ClienteDTO> buscarTodosClientes() {
 		List<Cliente> buscarClientes = repoCliente.findAll();
 		List<ClienteDTO> lista = new ArrayList<>();
-		
-		for(Cliente Cliente : buscarClientes)
+
+		for (Cliente Cliente : buscarClientes)
 			lista.add(mapper.map(Cliente, ClienteDTO.class));
-		
+
 		return lista;
 	}
-	
+
 	@GetMapping("/Cliente/{id}")
-	public ClienteDTO buscarCliente(@PathVariable Long id)
-	{
+	public ClienteDTO buscarCliente(@PathVariable Long id) {
 		Optional<Cliente> buscarCliente = repoCliente.findById(id);
-		
-		if(buscarCliente.isEmpty())
+
+		if (buscarCliente.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe Cliente com esse id!");
-		
+
 		return mapper.map(buscarCliente.get(), ClienteDTO.class);
 	}
-	
+
 	@PostMapping("/Cliente")
-	public ResponseEntity<ClienteDTO> criarCliente(@RequestBody ClienteDTO ClienteRecebido)
-	{
-		// Validar Cliente
-		
+	public ResponseEntity<ClienteDTO> criarCliente(@RequestBody ClienteDTO ClienteRecebido) {
+
+		// Validar se o Cliente já existe
+		Cliente clienteJaExiste = repoCliente.findByCpf(ClienteRecebido.getCpf());
+		if (clienteJaExiste != null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe um Cliente com esse CPF!");
+		}
+
 		// Realizar requisição para microsserviço que cria um usuário e retorna o id
-		Long idRecebidoMicrosservico = 1L;
 		
+		Long idRecebidoMicrosservico = 1L;
+
 		Cliente novoCliente = mapper.map(ClienteRecebido, Cliente.class);
 		novoCliente.setIdUsuario(idRecebidoMicrosservico);
-		
-		novoCliente.setAtivo(true);
+
+		// novoCliente.setAtivo(true);
 		novoCliente = repoCliente.save(novoCliente);
-		
+
 		return ResponseEntity.created(null).body(mapper.map(novoCliente, ClienteDTO.class));
 	}
-	
-	// Se houver alteração de informações da entidade usuário, o orquestrador manda a alteração para o microsserviço correspondente
+
+	// Se houver alteração de informações da entidade usuário, o orquestrador manda
+	// a alteração para o microsserviço correspondente
 	@PutMapping("/Cliente/{id}")
-	public ClienteDTO atualizarCliente(@PathVariable Long id, @RequestBody ClienteDTO ClienteRecebido)
-	{
+	public ClienteDTO atualizarCliente(@PathVariable Long id, @RequestBody ClienteDTO ClienteRecebido) {
 		// Validar Cliente atualizado
-		
+
 		Optional<Cliente> buscarCliente = repoCliente.findById(id);
-		
-		if(buscarCliente.isEmpty())
+
+		if (buscarCliente.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe Cliente com esse id!");
-		
+
 		buscarCliente.get().setCpf(ClienteRecebido.getCpf());
 		buscarCliente.get().setEmail(ClienteRecebido.getEmail());
-		
+
 		buscarCliente.get().setNome(ClienteRecebido.getNome());
-		buscarCliente.get().setTelefone(ClienteRecebido.getTelefone());
-		
+		// buscarCliente.get().setTelefone(ClienteRecebido.getTelefone());
+
 		return mapper.map(repoCliente.save(buscarCliente.get()), ClienteDTO.class);
 	}
-	
+
 	@DeleteMapping("/Cliente/{id}")
-	public ClienteDTO removerCliente(@PathVariable Long id)
-	{
+	public ClienteDTO removerCliente(@PathVariable Long id) {
 		Optional<Cliente> buscarCliente = repoCliente.findById(id);
-		
-		if(buscarCliente.isEmpty())
+
+		if (buscarCliente.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe Cliente com esse id!");
-		
-		buscarCliente.get().setAtivo(false);
+
+		// buscarCliente.get().setAtivo(false);
 		return mapper.map(repoCliente.save(buscarCliente.get()), ClienteDTO.class);
 	}
 }
