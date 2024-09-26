@@ -86,6 +86,15 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
 //   exampleProxy(req, res, next)
 // })
 
+// AUTH
+app.post('/login', (req, res, next) => {
+  authServiceProxy(req, res, next);
+});
+
+app.post('/logout', function (req, res) {
+  res.json({ auth: false, token: null });
+});
+
 // config
 app.use(logger('dev'))
 app.use(helmet())
