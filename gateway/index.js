@@ -20,20 +20,80 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-// TODO: JWT Logic
 function verifyJWT(req, res, next) {
-  next();
+  return next() // TODO: Remove on final jwt version
+  const token = req.headers['authorization'].replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({
+      auth: false,
+      message: 'Token não fornecido.',
+    });
+  }
+
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
+    if (err) {
+      return res.status(500).json({ auth: false, message: 'Falha ao autenticar o token.' });
+    }
+
+    req.userId = decoded.id;
+    next();
+  });
 }
 
 // proxies
 // TODO: Add proxies
 // const exampleProxy = httpProxy('http://localhost:5002')
 
+const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
+  proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    try {
+      retBody = {};
+      retBody.login = bodyContent.login;
+      retBody.senha = bodyContent.senha;
+      bodyContent = retBody;
+    }
+    catch (e) {
+      console.log('- ERRO: ' + e);
+    }
+    return bodyContent;
+  },
+  proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
+    proxyReqOpts.headers['Content-Type'] = 'application/json';
+    proxyReqOpts.method = 'POST';
+    return proxyReqOpts;
+  },
+  userResDecorator: function (proxyRes, proxyResData, userReq, userRes) {
+    if (proxyRes.statusCode == 200) {
+      var str = Buffer.from(proxyResData).toString('utf-8');
+      var objBody = JSON.parse(str);
+      const id = objBody.id;
+      const token = jwt.sign({ id }, process.env.SECRET, {
+        expiresIn: 300 // expira em 5 min
+      });
+      userRes.status(200);
+      return { auth: true, token: token, data: objBody };
+    }
+    else {
+      userRes.status(401);
+      return { message: 'Login inválido!' };
+    }
+  }
+});
+
 // routes
 // TODO: Add routes
 // app.get('/example', function (req, res, next) {
 //   exampleProxy(req, res, next)
 // })
+
+// AUTH
+app.post('/login', (req, res, next) => {
+  authServiceProxy(req, res, next);
+});
+
+app.post('/logout', function (req, res) {
+  res.json({ auth: false, token: null });
+});
 
 // config
 app.use(logger('dev'))
