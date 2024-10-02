@@ -80,19 +80,104 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
   }
 });
 
-// routes
-// TODO: Add routes
-// app.get('/example', function (req, res, next) {
-//   exampleProxy(req, res, next)
-// })
+const clientesPostServiceProxy = 'TODO';
+const clientesServiceProxy = 'TODO';
+const reservasPostServiceProxy = 'TODO';
+const reservasServiceProxy = 'TODO';
+const milhasServiceProxy = 'TODO';
+const milhasPostServiceProxy = 'TODO';
+const funcionariosServiceProxy = 'TODO';
+const funcionariosPostServiceProxy = 'TODO';
+const funcionariosPutServiceProxy = 'TODO';
+const voosServiceProxy = 'TODO';
+const voosPostServiceProxy = 'TODO';
 
-// AUTH
+// Routes
+
+// Auth
 app.post('/login', (req, res, next) => {
   authServiceProxy(req, res, next);
 });
 
 app.post('/logout', function (req, res) {
   res.json({ auth: false, token: null });
+});
+
+// Clientes
+app.post('/clientes', function (req, res, next) {
+  clientesPostServiceProxy(req, res, next);
+});
+
+app.get('/clientes', function (req, res, next) {
+  clientesServiceProxy(req, res, next);
+});
+
+// Reservas
+app.get('/reservas', verifyJWT, function (req, res, next) {
+  reservasPostServiceProxy(req, res, next);
+});
+
+app.post('/reservas', verifyJWT, function (req, res, next) {
+  reservasServiceProxy(req, res, next);
+});
+
+app.get('/reservas/:id', verifyJWT, function (req, res, next) {
+  reservasServiceProxy(req, res, next);
+});
+
+app.post('/reservas/:id/cancelar', verifyJWT, function (req, res, next) {
+  reservasServiceProxy(req, res, next);
+});
+
+app.post('/reservas/:id/checkin', verifyJWT, function (req, res, next) {
+  reservasServiceProxy(req, res, next);
+});
+
+// Milhas
+app.get('/milhas', verifyJWT, function (req, res, next) {
+  milhasServiceProxy(req, res, next);
+});
+
+app.post('/milhas', verifyJWT, function (req, res, next) {
+  milhasPostServiceProxy(req, res, next);
+});
+
+// Funcionarios
+app.get('/funcionarios', verifyJWT, function (req, res, next) {
+  funcionariosServiceProxy(req, res, next);
+});
+
+app.post('/funcionarios', verifyJWT, function (req, res, next) {
+  funcionariosPostServiceProxy(req, res, next);
+});
+
+app.put('/funcionarios/:id', verifyJWT, function (req, res, next) {
+  funcionariosPutServiceProxy(req, res, next);
+});
+
+app.delete('/funcionarios/:id', verifyJWT, function (req, res, next) {
+  funcionariosServiceProxy(req, res, next);
+});
+
+// Voos
+app.get('/voos', verifyJWT, function (req, res, next) {
+  voosServiceProxy(req, res, next);
+});
+
+app.post('/voos', verifyJWT, function (req, res, next) {
+  voosPostServiceProxy(req, res, next);
+});
+
+app.post('/voos/:id/reserva/:id_reserva/embarque', verifyJWT, function (req, res, next) {
+  voosServiceProxy(req, res, next);
+});
+
+app.post('/voos/:id/cancelar', verifyJWT, function (req, res, next) {
+  voosServiceProxy(req, res, next);
+});
+
+app.post('/voos/:id/realizar', verifyJWT, function (req, res, next) {
+  voosServiceProxy(req, res, next);
 });
 
 // config
