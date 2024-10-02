@@ -3,11 +3,12 @@ import { TransacaoMilhasService } from '../../../services/transacao-milhas.servi
 import { TransacaoMilhas } from '../../../models/transacaoMilhas/transacao-milhas.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-comprar-milhas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './comprar-milhas.component.html',
   styleUrl: './comprar-milhas.component.scss'
 })
@@ -16,6 +17,7 @@ export class ComprarMilhasComponent {
 
   constructor(
     private transacaoMilhasService: TransacaoMilhasService,
+    private router: Router
   ) {}
 
   comprarMilhas(quantidade: number): void{
@@ -24,7 +26,7 @@ export class ComprarMilhasComponent {
       let compra = new TransacaoMilhas ('00000000004', new Date(), quantidade, 'entrada', 'COMPRA DE MILHAS');
       this.transacaoMilhasService.pushTransacao(compra);
       alert("Compra realizada!");
-      //route para inicio de cliente
+      this.router.navigate(['/home-cliente'])
     }
   }
 }
