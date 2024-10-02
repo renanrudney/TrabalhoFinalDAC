@@ -1,0 +1,38 @@
+<div class="container mt-5">
+  <h2>Extrato de Milhas</h2>
+  
+  <!-- Quantidade atual de milhas -->
+  <div class="row">
+    <div class="col">
+      <h4>Milhas Atuais: MILHAS</h4>
+    </div>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Data/Hora</th>
+        <th>Quantidade de milhas/Valor (R$)</th>
+        <th>Milhas Compradas/Usadas</th>
+        <th>Descrição</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <ng-container *ngIf="transacoes">
+        <div *ngFor="let transacao of transacoes">
+          <tr>
+            <td>{{ transacao.dataHora }}</td>
+            @if ( transacao.tipo === 'entrada') {
+              <td>{{ transacao.quantidadeMilhas * 5}}</td>
+            } @else {
+              <td>{{ transacao.quantidadeMilhas }}</td>
+            }
+            <td>{{ transacao.tipo }}</td>
+            <td>{{ transacao.descricao }}</td>
+          </tr>
+        </div>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
