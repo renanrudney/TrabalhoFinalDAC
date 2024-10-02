@@ -1,0 +1,8 @@
+<h2>Comprar Milhas</h2>
+
+<label for="milhas">Quantas Milhas deseja comprar?</label>
+<input type="number" id="milhas" name="milhas" [(ngModel)]="quantidadeMilhas">
+
+<p>Total em Reais: R${{ quantidadeMilhas * 5 }}</p>
+
+<button type="button" (click)="comprarMilhas(quantidadeMilhas)">Comprar</button>
