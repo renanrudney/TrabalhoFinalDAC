@@ -36,8 +36,8 @@ public class Voo
 	private double valorPassagem;
 	
 	@Column(name="qtd_poltronas_total")
-	private Long qtdPoltronasTotal;
+	private int qtdPoltronasTotal;
 	
 	@Column(name="qtd_poltronas_ocupadas")
-	private Long qtdPoltronasOcupadas;
+	private int qtdPoltronasOcupadas;
 }

@@ -3,6 +3,7 @@ package dac.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +63,12 @@ public class ClienteController {
 
 		// Realizar requisição para microsserviço que cria um usuário e retorna o id
 		
-		Long idRecebidoMicrosservico = 1L;
+		Long idRecebidoMicrosservico = getRandomLong(1L, 100L);
 
 		Cliente novoCliente = mapper.map(ClienteRecebido, Cliente.class);
 		novoCliente.setIdUsuario(idRecebidoMicrosservico);
 
-		// novoCliente.setAtivo(true);
+		novoCliente.setAtivo(true);
 		novoCliente = repoCliente.save(novoCliente);
 
 		return ResponseEntity.created(null).body(mapper.map(novoCliente, ClienteDTO.class));
@@ -86,9 +87,7 @@ public class ClienteController {
 
 		buscarCliente.get().setCpf(ClienteRecebido.getCpf());
 		buscarCliente.get().setEmail(ClienteRecebido.getEmail());
-
 		buscarCliente.get().setNome(ClienteRecebido.getNome());
-		// buscarCliente.get().setTelefone(ClienteRecebido.getTelefone());
 
 		return mapper.map(repoCliente.save(buscarCliente.get()), ClienteDTO.class);
 	}
@@ -100,7 +99,21 @@ public class ClienteController {
 		if (buscarCliente.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe Cliente com esse id!");
 
-		// buscarCliente.get().setAtivo(false);
+		buscarCliente.get().setAtivo(false);
 		return mapper.map(repoCliente.save(buscarCliente.get()), ClienteDTO.class);
 	}
+
+
+	// Função temporária para teste de inserção de clientes no banco
+	private static final Random random = new Random();
+
+    public static long getRandomLong(long min, long max) {
+        // Garante que o valor mínimo seja menor que o máximo
+        if (min >= max) {
+            throw new IllegalArgumentException("O valor mínimo deve ser menor que o valor máximo.");
+        }
+        
+        // Gera um número aleatório no intervalo especificado
+        return min + (long) (random.nextDouble() * (max - min));
+    }
 }
