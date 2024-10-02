@@ -12,7 +12,7 @@
     <thead>
       <tr>
         <th>Data/Hora</th>
-        <th>Quantidade de milhas/Valor (R$)</th>
+        <th>Valor (R$)</th>
         <th>Milhas Compradas/Usadas</th>
         <th>Descrição</th>
       </tr>
@@ -26,9 +26,9 @@
             @if ( transacao.tipo === 'entrada') {
               <td>{{ transacao.quantidadeMilhas * 5}}</td>
             } @else {
-              <td>{{ transacao.quantidadeMilhas }}</td>
+              <td>-</td>
             }
-            <td>{{ transacao.tipo }}</td>
+            <td>{{ transacao.quantidadeMilhas }}</td>
             <td>{{ transacao.descricao }}</td>
           </tr>
         </div>
