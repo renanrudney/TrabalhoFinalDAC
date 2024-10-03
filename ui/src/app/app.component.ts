@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { InicialClienteComponent } from './pages/inicial-cliente';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [InicialClienteComponent],
+  template: '<app-tela-inicial-cliente></app-tela-inicial-cliente>',
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'ui';
-}
+export class AppComponent {}
