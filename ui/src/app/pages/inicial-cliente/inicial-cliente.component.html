@@ -1,0 +1,44 @@
+<div class="container">
+    <!-- Menu -->
+    <nav>
+      <ul>
+        <li><a href="#">Ver Perfil</a></li>
+        <li><a href="#">Reservar Voo</a></li>
+        <li><a href="#">Consultar Voos</a></li>
+      </ul>
+    </nav>
+  
+    <!-- Saldo em milhas -->
+    <section class="saldo-milhas">
+      <h2>Saldo Atual em Milhas: {{ saldoMilhas }} milhas</h2>
+    </section>
+  
+    <!-- Tabela de Reservas e Voos -->
+    <section class="reservas">
+      <h3>Minhas Reservas e Voos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Aeroporto Origem</th>
+            <th>Aeroporto Destino</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let voo of voos | orderBy: 'dataHora'">
+            <td>{{ voo.dataHora | date: 'short' }}</td>
+            <td>{{ voo.origem }}</td>
+            <td>{{ voo.destino }}</td>
+            <td>{{ voo.status }}</td>
+            <td>
+              <button (click)="verReserva(voo)">Ver Reserva</button>
+              <button *ngIf="voo.status === 'Reservado'" (click)="cancelarReserva(voo)">Cancelar Reserva</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+  
