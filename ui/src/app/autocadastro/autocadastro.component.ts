@@ -6,7 +6,7 @@ import axios from 'axios';
   selector: 'app-autocadastro',
   standalone: true,
   templateUrl: './autocadastro.component.html',
-  styleUrls: ['./autocadastro.component.css'],
+  styleUrls: ['./autocadastro.component.scss'],
   imports: [FormsModule] 
 })
 export class AutocadastroComponent {
