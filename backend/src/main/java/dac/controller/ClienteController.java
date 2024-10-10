@@ -52,6 +52,7 @@ public class ClienteController {
 		return mapper.map(buscarCliente.get(), ClienteDTO.class);
 	}
 
+	@SuppressWarnings("null")
 	@PostMapping("/Cliente")
 	public ResponseEntity<ClienteDTO> criarCliente(@RequestBody ClienteDTO ClienteRecebido) {
 

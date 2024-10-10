@@ -1,11 +1,8 @@
 package dac.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,6 +50,7 @@ public class AeroportoController {
 		return mapper.map(buscarAeroporto.get(), AeroportoDTO.class);
 	}
 
+	@SuppressWarnings("null")
 	@PostMapping("/Aeroporto")
 	public ResponseEntity<AeroportoDTO> criarAeroporto(@RequestBody AeroportoDTO AeroportoRecebido) {
 
