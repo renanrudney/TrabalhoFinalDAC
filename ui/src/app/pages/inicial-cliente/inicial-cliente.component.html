@@ -27,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let voo of voos | orderBy: 'dataHora'">
+          <tr *ngFor="let voo of voos"> <!-- | orderBy: 'dataHora' -->
             <td>{{ voo.dataHora | date: 'short' }}</td>
             <td>{{ voo.origem }}</td>
             <td>{{ voo.destino }}</td>
