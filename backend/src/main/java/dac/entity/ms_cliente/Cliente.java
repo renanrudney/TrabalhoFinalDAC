@@ -1,5 +1,6 @@
 package dac.entity.ms_cliente;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,7 +22,7 @@ public class Cliente
 	@Column(name="id_usuario")
 	private Long idUsuario;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_endereco", referencedColumnName="id")
 	private Endereco endereco;
 	
@@ -36,4 +37,7 @@ public class Cliente
 	
 	@Column(name="milhas")
 	private double milhas;
+
+	@Column(name="ativo")
+	private boolean ativo;
 }

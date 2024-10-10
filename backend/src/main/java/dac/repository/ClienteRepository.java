@@ -6,5 +6,5 @@ import dac.entity.ms_cliente.Cliente;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long>
 {
-	
+    public Cliente findByCpf(String cpf);
 }

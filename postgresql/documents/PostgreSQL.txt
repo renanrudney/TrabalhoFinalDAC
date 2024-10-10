@@ -36,6 +36,7 @@ CREATE TABLE Cliente.Cliente(
 	nome VARCHAR(50),
 	email VARCHAR(30),
 	milhas DOUBLE PRECISION,
+	ativo BOOL,
 	CONSTRAINT pk_cliente PRIMARY KEY (id_usuario),
 	CONSTRAINT fk_cliente FOREIGN KEY (id_endereco) REFERENCES Cliente.Endereco(id)
 );
