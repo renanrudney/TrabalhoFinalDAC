@@ -47,10 +47,10 @@ function verifyJWT(req, res, next) {
 const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
-      retBody = {};
-      retBody.login = bodyContent.login;
-      retBody.senha = bodyContent.senha;
-      bodyContent = retBody;
+      reqBody = {};
+      reqBody.login = bodyContent.login;
+      reqBody.senha = bodyContent.senha;
+      bodyContent = reqBody;
     }
     catch (e) {
       console.log('- ERRO: ' + e);
