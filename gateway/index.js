@@ -80,17 +80,57 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
   }
 });
 
-const clientesPostServiceProxy = 'TODO';
-const clientesServiceProxy = 'TODO';
-const reservasPostServiceProxy = 'TODO';
-const reservasServiceProxy = 'TODO';
-const milhasServiceProxy = 'TODO';
-const milhasPostServiceProxy = 'TODO';
-const funcionariosServiceProxy = 'TODO';
-const funcionariosPostServiceProxy = 'TODO';
-const funcionariosPutServiceProxy = 'TODO';
-const voosServiceProxy = 'TODO';
-const voosPostServiceProxy = 'TODO';
+const clientesPostServiceProxy = 'TODO'; // 5001
+const clientesServiceProxy = 'TODO'; // 5001
+const reservasPostServiceProxy = 'TODO'; // 5002
+const reservasServiceProxy = 'TODO'; // 5002
+const milhasServiceProxy = 'TODO'; // 5003
+const milhasPostServiceProxy = 'TODO'; // 5003
+const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5004');
+const funcionariosPostServiceProxy = httpProxy('http://host.docker.internal:5004', {
+  proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    try {
+      reqBody = {};
+      reqBody.nome = bodyContent.nome;
+      reqBody.email = bodyContent.email;
+      reqBody.cpf = bodyContent.cpf;
+      reqBody.telefone = bodyContent.telefone;
+      bodyContent = reqBody;
+    }
+    catch (e) {
+      console.log('- ERRO: ' + e);
+    }
+    return bodyContent;
+  },
+  proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
+    proxyReqOpts.headers['Content-Type'] = 'application/json';
+    proxyReqOpts.method = 'POST';
+    return proxyReqOpts;
+  }
+});
+const funcionariosPutServiceProxy = httpProxy('http://host.docker.internal:5004', {
+  proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    try {
+      reqBody = {};
+      reqBody.nome = bodyContent.nome;
+      reqBody.email = bodyContent.email;
+      reqBody.cpf = bodyContent.cpf;
+      reqBody.telefone = bodyContent.telefone;
+      bodyContent = reqBody;
+    }
+    catch (e) {
+      console.log('- ERRO: ' + e);
+    }
+    return bodyContent;
+  },
+  proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
+    proxyReqOpts.headers['Content-Type'] = 'application/json';
+    proxyReqOpts.method = 'PUT';
+    return proxyReqOpts;
+  }
+});
+const voosServiceProxy = 'TODO'; // 5005
+const voosPostServiceProxy = 'TODO'; // 5005
 
 // Routes
 
