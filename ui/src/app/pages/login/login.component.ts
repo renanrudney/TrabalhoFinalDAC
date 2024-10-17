@@ -20,12 +20,10 @@ export class LoginComponent {
 
   logar() {
     if (this.authService.login(this.login, this.senha)) {
-      console.log('Logado com successo');
-      this.loginFailed = false;
+      // Redireciona para a página inicial ou outra página se o login for bem-sucedido
       this.router.navigate(['/home-cliente']);
     } else {
-      console.log('Login inválido');
-      this.loginFailed = true;
+      this.loginFailed = true; // Exibir mensagem de erro
     }
   }
 }
