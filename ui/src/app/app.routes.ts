@@ -5,6 +5,8 @@ import { ExtratoMilhasComponent } from './pages/cliente/extrato-milhas/extrato-m
 import { ComprarMilhasComponent } from './pages/cliente/comprar-milhas/comprar-milhas.component';
 import { HomeClienteComponent } from './pages/cliente/home-cliente/home-cliente.component';
 import { LoginComponent } from './pages/login/login.component';
+import { HomeFuncionarioComponent } from './pages/funcionario/home-funcionario/home-funcionario.component';
+import { CrudFuncionarioComponent } from './pages/funcionario/crud-funcionario/crud-funcionario.component';
 
 export const routes: Routes = [
 
@@ -14,5 +16,7 @@ export const routes: Routes = [
     { path: 'inicial-cliente', component: InicialClienteComponent },
     { path: 'extrato-milhas', component: ExtratoMilhasComponent },
     { path: 'comprar-milhas', component: ComprarMilhasComponent },
-    //{ path: 'home-cliente', component: HomeClienteComponent},
+    { path: 'home-cliente', component: HomeClienteComponent},
+    { path: 'home-funcionario', component: HomeFuncionarioComponent},
+    { path: 'crud-funcionario', component: CrudFuncionarioComponent},
 ];

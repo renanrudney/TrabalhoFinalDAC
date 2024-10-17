@@ -54,6 +54,7 @@ public class FuncionarioController
 		return mapper.map(buscarFuncionario.get(), FuncionarioDTO.class);
 	}
 	
+	@SuppressWarnings("null")
 	@PostMapping("/funcionario")
 	public ResponseEntity<FuncionarioDTO> criarFuncionario(@RequestBody FuncionarioDTO funcionarioRecebido)
 	{

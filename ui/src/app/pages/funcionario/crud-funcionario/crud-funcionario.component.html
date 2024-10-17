@@ -1,0 +1,36 @@
+<div class="container mt-4">
+  <h2 class="text-center">Menu do Funcionario</h2>
+  
+  <div class="mb-4">
+    <h4>Operações:</h4>
+    <div class="d-flex justify-content-between mb-3">
+      <a routerLink="/" class="btn btn-primary btn-lg mr-2">Inserção de Funcionário</a>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <h4>Funcionários</h4>
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Email</th>
+          <th>Telefone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let funcionario of funcionarios">
+          <td>{{ funcionario.nome }}</td>
+          <td>{{ funcionario.cpf }}</td>
+          <td>{{ funcionario.email }}</td>
+          <td>{{ funcionario.telefone }}</td>
+          <td>
+            <button class="btn btn-info" (click)="alterarFuncionario(funcionario.id)">Alterar</button>
+            <button class="btn btn-danger" (click)="removerFuncionario(funcionario.id)">Remover</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
