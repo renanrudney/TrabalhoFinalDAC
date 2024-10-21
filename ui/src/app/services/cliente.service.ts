@@ -7,7 +7,9 @@ import { Observable, of } from 'rxjs';
 })
 export class ClienteService {
 
-  Clientes:Array<Cliente> = [];
+  Clientes: Array<Cliente> = [
+    new Cliente('00000000000','Joao Silva','a@email.com','Rua x,1',null,'80000000','Curitiba','PR',100,1)
+  ];
 
   constructor() { }
 
@@ -15,4 +17,17 @@ export class ClienteService {
     this.Clientes.push(novoCliente);
     return of(novoCliente);
   }
+
+  getClienteByLogin(login: string | null): Cliente | undefined{
+    return this.Clientes.find(cliente => cliente.email === login);
+  }
+
+  substrairMilhas(milhas: number, email: string): void {
+    this.Clientes.filter(cliente => {
+      if(cliente.email === email){
+        cliente.milhas -= milhas;
+      }
+    });
+  }
+
 }

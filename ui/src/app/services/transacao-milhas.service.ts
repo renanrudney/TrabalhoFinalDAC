@@ -8,10 +8,10 @@ import {Observable, of} from 'rxjs';
 export class TransacaoMilhasService {
 
   transactions: TransacaoMilhas[] = [
-    new TransacaoMilhas('00000000000', new Date(2024,0,1,14,30), 123345, 'entrada', 'COMPRA DE MILHAS'),
-    new TransacaoMilhas('00000000001', new Date(2024,2,1,9,0), 6789, 'saida', 'CWB->GRU'),
-    new TransacaoMilhas('00000000002', new Date(2024,3,1,22,45), 23456, 'entrada', 'COMPRA DE MILHAS'),
-    new TransacaoMilhas('00000000003', new Date(2024,4,1,1,14), 9897, 'saida', 'GRU->CWB')
+    new TransacaoMilhas('a@email.com', new Date(2024,0,1,14,30), 123345, 'entrada', 'COMPRA DE MILHAS'),
+    new TransacaoMilhas('a@email.com', new Date(2024,2,1,9,0), 6789, 'saida', 'CWB->GRU'),
+    new TransacaoMilhas('a@email.com', new Date(2024,3,1,22,45), 23456, 'entrada', 'COMPRA DE MILHAS'),
+    new TransacaoMilhas('a@email.com', new Date(2024,4,1,1,14), 9897, 'saida', 'GRU->CWB')
   ];
 
   constructor() {}
@@ -20,7 +20,8 @@ export class TransacaoMilhasService {
     return of(this.transactions);
   }
 
-  pushTransacao(novaTransacao: TransacaoMilhas): void {
-    this.transactions.push(novaTransacao);
+  novaTransacao(cliente: string, milhas: number, descricao: string): void {
+    const transacao: TransacaoMilhas = new TransacaoMilhas (cliente,new Date(),milhas,"entrada",descricao);
+    this.transactions.push(transacao);
   }
 }

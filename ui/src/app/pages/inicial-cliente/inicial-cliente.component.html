@@ -1,44 +1,34 @@
-<div class="container">
-    <!-- Menu -->
-    <nav>
-      <ul>
-        <li><a href="#">Ver Perfil</a></li>
-        <li><a href="#">Reservar Voo</a></li>
-        <li><a href="#">Consultar Voos</a></li>
-      </ul>
-    </nav>
-  
+<div class="container mt-4">
     <!-- Saldo em milhas -->
-    <section class="saldo-milhas">
-      <h2>Saldo Atual em Milhas: {{ saldoMilhas }} milhas</h2>
-    </section>
+    <div class="mb-4">
+      <h4>Saldo em Milhas: <span class="badge bg-primary">{{ clienteLogado?.milhas }}</span></h4>
+    </div>
   
     <!-- Tabela de Reservas e Voos -->
-    <section class="reservas">
+    <div class="mb-4">
       <h3>Minhas Reservas e Voos</h3>
-      <table>
-        <thead>
+      <table class="table table-bordered">
+        <thead class="table-light">
           <tr>
             <th>Data/Hora</th>
             <th>Aeroporto Origem</th>
             <th>Aeroporto Destino</th>
-            <th>Status</th>
+            <th>Estado</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let voo of voos"> <!-- | orderBy: 'dataHora' -->
-            <td>{{ voo.dataHora | date: 'short' }}</td>
-            <td>{{ voo.origem }}</td>
-            <td>{{ voo.destino }}</td>
-            <td>{{ voo.status }}</td>
+          <tr *ngFor="let reserva of Reservas"> <!-- | orderBy: 'dataHora' -->
+            <td>{{ reserva.codigoReserva }}</td>
+            <td>{{ getVooOrigem(reserva.codigoVoo) }}</td>
+            <td>{{ getVooDestino(reserva.codigoVoo) }}</td>
+            <td>{{ reserva.estado }}</td>
             <td>
-              <button (click)="verReserva(voo)">Ver Reserva</button>
-              <button *ngIf="voo.status === 'Reservado'" (click)="cancelarReserva(voo)">Cancelar Reserva</button>
+              <button (click)="abrirModalVerReserva(reserva)">Ver Reserva</button>
+              <button *ngIf="reserva.estado === 'RESERVADO'" (click)="abrirModalCancelarReserva(reserva)">Cancelar Reserva</button>
             </td>
           </tr>
         </tbody>
       </table>
-    </section>
   </div>
   

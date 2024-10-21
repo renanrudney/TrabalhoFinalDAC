@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Reserva } from '../../../models/reserva/reserva.model';
+import { ReservaService } from '../../../services/reserva.service';
+import { VooService } from '../../../services/voo.service';
 
 @Component({
   selector: 'app-cancelar-reserva',
@@ -9,10 +12,19 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './cancelar-reserva.component.scss'
 })
 export class CancelarReservaComponent {
+  @Input() reserva!: Reserva;
+  constructor(public activeModal: NgbActiveModal, private reservaService: ReservaService, private vooService: VooService) {}
 
-  constructor(public activeModal: NgbActiveModal) {}
+  cancelarReserva(codigoReserva: string): void {
+    this.reservaService.cancelarReserva(codigoReserva);
+    this.activeModal.close()
+  }
 
-  cancelarReserva(): void {
-    
+  getVooOrigem(codigoVoo: string): string | undefined {
+    return this.vooService.getOrigem(codigoVoo);
+  }
+
+  getVooDestino(codigoVoo: string): string | undefined{
+    return this.vooService.getDestino(codigoVoo);
   }
 }

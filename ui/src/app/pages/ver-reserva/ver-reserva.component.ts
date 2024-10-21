@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Reserva } from '../../models/reserva/reserva.model';
+import { VooService } from '../../services/voo.service';
 
 @Component({
   selector: 'app-ver-reserva',
@@ -8,5 +11,14 @@ import { Component } from '@angular/core';
   styleUrl: './ver-reserva.component.scss'
 })
 export class VerReservaComponent {
+  @Input() reserva!: Reserva;
+  constructor(public activeModal: NgbActiveModal, private vooService: VooService) {}
 
+  getVooOrigem(codigoVoo: string): string | undefined {
+    return this.vooService.getOrigem(codigoVoo);
+  }
+
+  getVooDestino(codigoVoo: string): string | undefined{
+    return this.vooService.getDestino(codigoVoo);
+  }
 }

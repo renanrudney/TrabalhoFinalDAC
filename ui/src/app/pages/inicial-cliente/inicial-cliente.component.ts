@@ -1,57 +1,52 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-// Interface para representar os voos
-interface Voo {
-  dataHora: Date;
-  origem: string;
-  destino: string;
-  status: string;  // "Reservado", "Feito", "Cancelado"
-}
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { AuthService } from '../../services/auth.service';
+import { ClienteService } from '../../services/cliente.service';
+import { Cliente } from '../../models/cliente/cliente.model';
+import { Reserva } from '../../models/reserva/reserva.model';
+import { VooService } from '../../services/voo.service';
+import { Voo } from '../../models/voo/voo.model';
+import { ReservaService } from '../../services/reserva.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { VerReservaComponent } from '../ver-reserva/ver-reserva.component';
+import { CancelarReservaComponent } from '../cliente/cancelar-reserva/cancelar-reserva.component';
 
 @Component({
   selector: 'app-tela-inicial-cliente',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './inicial-cliente.component.html',
   styleUrls: ['./inicial-cliente.component.scss']
 })
 export class InicialClienteComponent {
-  saldoMilhas: number = 15000;  // Exemplo de saldo inicial
+  clienteLogado: Cliente | undefined = undefined;
+  Reservas: Array<Reserva> = [];
+  Voos: Array<Voo> = [];
 
-  // Exemplo de dados de voos
-  voos: Voo[] = [
-    {
-      dataHora: new Date('2024-10-05T10:30:00'),
-      origem: 'Aeroporto A',
-      destino: 'Aeroporto B',
-      status: 'Reservado'
-    },
-    {
-      dataHora: new Date('2024-09-25T14:15:00'),
-      origem: 'Aeroporto C',
-      destino: 'Aeroporto D',
-      status: 'Feito'
-    },
-    {
-      dataHora: new Date('2024-09-20T08:45:00'),
-      origem: 'Aeroporto E',
-      destino: 'Aeroporto F',
-      status: 'Cancelado'
-    }
-  ];
+ constructor(private authService: AuthService, private clienteService: ClienteService, private vooService: VooService, private reservaService: ReservaService, private modalService: NgbModal) {}
 
-  // Função para ver detalhes da reserva (R04)
-  verReserva(voo: Voo) {
-    alert(`Visualizando reserva do voo de ${voo.origem} para ${voo.destino}`);
+  ngOnInit(): void {
+    this.clienteLogado = this.clienteService.getClienteByLogin(this.authService.getUserLogin());
+    this.Voos.push(...this.vooService.getVoos());
   }
 
-  // Função para cancelar reserva (R08)
-  cancelarReserva(voo: Voo) {
-    if (confirm(`Tem certeza que deseja cancelar a reserva para o voo de ${voo.origem} para ${voo.destino}?`)) {
-      voo.status = 'Cancelado';
-      alert('Reserva cancelada com sucesso!');
-    }
+  getVooOrigem(codigoVoo: string): string | undefined {
+    return this.vooService.getOrigem(codigoVoo);
+  }
+
+  getVooDestino(codigoVoo: string): string | undefined{
+    return this.vooService.getDestino(codigoVoo);
+  }
+
+  abrirModalVerReserva(reserva: Reserva) {
+    const modalRef = this.modalService.open(VerReservaComponent);
+    modalRef.componentInstance.reserva = reserva;
+  }
+
+  abrirModalCancelarReserva(reserva: Reserva) {
+    const modalRef = this.modalService.open(CancelarReservaComponent);
+    modalRef.componentInstance.reserva = reserva;
   }
 }

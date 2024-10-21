@@ -1,1 +1,16 @@
-<p>ver-reserva works!</p>
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Ver Reserva {{ reserva.codigoReserva }} </h4>
+</div>
+<div class="modal-body">
+  <ul class="list-unstyled">
+    <li>Data/Hora: {{ reserva.dataHora }}</li>
+    <li>Aeroporto Origem: {{ getVooOrigem(reserva.codigoVoo) }}</li>
+    <li>Aeroporto Destino: {{ getVooDestino(reserva.codigoVoo) }}</li>
+    <li>Custo Total (R$):</li>
+    <li>Milhas usadas:</li>
+    <li>Estado da Reserva: {{ reserva.estado }}</li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close()">Fechar</button>
+</div>
