@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
 import { Router,RouterModule } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -16,10 +16,10 @@ export class LoginComponent {
   senha: string = '';
   loginFailed: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   logar() {
-    if (this.authService.login(this.login, this.senha)) {
+    if (this.userService.login(this.login, this.senha)) {
       // Redireciona para a página inicial ou outra página se o login for bem-sucedido
       this.router.navigate(['/home-cliente']);
     } else {

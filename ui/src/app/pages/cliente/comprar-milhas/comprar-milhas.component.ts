@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { TransacaoMilhasService } from '../../../services/transacao-milhas.service';
-import { TransacaoMilhas } from '../../../models/transacaoMilhas/transacao-milhas.model';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { StorageService } from '../../../services/storage.service';
 
 @Component({
   selector: 'app-comprar-milhas',
@@ -15,16 +15,15 @@ import { Router, RouterModule } from '@angular/router';
 export class ComprarMilhasComponent {
   quantidadeMilhas: number = 0;
 
-  constructor(
-    private transacaoMilhasService: TransacaoMilhasService,
-    private router: Router
-  ) {}
+  constructor(private transacaoMilhasService: TransacaoMilhasService, private router: Router, private storageService: StorageService) {}
 
   comprarMilhas(quantidade: number): void{
     quantidade = this.quantidadeMilhas;
     if (quantidade > 0){
-      let compra = new TransacaoMilhas ('00000000004', new Date(), quantidade, 'entrada', 'COMPRA DE MILHAS');
-      this.transacaoMilhasService.pushTransacao(compra);
+      const clienteId: number = Number(this.storageService.getItem('userId'));
+      if (clienteId)
+        this.transacaoMilhasService.novaTransacao(clienteId,quantidade,"COMPRA DE MILHAS");
+
       alert("Compra realizada!");
       this.router.navigate(['/home-cliente'])
     }

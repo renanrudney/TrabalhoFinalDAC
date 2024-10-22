@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TransacaoMilhas } from '../../../models/transacaoMilhas/transacao-milhas.model';
 import { TransacaoMilhasService } from '../../../services/transacao-milhas.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ClienteService } from '../../../services/cliente.service';
+import { StorageService } from '../../../services/storage.service';
 
 @Component({
   selector: 'app-extrato-milhas',
@@ -11,19 +13,19 @@ import { RouterModule } from '@angular/router';
   templateUrl: './extrato-milhas.component.html',
   styleUrl: './extrato-milhas.component.scss'
 })
-export class ExtratoMilhasComponent {
+export class ExtratoMilhasComponent implements OnInit{
   saldoMilhas: number = 1500; // Exemplo de saldo em milhas
   transacoes: TransacaoMilhas[] = [];
 
-  constructor(private transacaoMilhasService: TransacaoMilhasService) {}
+  constructor(private transacaoMilhasService: TransacaoMilhasService, private clienteService: ClienteService, private storageService: StorageService) {}
 
   ngOnInit(): void {
-    this.carregarTransacoes();
+    const clienteId: number = Number(this.storageService.getItem('userId'))
+    this.saldoMilhas = this.clienteService.getClienteMilhas(clienteId);
+    this.transacoes.push(...this.transacaoMilhasService.getTransacoesCliente(clienteId));
   }
 
-  carregarTransacoes(): void {
-    this.transacaoMilhasService.getTransacoes().subscribe(transacoes => {
-      this.transacoes = transacoes;
-    });
+  voltar():void {
+    window.history.back();
   }
 }

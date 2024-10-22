@@ -2,16 +2,19 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import axios from 'axios';
-import { Cliente } from '../models/cliente/cliente.model';
-import { ClienteService } from '../services/cliente.service';
+import { Cliente } from '../../models/cliente/cliente.model';
+import { ClienteService } from '../../services/cliente.service';
 import { Router, RouterModule } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { NgxMaskDirective,provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-autocadastro',
   standalone: true,
   templateUrl: './autocadastro.component.html',
   styleUrls: ['./autocadastro.component.scss'],
-  imports: [FormsModule,CommonModule,RouterModule] 
+  imports: [FormsModule,CommonModule,RouterModule,NgxMaskDirective],
+  providers: [provideNgxMask()]
 })
 export class AutocadastroComponent {
 
@@ -29,7 +32,7 @@ export class AutocadastroComponent {
   cepError: string | null = null;
   loading: boolean = false; // Variável para controlar o estado de carregamento
 
-  constructor(private clienteService: ClienteService,private router: Router) {}
+  constructor(private clienteService: ClienteService,private router: Router, private userService: UserService) {}
 
   buscarEndereco(cep: string | null) {
     if (cep != "") {
@@ -74,6 +77,7 @@ export class AutocadastroComponent {
 
     this.clienteService.criarCliente(novoCliente).subscribe(
       (response) => {
+        this.userService.criarUsuarioCliente(novoCliente.email);
         console.log('Cliente criado com sucesso:', response);
         alert('Seu cadastro foi realizado. Você receberá um e-mail contendo sua senha');
         this.router.navigate(['/login']);
@@ -81,8 +85,6 @@ export class AutocadastroComponent {
       (error) => {
         console.error('Erro ao criar o cliente:', error);
       }
-    );
-    // Aqui você poderia gerar uma senha aleatória e enviar um e-mail
-    
+    );    
   }
 }

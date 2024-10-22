@@ -1,29 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../models/usuario/usuario.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  Usuarios: Array<Usuario> = [
-    new Usuario('a@email.com','1234','cliente'),
-    new Usuario('b@email.com','5678','funcionario')
-  ];
+  constructor(private router: Router) { }
 
-  constructor() { }
-
-  login(username: string, password: string): boolean {
-    // Simulação de validação (substitua pela sua lógica de back-end real)
-    const usuario = this.Usuarios.find(user => user.login === username && user.senha === password);
-    
-    if (usuario) {
-      // Aqui você pode armazenar o token ou qualquer outra lógica que desejar
-      console.log('Login bem-sucedido:', usuario);
-      return true; // Retorna verdadeiro se o login foi bem-sucedido
-    } else {
-      console.log('Falha no login: usuário ou senha inválidos.');
-      return false; // Retorna falso se o login falhar
+  logar(usuario: Usuario): void {
+    const token = `${usuario.login}-${usuario.senha}-${usuario.tipo}-${usuario.id}-token`;
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('userType', usuario.tipo);
+    localStorage.setItem('userLogin', usuario.login);
+    if (usuario.id) {
+      localStorage.setItem('userId', usuario.id.toString());
     }
+  }
+
+  logout(): void {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
+  isAuthenticated(): boolean {
+    // Verifique se o usuário está autenticado
+    return !!localStorage.getItem('authToken');
+  }
+
+  getUserType(): string | null {
+    // Retorna o tipo de usuário (por exemplo, 'cliente' ou 'funcionario')
+    return localStorage.getItem('userType');
   }
 }

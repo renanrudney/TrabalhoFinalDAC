@@ -2,12 +2,18 @@
   <h4 class="modal-title" id="modal-basic-title">Cancelar Reserva</h4>
 </div>
 <div class="modal-body">
-  <td>Código da reserva: 1547328</td>
-  <td>Código do voo: 832901</td>
-  <td>Data/hora da reserva: 01/01/01 00:00:00</td>
-  <td>Estado da reserva: RESERVADO</td>
+  <ul class="list-group">
+    <li class="list-group-item">Código da Reserva: {{ reserva.codigoReserva }}</li>
+    <li class="list-group-item">Data/Hora: {{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm:ss' }}</li>
+    <li class="list-group-item">Aeroporto Origem: {{ getVooOrigem(reserva.codigoVoo) }}</li>
+    <li class="list-group-item">Aeroporto Destino: {{ getVooDestino(reserva.codigoVoo) }}</li>
+    <li class="list-group-item">Passagens compradas: {{ reserva.qntdPassagens }}</li>
+    <li class="list-group-item">Custo Total (R$): {{ reserva.custoTotal }}</li>
+    <li class="list-group-item">Milhas usadas: {{ reserva.milhasUsadas }}</li>
+    <li class="list-group-item">Estado da Reserva: {{ reserva.estado }}</li>
+  </ul>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="activeModal.close()">Fechar</button>
-  <button type="submit" class="btn btn-danger" (click)="cancelarReserva()">Cancelar</button>
+  <button type="submit" class="btn btn-danger" (click)="cancelarReserva(reserva.codigoReserva)">Cancelar</button>
 </div>
