@@ -37,7 +37,22 @@ export class ConsultarReservaComponent {
   }
 
   isReservadoEValido(reserva: Reserva): boolean {
-    return reserva.estado === 'RESERVADO' && reserva.dataHora > new Date();
+    // Verifica se a reserva está 'RESERVADO'
+    if (reserva.estado !== 'RESERVADO') {
+        return false;
+    }
+
+    // Busca o voo correspondente à reserva
+    const dataHora = this.vooService.getVooDataHora(reserva.codigoVoo);
+    
+    // Verifica se o voo foi encontrado e se está dentro do intervalo de 48 horas
+    if (dataHora) {
+      const agora = new Date();
+      const dataLimite = new Date(agora.getTime() + 48 * 60 * 60 * 1000); // 48 horas a partir de agora
+      return dataHora > agora && dataHora <= dataLimite;
+    }
+    
+    return false; // Se o voo não for encontrado, retorna false
   }
 
   getVooOrigem(codigoVoo: string): string | undefined {

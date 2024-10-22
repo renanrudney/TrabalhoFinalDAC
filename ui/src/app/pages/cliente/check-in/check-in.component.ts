@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { VooService } from '../../../services/voo.service';
 import { Voo } from '../../../models/voo/voo.model';
 import { CommonModule } from '@angular/common';
-import { ClienteService } from '../../../services/cliente.service';
-import { AuthService } from '../../../services/auth.service';
-import { Cliente } from '../../../models/cliente/cliente.model';
+import { ReservaService } from '../../../services/reserva.service';
+import { Reserva } from '../../../models/reserva/reserva.model';
+import { StorageService } from '../../../services/storage.service';
 
 @Component({
   selector: 'app-check-in',
@@ -13,19 +13,26 @@ import { Cliente } from '../../../models/cliente/cliente.model';
   templateUrl: './check-in.component.html',
   styleUrl: './check-in.component.scss'
 })
-export class CheckInComponent {
+export class CheckInComponent implements OnInit {
 
   voos: Array<Voo> = [];
+  reservasCliente: Array<Reserva> = [];
+  voosProximos: Array<Voo> = [];
 
-    constructor(private vooService: VooService, private authService: AuthService, private clienteService: ClienteService) {}
+  constructor(private vooService: VooService, private reservaService: ReservaService, private storageService: StorageService) {}
 
   ngOnInit(): void {
-    //this.clienteLogado = this.clienteService.getClienteByLogin(this.authService.getUserLogin());
-    this.carregarVoosProximos();
+    const clienteId: number = Number(this.storageService.getItem('userId'));
+    this.reservasCliente.push(...this.reservaService.getReservasByClienteId(clienteId));
+    this.voosProximos.push(...this.vooService.getVoosProximasHoras());
+    this.voos.push(...this.voosClienteProximas48H());
+    //Ordena os voos na lista
+    this.voos.sort((a, b) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime());
   }
 
-  carregarVoosProximos(): void {
-    // Filtrar voos que acontecem nas próximas 48 horas
-    this.voos = this.vooService.getVoosProximasHoras();
+  voosClienteProximas48H(): Array<Voo> {
+    return this.voosProximos.filter(voo => 
+      this.reservasCliente.some(reserva => reserva.codigoVoo === voo.codigoVoo)
+    );
   }
 }

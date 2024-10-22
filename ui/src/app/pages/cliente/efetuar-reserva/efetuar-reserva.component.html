@@ -54,7 +54,7 @@
     <h3>Detalhes do Voo Selecionado</h3>
     <p><strong>Origem:</strong> {{ vooSelecionado.origem }}</p>
     <p><strong>Destino:</strong> {{ vooSelecionado.destino }}</p>
-    <p><strong>Data/Hora:</strong> {{ vooSelecionado.dataHora }}</p>
+    <p><strong>Data/Hora:</strong> {{ vooSelecionado.dataHora | date: 'dd/MM/yyyy HH:mm' }}</p>
     <p><strong>Preço por Assento:</strong> {{ vooSelecionado.valorPassagem}}</p>
     <p><strong>Milhas disponíveis:</strong> {{ cliente?.milhas }}</p>
 
@@ -65,7 +65,6 @@
     </div>
 
     <p><strong>Total (R$):</strong> {{ valorTotal | currency: 'BRL' }}</p>
-    <p><strong>Milhas necessárias:</strong> {{ milhasNecessarias }}</p>
 
     <!-- Uso de milhas -->
     <div class="form-group">

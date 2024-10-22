@@ -10,27 +10,27 @@ export class AuthService {
   constructor(private router: Router) { }
 
   logar(usuario: Usuario): void {
-    const token = `${usuario.login}-${usuario.senha}-${usuario.tipo}-token`;
+    const token = `${usuario.login}-${usuario.senha}-${usuario.tipo}-${usuario.id}-token`;
     localStorage.setItem('authToken', token);
     localStorage.setItem('userType', usuario.tipo);
     localStorage.setItem('userLogin', usuario.login);
+    if (usuario.id) {
+      localStorage.setItem('userId', usuario.id.toString());
+    }
   }
 
   logout(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userType');
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
 
-  isLoggedIn(): boolean {
+  isAuthenticated(): boolean {
+    // Verifique se o usuário está autenticado
     return !!localStorage.getItem('authToken');
   }
 
-  getUserType(): string | null{
+  getUserType(): string | null {
+    // Retorna o tipo de usuário (por exemplo, 'cliente' ou 'funcionario')
     return localStorage.getItem('userType');
-  }
-
-  getUserLogin(): string | null{
-    return localStorage.getItem('userLogin');
   }
 }

@@ -10,6 +10,7 @@
       <table class="table table-bordered">
         <thead class="table-light">
           <tr>
+            <th>Código da Reserva</th>
             <th>Data/Hora</th>
             <th>Aeroporto Origem</th>
             <th>Aeroporto Destino</th>
@@ -19,14 +20,17 @@
         </thead>
         <tbody>
           <tr *ngFor="let reserva of Reservas"> <!-- | orderBy: 'dataHora' -->
-            <td>{{ reserva.codigoReserva }}</td>
-            <td>{{ getVooOrigem(reserva.codigoVoo) }}</td>
-            <td>{{ getVooDestino(reserva.codigoVoo) }}</td>
-            <td>{{ reserva.estado }}</td>
-            <td>
-              <button (click)="abrirModalVerReserva(reserva)">Ver Reserva</button>
-              <button *ngIf="reserva.estado === 'RESERVADO'" (click)="abrirModalCancelarReserva(reserva)">Cancelar Reserva</button>
-            </td>
+            <ng-container *ngIf="['RESERVADO', 'EMBARCADO', 'CANCELADO VOO'].includes(reserva.estado)">
+              <td>{{ reserva.codigoReserva }}</td>
+              <td>{{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ getVooOrigem(reserva.codigoVoo) }}</td>
+              <td>{{ getVooDestino(reserva.codigoVoo) }}</td>
+              <td>{{ reserva.estado }}</td>
+              <td>
+                <button (click)="abrirModalVerReserva(reserva)">Ver Reserva</button>
+                <button *ngIf="reserva.estado === 'RESERVADO'" (click)="abrirModalCancelarReserva(reserva)">Cancelar Reserva</button>
+              </td>
+            </ng-container>
           </tr>
         </tbody>
       </table>

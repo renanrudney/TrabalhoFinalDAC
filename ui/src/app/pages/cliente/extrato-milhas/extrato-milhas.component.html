@@ -4,7 +4,7 @@
   <!-- Quantidade atual de milhas -->
   <div class="row mb-4">
     <div class="col">
-      <h4>Saldo em Milhas: <span class="badge bg-primary">{{ saldoMilhas }}</span></h4>
+      <h4>Seu saldo em Milhas: <span class="badge bg-primary">{{ saldoMilhas }}</span></h4>
     </div>
   </div>
 
@@ -22,7 +22,7 @@
         <ng-container *ngIf="transacoes && transacoes.length > 0; else noTransacoes">
           <tr *ngFor="let transacao of transacoes">
             <td>{{ transacao.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td *ngIf="transacao.tipo === 'entrada'">{{ transacao.quantidadeMilhas * 5 }}</td>
+            <td *ngIf="transacao.tipo === 'entrada'">{{ (transacao.quantidadeMilhas * 5) | currency: 'BRL' : 'symbol':'1.2-2' }}</td>
             <td *ngIf="transacao.tipo !== 'entrada'">-</td>
             <td>{{ transacao.quantidadeMilhas }}</td>
             <td>{{ transacao.descricao }}</td>
@@ -35,5 +35,10 @@
         </ng-template>
       </tbody>
     </table>
+  </div>
+
+  <!-- Botão de Voltar -->
+  <div class="mt-3">
+    <button class="btn btn-secondary" (click)="voltar()">Voltar</button>
   </div>
 </div>

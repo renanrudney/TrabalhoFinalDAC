@@ -8,8 +8,8 @@ import { AuthService } from './auth.service';
 export class UserService {
 
   Usuarios: Array<Usuario> = [
-    new Usuario('a@email.com','1234','cliente'),
-    new Usuario('b@email.com','5678','funcionario')
+    new Usuario('a@email.com','1234','cliente',1),
+    new Usuario('b@email.com','5678','funcionario',2)
   ];
 
   constructor(private authService: AuthService) { }
@@ -29,9 +29,25 @@ export class UserService {
     }
   }
 
+  criarUsuarioCliente(login: string): void {
+    const senha: string = this.generateRandomPassword();
+    const user: Usuario = new Usuario(login,senha,"cliente",undefined);
+    this.Usuarios.push(user);
+    //Enviar Senha por email
+  }
+
   isFuncionario(perfil: string): boolean {
     // Simulação de validação (substitua pela sua lógica de back-end real)
     return perfil === 'funcionario';
+  }
+
+  generateRandomPassword(): string {
+    let password = '';
+    for (let i = 0; i < 4; i++) {
+        const randomDigit = Math.floor(Math.random() * 10); // Gera um número entre 0 e 9
+        password += randomDigit.toString(); // Adiciona o dígito à senha
+    }
+    return password;
   }
   
 }

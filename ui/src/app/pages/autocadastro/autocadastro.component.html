@@ -43,9 +43,9 @@
         </div>
         <div class="row">
           <div class="form-floating col-sm-6 mb-3">
-            <input type="text" class="form-control" id="cpf" placeholder="Precisamos de um CPF válido."
-                   [(ngModel)]="cpf" mask="000.000.000-00" inputmode="numeric" name="cpf" required cpf
-                   #cpfCtrl="ngModel">
+            <input type="text" class="form-control" id="cpf" placeholder="Precisamos de um CPF válido." 
+                   [(ngModel)]="cpf" inputmode="numeric" name="cpf" required cpf
+                   #cpfCtrl="ngModel" mask="000.000.000-00">
 
             <label for="cpf" class="form-label">CPF</label>
             <i *ngIf="cpfCtrl.valid && cpfCtrl.touched"

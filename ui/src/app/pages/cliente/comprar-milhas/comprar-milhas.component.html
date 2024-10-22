@@ -6,7 +6,7 @@
     <input type="number" id="milhas" name="milhas" [(ngModel)]="quantidadeMilhas" class="form-control" placeholder="Digite a quantidade de milhas">
   </div>
 
-  <p class="mt-3">Total em Reais: R$ {{ quantidadeMilhas * 5 }}</p>
+  <p class="mt-3">Total em Reais: {{ (quantidadeMilhas * 5) | currency: 'BRL' : 'symbol':'1.2-2' }}</p>
 
   <div class="text-center mt-4">
     <button type="button" (click)="comprarMilhas(quantidadeMilhas)" class="btn btn-primary btn-lg">Comprar</button>

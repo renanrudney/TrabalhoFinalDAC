@@ -95,4 +95,9 @@ export class VooService {
     const vooEncontrado = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
     return vooEncontrado?.destino;
   }
+
+  getVooDataHora(codigoVoo: string): Date | undefined {
+    const vooEncontrado = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
+    return vooEncontrado ? vooEncontrado.dataHora : undefined;
+}
 }

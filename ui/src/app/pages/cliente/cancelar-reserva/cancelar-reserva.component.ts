@@ -3,13 +3,14 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Reserva } from '../../../models/reserva/reserva.model';
 import { ReservaService } from '../../../services/reserva.service';
 import { VooService } from '../../../services/voo.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cancelar-reserva',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './cancelar-reserva.component.html',
-  styleUrl: './cancelar-reserva.component.scss'
+  styleUrl: './cancelar-reserva.component.scss',
 })
 export class CancelarReservaComponent {
   @Input() reserva!: Reserva;
