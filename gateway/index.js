@@ -88,6 +88,16 @@ const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
       reqBody.nome = bodyContent.nome;
       reqBody.email = bodyContent.email;
       reqBody.cpf = bodyContent.cpf;
+      reqBody.endereco = {
+        id: bodyContent.endereco.id,
+        tipo: bodyContent.endereco.tipo,
+        logradouro: bodyContent.endereco.logradouro,
+        numero: bodyContent.endereco.numero,
+        complemento: bodyContent.endereco.complemento,
+        cep: bodyContent.endereco.cep,
+        cidade: bodyContent.endereco.cidade,
+        estado: bodyContent.endereco.estado
+      };
       bodyContent = reqBody;
     }
     catch (e) {
@@ -107,11 +117,13 @@ const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
       reqBody = {};
-      reqBody.cod = bodyContent.cod;
-      reqBody.data_hora = bodyContent.data_hora;
+      reqBody.dataHora = bodyContent.dataHora;
       reqBody.estadoReserva = bodyContent.estadoReserva;
-      reqBody.codVoo = bodyContent.codVoo;
-      reqBody.idCliente = bodyContent.idCliente;
+      reqBody.codigoVoo = bodyContent.codigoVoo;
+      reqBody.idCliente = bodyContent.clienteId;
+      reqBody.qntdPassagens = bodyContent.qntdPassagens;
+      reqBody.custoTotal = bodyContent.custoTotal;
+      reqBody.milhasUsadas= bodyContent.milhasUsadas;
       bodyContent = reqBody;
     }
     catch (e) {
