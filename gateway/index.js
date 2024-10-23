@@ -41,7 +41,6 @@ function verifyJWT(req, res, next) {
 }
 
 // proxies
-// TODO: Add proxies
 // const exampleProxy = httpProxy('http://localhost:5002')
 
 const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
@@ -88,6 +87,16 @@ const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
       reqBody.nome = bodyContent.nome;
       reqBody.email = bodyContent.email;
       reqBody.cpf = bodyContent.cpf;
+      reqBody.endereco = {
+        id: bodyContent.endereco.id,
+        tipo: bodyContent.endereco.tipo,
+        logradouro: bodyContent.endereco.logradouro,
+        numero: bodyContent.endereco.numero,
+        complemento: bodyContent.endereco.complemento,
+        cep: bodyContent.endereco.cep,
+        cidade: bodyContent.endereco.cidade,
+        estado: bodyContent.endereco.estado
+      };
       bodyContent = reqBody;
     }
     catch (e) {
@@ -107,11 +116,13 @@ const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
       reqBody = {};
-      reqBody.cod = bodyContent.cod;
-      reqBody.data_hora = bodyContent.data_hora;
+      reqBody.dataHora = bodyContent.dataHora;
       reqBody.estadoReserva = bodyContent.estadoReserva;
-      reqBody.codVoo = bodyContent.codVoo;
-      reqBody.idCliente = bodyContent.idCliente;
+      reqBody.codigoVoo = bodyContent.codigoVoo;
+      reqBody.idCliente = bodyContent.clienteId;
+      reqBody.qntdPassagens = bodyContent.qntdPassagens;
+      reqBody.custoTotal = bodyContent.custoTotal;
+      reqBody.milhasUsadas= bodyContent.milhasUsadas;
       bodyContent = reqBody;
     }
     catch (e) {
@@ -125,6 +136,28 @@ const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
     return proxyReqOpts;
   }
 });
+
+const milhasServiceProxy = httpProxy('http://host.docker.internal:5003');
+const milhasPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
+  proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    try {
+      reqBody = {};
+      reqBody.idCliente = bodyContent.idCliente;
+      reqBody.qntdMilhas = bodyContent.qntdMilhas;
+      bodyContent = reqBody;
+    }
+    catch (e) {
+      console.log('- ERRO: ' + e);
+    }
+    return bodyContent;
+  },
+  proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
+    proxyReqOpts.headers['Content-Type'] = 'application/json';
+    proxyReqOpts.method = 'POST';
+    return proxyReqOpts;
+  }
+});
+
 const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5003');
 const funcionariosPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
@@ -235,6 +268,20 @@ app.post('/reservas/:id/checkin', verifyJWT, function (req, res, next) {
   reservasServiceProxy(req, res, next);
 });
 
+app.post('/reservas/:id/embarque', verifyJWT, function (req, res, next) {
+  reservasServiceProxy(req, res, next);
+});
+
+// Milhas
+app.get('/milhas', verifyJWT, function (req, res, next) {
+  milhasServiceProxy(req, res, next);
+});
+
+app.post('/milhas', verifyJWT, function (req, res, next) {
+  milhasPostServiceProxy(req, res, next);
+});
+
+
 // Funcionarios
 app.get('/funcionarios', verifyJWT, function (req, res, next) {
   funcionariosServiceProxy(req, res, next);
@@ -259,10 +306,6 @@ app.get('/voos', verifyJWT, function (req, res, next) {
 
 app.post('/voos', verifyJWT, function (req, res, next) {
   voosPostServiceProxy(req, res, next);
-});
-
-app.post('/voos/:id/reserva/:id_reserva/embarque', verifyJWT, function (req, res, next) {
-  voosServiceProxy(req, res, next);
 });
 
 app.post('/voos/:id/cancelar', verifyJWT, function (req, res, next) {
