@@ -41,7 +41,6 @@ function verifyJWT(req, res, next) {
 }
 
 // proxies
-// TODO: Add proxies
 // const exampleProxy = httpProxy('http://localhost:5002')
 
 const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
@@ -137,6 +136,28 @@ const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
     return proxyReqOpts;
   }
 });
+
+const milhasServiceProxy = httpProxy('http://host.docker.internal:5003');
+const milhasPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
+  proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    try {
+      reqBody = {};
+      reqBody.idCliente = bodyContent.idCliente;
+      reqBody.qntdMilhas = bodyContent.qntdMilhas;
+      bodyContent = reqBody;
+    }
+    catch (e) {
+      console.log('- ERRO: ' + e);
+    }
+    return bodyContent;
+  },
+  proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
+    proxyReqOpts.headers['Content-Type'] = 'application/json';
+    proxyReqOpts.method = 'POST';
+    return proxyReqOpts;
+  }
+});
+
 const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5003');
 const funcionariosPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
@@ -247,6 +268,20 @@ app.post('/reservas/:id/checkin', verifyJWT, function (req, res, next) {
   reservasServiceProxy(req, res, next);
 });
 
+app.post('/reservas/:id/embarque', verifyJWT, function (req, res, next) {
+  reservasServiceProxy(req, res, next);
+});
+
+// Milhas
+app.get('/milhas', verifyJWT, function (req, res, next) {
+  milhasServiceProxy(req, res, next);
+});
+
+app.post('/milhas', verifyJWT, function (req, res, next) {
+  milhasPostServiceProxy(req, res, next);
+});
+
+
 // Funcionarios
 app.get('/funcionarios', verifyJWT, function (req, res, next) {
   funcionariosServiceProxy(req, res, next);
@@ -271,10 +306,6 @@ app.get('/voos', verifyJWT, function (req, res, next) {
 
 app.post('/voos', verifyJWT, function (req, res, next) {
   voosPostServiceProxy(req, res, next);
-});
-
-app.post('/voos/:id/reserva/:id_reserva/embarque', verifyJWT, function (req, res, next) {
-  voosServiceProxy(req, res, next);
 });
 
 app.post('/voos/:id/cancelar', verifyJWT, function (req, res, next) {
