@@ -11,6 +11,7 @@ import { ConsultarReservaComponent } from './pages/cliente/consultar-reserva/con
 import { CheckInComponent } from './pages/cliente/check-in/check-in.component';
 import { clienteGuard } from './shared/guards/cliente.guard';
 import { funcionarioGuard } from './shared/guards/funcionario.guard';
+import { InserirFuncionarioComponent } from './pages/funcionario/inserir-funcionario/inserir-funcionario.component';
 
 export const routes: Routes = [
 
@@ -24,5 +25,6 @@ export const routes: Routes = [
     { path: 'consultar-reserva', component: ConsultarReservaComponent, canActivate: [clienteGuard] },
     { path: 'check-in', component: CheckInComponent, canActivate: [clienteGuard] },    
     { path: 'home-funcionario', component: HomeFuncionarioComponent, canActivate: [funcionarioGuard] },
-    { path: 'crud-funcionario', component: CrudFuncionarioComponent, canActivate: [funcionarioGuard] }
+    { path: 'crud-funcionario', component: CrudFuncionarioComponent, canActivate: [funcionarioGuard] },
+    { path: 'inserir-funcionario', component: InserirFuncionarioComponent, canActivate: [funcionarioGuard] }
 ];
