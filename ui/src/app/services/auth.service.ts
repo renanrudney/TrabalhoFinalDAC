@@ -17,6 +17,12 @@ export class AuthService {
     if (usuario.id) {
       localStorage.setItem('userId', usuario.id.toString());
     }
+  
+    // Log para verificar se os dados foram armazenados
+    console.log(localStorage.getItem('authToken'));
+    console.log(localStorage.getItem('userType'));
+    console.log(localStorage.getItem('userLogin'));
+    console.log(localStorage.getItem('userId'));
   }
 
   logout(): void {

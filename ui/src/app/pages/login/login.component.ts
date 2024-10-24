@@ -20,13 +20,13 @@ export class LoginComponent {
   constructor(private userService: UserService, private router: Router, private storageService: StorageService) {}
 
   logar() {
-    if (this.userService.login(this.login, this.senha)) {
+
+    const login: string = this.userService.login(this.login, this.senha);
+    if (login === 'cliente') {
       // Redireciona para a página inicial ou outra página se o login for bem-sucedido
-      if (this.storageService.getItem('getType') === "cliente") {
-        this.router.navigate(['/home-cliente']);
-      } else {
-        this.router.navigate(['/home-funcionario']);
-      }
+      this.router.navigate(['/home-cliente']);      
+    } else if (login === 'funcionario') {
+      this.router.navigate(['/home-funcionario']);
     } else {
       this.loginFailed = true; // Exibir mensagem de erro
     }

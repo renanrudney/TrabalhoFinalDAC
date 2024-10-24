@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VerReservaComponent } from '../ver-reserva/ver-reserva.component';
 import { CancelarReservaComponent } from '../cancelar-reserva/cancelar-reserva.component';
 import { StorageService } from '../../../services/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tela-inicial-cliente',
