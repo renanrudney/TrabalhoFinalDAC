@@ -14,6 +14,7 @@ import { funcionarioGuard } from './shared/guards/funcionario.guard';
 import { CadastroVooComponent } from './pages/funcionario/cadastro-voo/cadastro-voo.component';
 import { ConfirmarEmbarqueComponent } from './pages/funcionario/confirmar-embarque/confirmar-embarque.component';
 import { InserirFuncionarioComponent } from './pages/funcionario/inserir-funcionario/inserir-funcionario.component';
+import { AlterarFuncionarioComponent } from './pages/funcionario/alterar-funcionario/alterar-funcionario.component';
 
 export const routes: Routes = [
 
@@ -30,5 +31,6 @@ export const routes: Routes = [
     { path: 'crud-funcionario', component: CrudFuncionarioComponent, canActivate: [funcionarioGuard] },
     { path: 'cadastro-voo', component: CadastroVooComponent, canActivate: [funcionarioGuard] },
     { path: 'confirmar-embarque', component: ConfirmarEmbarqueComponent, canActivate: [funcionarioGuard] },
-    { path: 'inserir-funcionario', component: InserirFuncionarioComponent, canActivate: [funcionarioGuard] }
+    { path: 'inserir-funcionario', component: InserirFuncionarioComponent, canActivate: [funcionarioGuard] },
+    { path: 'alterar-funcionario', component: AlterarFuncionarioComponent, canActivate: [funcionarioGuard] }
 ];

@@ -4,7 +4,7 @@
   <div class="mb-4">
     <h4>Operações:</h4>
     <div class="d-flex justify-content-between mb-3">
-      <a routerLink="/" class="btn btn-primary btn-lg mr-2">Inserção de Funcionário</a>
+      <a routerLink="/inserir-funcionario" class="btn btn-primary btn-lg mr-2">Inserção de Funcionário</a>
     </div>
   </div>
 
@@ -26,7 +26,7 @@
           <td>{{ funcionario.email }}</td>
           <td>{{ funcionario.telefone }}</td>
           <td>
-            <button class="btn btn-info" (click)="alterarFuncionario(funcionario.id)">Alterar</button>
+            <a class="btn btn-info" routerLink="/alterar-funcionario">Alterar</a>
             <button class="btn btn-danger" (click)="removerFuncionario(funcionario.id)">Remover</button>
           </td>
         </tr>
