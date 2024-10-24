@@ -21,8 +21,8 @@ export class LoginComponent {
   logar() {
     if (this.userService.login(this.login, this.senha)) {
       // Redireciona para a página inicial ou outra página se o login for bem-sucedido
-      this.router.navigate(['/home-cliente']);
-    } else {
+      this.router.navigate(['/home-funcionario']);
+    }else {
       this.loginFailed = true; // Exibir mensagem de erro
     }
   }
