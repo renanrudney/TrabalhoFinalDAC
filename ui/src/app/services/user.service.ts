@@ -36,6 +36,13 @@ export class UserService {
     //Enviar Senha por email
   }
 
+  criarUsuarioFuncionario(login: string): void {
+    const senha: string = this.generateRandomPassword();
+    const user: Usuario = new Usuario(login,senha,"funcionario",undefined);
+    this.Usuarios.push(user);
+    //Enviar Senha por email
+  }
+
   isFuncionario(perfil: string): boolean {
     // Simulação de validação (substitua pela sua lógica de back-end real)
     return perfil === 'funcionario';
