@@ -5,8 +5,6 @@
 #### Trabalho de DAC do Curso Técnologo em Análise e Desenvolvimento de Sistemas (TADS - UFPR)
 
 #### Equipe do Trabalho:
-* Albano Roberto Drescher von Maywitz
-* Gustavo Padilha
 * Leandro Souza
 * Luiz Senji
 * Maricot Nicolas
