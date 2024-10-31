@@ -23,7 +23,7 @@ export class ConsultarReservaComponent {
   constructor(private reservaService: ReservaService, private router: Router,private vooService: VooService, private modalService: NgbModal) {}
 
   consultarReserva() {
-    this.reserva = this.reservaService.getReserva(this.codigoReserva); // Implemente este método no seu serviço
+    this.reserva = this.reservaService.getReserva(this.codigoReserva.toUpperCase()); // Implemente este método no seu serviço
     if (!this.reserva) {
       this.mensagemErro = 'Reserva não encontrada!';
     } else {

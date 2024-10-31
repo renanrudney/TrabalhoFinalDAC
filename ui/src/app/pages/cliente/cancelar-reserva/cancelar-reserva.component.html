@@ -4,7 +4,7 @@
 <div class="modal-body">
   <ul class="list-group">
     <li class="list-group-item">Código da Reserva: {{ reserva.codigoReserva }}</li>
-    <li class="list-group-item">Data/Hora: {{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm:ss' }}</li>
+    <li class="list-group-item">Data/Hora: {{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm' }}</li>
     <li class="list-group-item">Aeroporto Origem: {{ getVooOrigem(reserva.codigoVoo) }}</li>
     <li class="list-group-item">Aeroporto Destino: {{ getVooDestino(reserva.codigoVoo) }}</li>
     <li class="list-group-item">Passagens compradas: {{ reserva.qntdPassagens }}</li>

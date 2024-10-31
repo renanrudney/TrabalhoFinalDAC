@@ -10,8 +10,8 @@ import { ReservaService } from '../../../services/reserva.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VerReservaComponent } from '../ver-reserva/ver-reserva.component';
 import { CancelarReservaComponent } from '../cancelar-reserva/cancelar-reserva.component';
-import { StorageService } from '../../../services/storage.service';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-tela-inicial-cliente',
@@ -25,10 +25,10 @@ export class InicialClienteComponent implements OnInit
   clienteLogado: Cliente | undefined = undefined;
   Reservas: Array<Reserva> = [];
 
- constructor(private clienteService: ClienteService, private vooService: VooService, private reservaService: ReservaService, private modalService: NgbModal, private storageService: StorageService) {}
+ constructor(private clienteService: ClienteService, private vooService: VooService, private reservaService: ReservaService, private modalService: NgbModal, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const clienteId: number | null = Number(this.storageService.getItem('userId'));
+    const clienteId: number | null = Number(this.authService.getItem('userId'));
     if (clienteId){
       this.clienteLogado = this.clienteService.getClienteById(clienteId);
       this.Reservas.push(...this.reservaService.getReservasByClienteId(clienteId));

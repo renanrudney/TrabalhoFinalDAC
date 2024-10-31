@@ -64,6 +64,15 @@ export class VooService {
       750.00,
       150,
       75
+    ),
+    new Voo(
+      'TADS0007',                 // Código do Voo
+      (new Date('2024-10-31T22:00:00')),                    // Data/Hora do Voo
+      'CWB',      // Origem
+      'GRU',     // Destino
+      500,                        // Valor da Passagem
+      100,                        // Total de Poltronas
+      0                           // Poltronas Ocupadas
     )
   ];
 
@@ -73,18 +82,22 @@ export class VooService {
     return this.Voos;
   }
 
-  getVoosCompra(): Array<Voo>{
+  getVoosCompra(origem: string, destino: string): Array<Voo> {
     const dataAtual = new Date();
-    return this.Voos.filter(voo => voo.dataHora > dataAtual);
+    return this.Voos.filter(voo => 
+      voo.origem === origem && 
+      voo.destino === destino && 
+      voo.dataHora > dataAtual
+    );
   }
 
   getVoosProximasHoras(): Array<Voo> {
     const agora = new Date();
     const dataLimite = new Date(agora.getTime() + 48 * 60 * 60 * 1000);
     return this.Voos.filter(voo => {
-      voo.dataHora > agora && voo.dataHora <= dataLimite;
+      return voo.dataHora > agora && voo.dataHora <= dataLimite;
     });
-  }
+}
 
   getOrigem(codigoVoo: string): string | undefined{
     const vooEncontrado = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
