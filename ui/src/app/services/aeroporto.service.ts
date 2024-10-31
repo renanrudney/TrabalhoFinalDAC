@@ -20,4 +20,8 @@ export class AeroportoService {
   ];
 
   constructor() { }
+
+  getAeroportos(): Aeroporto[] {
+    return this.Aeroportos;
+  }
 }

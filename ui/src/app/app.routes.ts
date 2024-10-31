@@ -14,13 +14,14 @@ import { funcionarioGuard } from './shared/guards/funcionario.guard';
 import { CadastroVooComponent } from './pages/funcionario/cadastro-voo/cadastro-voo.component';
 import { ConfirmarEmbarqueComponent } from './pages/funcionario/confirmar-embarque/confirmar-embarque.component';
 import { InserirFuncionarioComponent } from './pages/funcionario/inserir-funcionario/inserir-funcionario.component';
+import { loginGuard } from './shared/guards/login.guard';
 import { AlterarFuncionarioComponent } from './pages/funcionario/alterar-funcionario/alterar-funcionario.component';
 
 export const routes: Routes = [
 
     { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'login', component: LoginComponent},
-    { path: 'autocadastro', component: AutocadastroComponent },
+    { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
+    { path: 'autocadastro', component: AutocadastroComponent, canActivate: [loginGuard] },
     { path: 'home-cliente', component: InicialClienteComponent, canActivate: [clienteGuard] },
     { path: 'comprar-milhas', component: ComprarMilhasComponent, canActivate: [clienteGuard] },
     { path: 'extrato-milhas', component: ExtratoMilhasComponent, canActivate: [clienteGuard] },

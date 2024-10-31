@@ -1,21 +1,27 @@
 <div class="container mt-5">
-  <h2>Efetuar Reserva</h2>
+  <h2 class="text-center mb-4">Efetuar Reserva</h2>
 
   <!-- Campo de busca de voos -->
   <form (ngSubmit)="buscarVoos()">
     <div class="row">
       <div class="col-md-6">
         <label for="origem">Aeroporto de Origem</label>
-        <input type="text" class="form-control" id="origem" [(ngModel)]="origem" name="origem" placeholder="Digite o aeroporto de origem">
+        <select class="form-control" id="origem" [(ngModel)]="origem" name="origem" required>
+          <option value="" disabled selected>Selecione o aeroporto de origem</option>
+          <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.codigo">{{ aeroporto.codigo }} - {{ aeroporto.nome }}</option>
+        </select>
       </div>
       <div class="col-md-6">
         <label for="destino">Aeroporto de Destino</label>
-        <input type="text" class="form-control" id="destino" [(ngModel)]="destino" name="destino" placeholder="Digite o aeroporto de destino">
+        <select class="form-control" id="destino" [(ngModel)]="destino" name="destino" required>
+          <option value="" disabled selected>Selecione o aeroporto de destino</option>
+          <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.codigo">{{ aeroporto.codigo }} - {{ aeroporto.nome }}</option>
+        </select>
       </div>
     </div>
     <div class="row mt-3">
       <div class="col">
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!origem || !destino">Buscar</button>
       </div>
     </div>
   </form>
@@ -39,7 +45,7 @@
           <td>{{ voo.codigoVoo }}</td>
           <td>{{ voo.origem }}</td>
           <td>{{ voo.destino }}</td>
-          <td>{{ voo.dataHora }}</td>
+          <td>{{ voo.dataHora | date: 'dd/MM/yyyy HH:mm'}}</td>
           <td>{{ voo.valorPassagem }}</td>
           <td>
             <button class="btn btn-success" (click)="selecionarVoo(voo)">Selecionar</button>
@@ -55,13 +61,14 @@
     <p><strong>Origem:</strong> {{ vooSelecionado.origem }}</p>
     <p><strong>Destino:</strong> {{ vooSelecionado.destino }}</p>
     <p><strong>Data/Hora:</strong> {{ vooSelecionado.dataHora | date: 'dd/MM/yyyy HH:mm' }}</p>
-    <p><strong>Preço por Assento:</strong> {{ vooSelecionado.valorPassagem}}</p>
+    <p><strong>Preço por Assento:</strong> {{ vooSelecionado.valorPassagem }}</p>
     <p><strong>Milhas disponíveis:</strong> {{ cliente?.milhas }}</p>
 
     <!-- Compra de passagens -->
     <div class="form-group">
       <label for="quantidade">Quantidade de passagens</label>
-      <input type="number" id="quantidade" class="form-control" [(ngModel)]="quantidade" (ngModelChange)="calcularTotal()">
+      <input type="number" id="quantidade" class="form-control" [(ngModel)]="quantidade" (ngModelChange)="calcularTotal()" min="1" required>
+      <div *ngIf="quantidade <= 0" class="text-danger">A quantidade deve ser maior que 0.</div>
     </div>
 
     <p><strong>Total (R$):</strong> {{ valorTotal | currency: 'BRL' }}</p>
@@ -69,11 +76,12 @@
     <!-- Uso de milhas -->
     <div class="form-group">
       <label for="milhasUsadas">Milhas a serem usadas</label>
-      <input type="number" id="milhasUsadas" class="form-control" [(ngModel)]="milhasUsadas" (ngModelChange)="calcularDiferenca()">
+      <input type="number" id="milhasUsadas" class="form-control" [(ngModel)]="milhasUsadas" (ngModelChange)="calcularDiferenca()" min="0" required>
+      <div *ngIf="milhasUsadas < 0" class="text-danger">As milhas devem ser iguais ou maiores que 0.</div>
     </div>
 
     <p><strong>Valor a ser pago em dinheiro:</strong> {{ valorEmDinheiro | currency: 'BRL' }}</p>
 
-    <button class="btn btn-primary mt-3" (click)="confirmarReserva()">Confirmar Reserva</button>
+    <button class="btn btn-primary mt-3" (click)="confirmarReserva()" [disabled]="quantidade <= 0 || milhasUsadas < 0">Confirmar Reserva</button>
   </div>
 </div>

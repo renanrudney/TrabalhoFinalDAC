@@ -9,6 +9,9 @@ export const funcionarioGuard: CanActivateFn = () => {
 
   if (authService.isAuthenticated() && authService.getUserType() === 'funcionario') {
     return true; // Permite acesso
+  } else if (authService.getUserType() === 'cliente') {
+    router.navigate(['/home-cliente']);
+    return true;
   } else {
     router.navigate(['/login']); // Redireciona para a página de login
     return false; // Bloqueia o acesso

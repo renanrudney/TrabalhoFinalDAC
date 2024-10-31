@@ -9,6 +9,9 @@ export const clienteGuard: CanActivateFn = () => {
 
   if (authService.isAuthenticated() && authService.getUserType() === 'cliente') {
     return true; // Permite acesso
+  } else if (authService.getUserType() === 'cliente') {
+    router.navigate(['/home-funcionario']);
+    return true;
   } else {
     router.navigate(['/login']); // Redireciona para a página de login
     return false; // Bloqueia o acesso

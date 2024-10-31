@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router,RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +16,7 @@ export class LoginComponent {
   senha: string = '';
   loginFailed: boolean = false;
 
-  constructor(private userService: UserService, private router: Router, private storageService: StorageService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   logar() {
 

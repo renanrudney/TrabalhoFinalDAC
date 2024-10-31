@@ -10,7 +10,8 @@ import { TransacaoMilhasService } from './transacao-milhas.service';
 export class ReservaService {
 
   Reservas: Array<Reserva> = [
-    new Reserva('AAA001','TADS0001',new Date('2024-10-15T14:00:00'),'RESERVADO',1,1,100,5)
+    new Reserva('AAA001','TADS0001',new Date('2024-10-15T14:00:00'),'RESERVADO',1,1,100,5),
+    new Reserva('AAA002','TADS0007', new Date('2024-10-30T22:00:00'),'RESERVADO',1,1,500,0)
   ]; 
 
   constructor(private historicoReservaService: HistoricoReservaService, private clienteService: ClienteService, private transacaoMilhasService: TransacaoMilhasService) { }
@@ -43,7 +44,7 @@ export class ReservaService {
   }
 
   getReserva(codigo: string): Reserva | null {
-    return this.Reservas.find(reserva => reserva.codigoReserva === codigo) || null
+    return this.Reservas.find(reserva => reserva.codigoReserva == codigo) || null
   }
 
   getReservasByClienteId(clienteId: number): Array<Reserva>{

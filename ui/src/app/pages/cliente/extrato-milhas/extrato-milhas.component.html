@@ -9,20 +9,22 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-striped table-hover">
-      <thead class="thead-light">
+    <table class="table table-striped table-hover table-bordered align-middle">
+      <thead class="table">
         <tr>
-          <th>Data/Hora</th>
-          <th>Valor (R$)</th>
-          <th>Milhas Compradas/Usadas</th>
-          <th>Descrição</th>
+          <th scope="col">Data/Hora</th>
+          <th scope="col">Valor (R$)</th>
+          <th scope="col">Milhas Compradas/Usadas</th>
+          <th scope="col">Descrição</th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngIf="transacoes && transacoes.length > 0; else noTransacoes">
           <tr *ngFor="let transacao of transacoes">
             <td>{{ transacao.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td *ngIf="transacao.tipo === 'entrada'">{{ (transacao.quantidadeMilhas * 5) | currency: 'BRL' : 'symbol':'1.2-2' }}</td>
+            <td *ngIf="transacao.tipo === 'entrada'">
+              {{ (transacao.quantidadeMilhas * 5) | currency: 'BRL' : 'symbol':'1.2-2' }}
+            </td>
             <td *ngIf="transacao.tipo !== 'entrada'">-</td>
             <td>{{ transacao.quantidadeMilhas }}</td>
             <td>{{ transacao.descricao }}</td>
@@ -30,12 +32,12 @@
         </ng-container>
         <ng-template #noTransacoes>
           <tr>
-            <td colspan="4" class="text-center">Nenhuma transação encontrada.</td>
+            <td colspan="4" class="text-center fw-bold">Nenhuma transação encontrada.</td>
           </tr>
         </ng-template>
       </tbody>
     </table>
-  </div>
+  </div>  
 
   <!-- Botão de Voltar -->
   <div class="mt-3">

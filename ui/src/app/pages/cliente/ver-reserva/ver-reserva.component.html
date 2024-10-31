@@ -8,7 +8,7 @@
     <li class="list-group-item">Origem: {{ getVooOrigem(reserva.codigoVoo) }}</li>
     <li class="list-group-item">Destino: {{ getVooDestino(reserva.codigoVoo) }}</li>
     <li class="list-group-item">Passagens compradas: {{ reserva.qntdPassagens }}</li>
-    <li class="list-group-item">Custo Total (R$):{{ reserva.custoTotal | currency: 'BRL' : 'symbol':'1.2-2'}}</li>
+    <li class="list-group-item">Custo Total (R$): {{ reserva.custoTotal | currency: 'BRL' : 'symbol':'1.2-2'}}</li>
     <li class="list-group-item">Milhas usadas: {{ reserva.milhasUsadas }}</li>
     <li class="list-group-item">Estado da Reserva: {{ reserva.estado }}</li>
   </ul>

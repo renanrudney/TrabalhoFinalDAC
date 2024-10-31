@@ -1,21 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { StorageService } from '../../services/storage.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit{
+  
+  userTipo: string | null = null;
 
-  constructor (private authService: AuthService, private storageService: StorageService) {}
+  constructor (private authService: AuthService) {}
 
-  getUserTipo(): string | null {
-    return this.storageService.getItem('userType');
+  ngOnInit(): void {
+    this.getUserTipo();
+  }
+
+  getUserTipo(): void {
+    this.userTipo = this.authService.getItem('userType');
   }
 
   logout() {

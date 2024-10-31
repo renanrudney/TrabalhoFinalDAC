@@ -25,12 +25,31 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
+    // Verifica se `localStorage` está disponível
+    if (!this.isLocalStorageAvailable()) {
+      return false;
+    }
     // Verifique se o usuário está autenticado
     return !!localStorage.getItem('authToken');
   }
 
   getUserType(): string | null {
     // Retorna o tipo de usuário (por exemplo, 'cliente' ou 'funcionario')
+    if (!this.isLocalStorageAvailable()) {
+      return null;
+    }
     return localStorage.getItem('userType');
   }
+
+  getItem(key: string): string | null {
+    if (!this.isLocalStorageAvailable()) {
+      return null;
+    }
+    return localStorage.getItem(key);
+  }
+
+  private isLocalStorageAvailable(): boolean {
+    return typeof localStorage !== 'undefined';
+  }
+
 }

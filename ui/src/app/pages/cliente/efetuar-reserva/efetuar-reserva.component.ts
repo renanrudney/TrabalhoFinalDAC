@@ -8,7 +8,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { TransacaoMilhasService } from '../../../services/transacao-milhas.service';
-import { StorageService } from '../../../services/storage.service';
+import { AeroportoService } from '../../../services/aeroporto.service';
+import { Aeroporto } from '../../../models/aeroporto/aeroporto.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-efetuar-reserva',
@@ -27,16 +29,20 @@ export class EfetuarReservaComponent implements OnInit{
   valorTotal: number = 0;
   milhasUsadas: number = 0;
   valorEmDinheiro: number = 0;
+  aeroportos: Aeroporto[] = [];
 
-  constructor(private vooService: VooService, private reservaService: ReservaService, private clienteService: ClienteService, private authService: AuthService,private transacaoMilhas: TransacaoMilhasService, private storageService: StorageService) {}
+  constructor(private vooService: VooService, private reservaService: ReservaService, private clienteService: ClienteService, 
+    private authService: AuthService,private transacaoMilhas: TransacaoMilhasService, private aeroportoService: AeroportoService,
+    private router: Router) {}
 
   ngOnInit() {
-    const clienteId: number = Number(this.storageService.getItem('userId'));
+    const clienteId: number = Number(this.authService.getItem('userId'));
     this.cliente = this.clienteService.getClienteById(clienteId);
+    this.aeroportos = this.aeroportoService.getAeroportos();
   }
 
   buscarVoos() {
-    this.voos.push(...this.vooService.getVoosCompra());
+    this.voos.push(...this.vooService.getVoosCompra(this.origem,this.destino));
   }
 
   selecionarVoo(voo: Voo) {
@@ -62,7 +68,8 @@ export class EfetuarReservaComponent implements OnInit{
       this.clienteService.substrairMilhas(this.milhasUsadas, clienteId);
       const descricao: string = this.vooSelecionado.origem + '->' + this.vooSelecionado.destino;
       this.transacaoMilhas.novaTransacao(clienteId,this.milhasUsadas,descricao,codigo);
-      console.log(`Reserva confirmada! Codigo da reserva: ${codigo}`);
+      alert(`Reserva confirmada! Codigo da reserva: ${codigo}`);
+      this.router.navigate(['/home-cliente']);
     } else {
       alert("Erro ao reservar, tente novamente");
     }
