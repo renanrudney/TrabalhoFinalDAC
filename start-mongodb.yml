@@ -17,7 +17,7 @@ services:
 
 networks:
   dac-net:
-    name: "dac-net"
+    name: dac-net
     external: true
 
 volumes:
