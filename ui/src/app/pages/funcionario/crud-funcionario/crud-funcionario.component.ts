@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 interface Funcionario {
   id: number;
@@ -26,8 +26,10 @@ export class CrudFuncionarioComponent {
     { id: 3, nome: 'Beltrano da Silva', cpf: '32345678903', email: 'beltrano@gmail.com', telefone: '9999-3333' },
   ];
   
-  alterarFuncionario(id: number): void {
-    console.log(`alterar funcionário com ID: ${id}`);
+  constructor(private router: Router) {}
+
+  alterarFuncionario(cpf: string): void {
+    this.router.navigate(['/alterar-funcionario', cpf]);
     // Lógica para ver lista de confirmação
   }
 

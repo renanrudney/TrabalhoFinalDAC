@@ -1,5 +1,3 @@
-import { Aeroporto } from "../aeroporto/aeroporto.model";
-
 export class Voo {
   constructor(
     public codigoVoo: string,
@@ -8,6 +6,7 @@ export class Voo {
     public destino: string,   // Aeroporto de destino
     public valorPassagem: number, // Valor em reais
     public totalPoltronas: number,
-    public poltronasOcupadas: number
+    public poltronasOcupadas: number,
+    public estado?: string
   ) {}
 }

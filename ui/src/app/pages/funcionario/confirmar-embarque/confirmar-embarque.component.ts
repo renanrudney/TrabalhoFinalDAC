@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
+import { ReservaService } from '../../../services/reserva.service';
+
 
 @Component({
   selector: 'app-confirmar-embarque',
@@ -11,16 +13,22 @@ import { RouterModule } from '@angular/router';
   styleUrl: './confirmar-embarque.component.scss'
 })
 
-export class ConfirmarEmbarqueComponent {
- 
-  assento = {
-    numero: 0
-  };
+export class ConfirmarEmbarqueComponent implements OnInit{
+  
+  codigoVoo: string | null = null;
+  reserva: string = "";
 
-  ConfirmarEmbarque(): void {
-    console.log(`embarque solicitado:`, this.assento.numero);
-    // Lógica para confirmar embarque ou apontar erro caso nao encontre o assento
+  constructor(private route: ActivatedRoute, private reservaService: ReservaService) {}
+
+  ngOnInit(): void {
+    this.codigoVoo = this.route.snapshot.paramMap.get('codigoVoo');
   }
 
-
+  ConfirmarEmbarque(reserva: string) {
+    if (this.codigoVoo) {
+      const mensagem: string = this.reservaService.embarque(reserva, this.codigoVoo);
+      alert(mensagem);    
+      this.reserva = "";
+    }
+  }
 }

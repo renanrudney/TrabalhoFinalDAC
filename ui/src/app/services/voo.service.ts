@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Voo } from '../models/voo/voo.model';
 import { Aeroporto } from '../models/aeroporto/aeroporto.model';
+import { ReservaService } from './reserva.service';
 
 @Injectable({
   providedIn: 'root'
@@ -76,7 +77,7 @@ export class VooService {
     )
   ];
 
-  constructor() { }
+  constructor(private reservaService: ReservaService) { }
 
   getVoos(): Array<Voo> {
     return this.Voos;
@@ -112,5 +113,21 @@ export class VooService {
   getVooDataHora(codigoVoo: string): Date | undefined {
     const vooEncontrado = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
     return vooEncontrado ? vooEncontrado.dataHora : undefined;
-}
+  }
+
+  cancelarVoo(codigoVoo: string): void {
+    const vooEncontrado: Voo | undefined = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
+    if (vooEncontrado) {
+      vooEncontrado.estado = "CANCELADO";
+      this.reservaService.vooCancelado(vooEncontrado.codigoVoo);
+    }
+  }
+
+  realizarVoo(codigoVoo: string): void {
+    const vooEncontrado: Voo | undefined = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
+    if (vooEncontrado?.estado === "CONFIRMADO") {
+      vooEncontrado.estado = "REALIZADO";
+      this.reservaService.vooRealizado(vooEncontrado.codigoVoo);
+    }
+  }
 }

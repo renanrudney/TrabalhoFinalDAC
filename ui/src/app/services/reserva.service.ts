@@ -50,6 +50,23 @@ export class ReservaService {
   getReservasByClienteId(clienteId: number): Array<Reserva>{
     return this.Reservas.filter(reserva => reserva.clienteId === clienteId);
   }
+
+  embarque(codigoReserva: string, codigoVoo: string): string {
+    const reservaFind: Reserva | null = this.getReserva(codigoReserva);
+    if (reservaFind) {
+      if (reservaFind.codigoVoo === codigoVoo){
+        reservaFind.estado = "EMBARCADO";
+        console.log(`Estado da reserva ${codigoReserva} alterado para EMBARCADO`);
+        return "Cliente embarcado com sucesso!";
+      } else {
+        console.log(`Reserva com código ${codigoReserva} não é do voo ${codigoVoo}.`);
+        return "Reserva não é deste voo!";
+      }
+    } else {
+      console.log(`Reserva com código ${codigoReserva} não encontrada.`);
+      return "Reserva não encontrada";
+    }
+  }
   
   gerarCodigoReserva(): string {
     const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -57,5 +74,26 @@ export class ReservaService {
     const randomLetra = () => letras[Math.floor(Math.random() * letras.length)];
     const randomNumero = () => numeros[Math.floor(Math.random() * numeros.length)];
     return `${randomLetra()}${randomLetra()}${randomLetra()}${randomNumero()}${randomNumero()}${randomNumero()}`;
+  }
+
+  vooCancelado(codigoVoo: string): void {
+    this.Reservas.forEach(reserva => {
+        if (reserva.codigoVoo === codigoVoo) {
+            reserva.estado = "CANCELADO VOO";
+        }
+    });
+  }
+
+  vooRealizado(codigoVoo: string): void {
+    this.Reservas.forEach(reserva => {
+        if (reserva.codigoVoo === codigoVoo) {
+          if (reserva.estado === "EMBARCADO"){
+            reserva.estado = "REALIZADO";
+          } else {
+            reserva.estado === "NÃO REALIZADO"
+          }
+          
+        }
+    });
   }
 }

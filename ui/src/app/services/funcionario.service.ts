@@ -25,4 +25,9 @@ export class FuncionarioService {
       funcionarioExistente.telefone = funcionarioAlterado.telefone;
     }
   }
+  
+  getFuncionarioByCpf(cpfFuncionario: string): Observable<Funcionario | null> {
+    const funcionario = this.funcionarios.find(funcionario => funcionario.cpf === cpfFuncionario) || null;
+    return of(funcionario);
+  }
 }

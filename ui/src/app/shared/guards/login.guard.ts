@@ -11,7 +11,7 @@ export const loginGuard: CanActivateFn = (route, state) => {
     
     // Redireciona conforme o tipo de usuário
     if (userTipo === 'cliente') {
-      router.navigate(['/inicial-cliente']);
+      router.navigate(['/home-cliente']);
     } else if (userTipo === 'funcionario') {
       router.navigate(['/home-funcionario']);
     }

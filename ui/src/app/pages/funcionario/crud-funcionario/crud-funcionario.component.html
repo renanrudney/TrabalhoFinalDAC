@@ -26,7 +26,7 @@
           <td>{{ funcionario.email }}</td>
           <td>{{ funcionario.telefone }}</td>
           <td>
-            <a class="btn btn-info" routerLink="/alterar-funcionario">Alterar</a>
+            <button class="btn btn-info" (click)="alterarFuncionario(funcionario.cpf)">Alterar</button>
             <button class="btn btn-danger" (click)="removerFuncionario(funcionario.id)">Remover</button>
           </td>
         </tr>
