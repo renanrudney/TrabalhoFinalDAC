@@ -1,0 +1,13 @@
+version: '3.5'
+
+services:
+  ms-auth:
+    image: ms-auth:0.0.1-SNAPSHOT
+    ports:
+      - 5000:5000
+  
+  dac-gateway:
+    image: dac-gateway
+    build: .
+    ports:
+      - 3000:3000

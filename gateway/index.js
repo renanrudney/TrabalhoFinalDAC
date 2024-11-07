@@ -21,7 +21,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 function verifyJWT(req, res, next) {
-  return next() // TODO: Remove on final jwt version
   const token = req.headers['authorization'].replace('Bearer ', '');
   if (!token) {
     return res.status(401).json({
@@ -41,7 +40,7 @@ function verifyJWT(req, res, next) {
 }
 
 // proxies
-// const exampleProxy = httpProxy('http://localhost:5002')
+// const exampleProxy = httpProxy(''http://host.docker.internal:5000')
 
 const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
