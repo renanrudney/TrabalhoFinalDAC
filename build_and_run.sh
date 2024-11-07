@@ -1,5 +1,7 @@
 docker network create --driver bridge dac-net
 
+docker-compose -f start-postgres.yml up -d
+sleep 5
 docker-compose -f start-mongodb.yml up -d
 sleep 5
 

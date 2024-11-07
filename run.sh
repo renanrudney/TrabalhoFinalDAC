@@ -1,3 +1,5 @@
+docker-compose -f start-postgres.yml up -d
+sleep 10
 docker-compose -f start-mongodb.yml up -d
 sleep 5
 
