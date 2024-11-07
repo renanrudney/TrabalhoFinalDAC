@@ -43,7 +43,7 @@ function verifyJWT(req, res, next) {
 // proxies
 // const exampleProxy = httpProxy('http://localhost:5002')
 
-const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
+const authServiceProxy = httpProxy('http://localhost:5000', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
       reqBody = {};

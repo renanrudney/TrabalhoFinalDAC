@@ -4,7 +4,7 @@ db.createCollection('usuario');  // Cria a coleção 'usuario'
 
 // (Opcional) Insere um exemplo na coleção 'usuario'
 db.usuario.insert({
-  login: "allbano@gmail.com",
-  senha: "dac-exemplo",
+  login: "dac@ufpr.br",
+  senha: "123456",
   tipo: "0"
 });
