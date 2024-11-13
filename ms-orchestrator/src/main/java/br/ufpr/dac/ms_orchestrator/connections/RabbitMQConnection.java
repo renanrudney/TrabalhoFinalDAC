@@ -1,4 +1,4 @@
-package br.ufpr.dac.orchestrator.connections;
+package br.ufpr.dac.ms_orchestrator.connections;
 
 import br.ufpr.dac.common.constants.RabbitMQConstants;
 
@@ -7,6 +7,10 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Binding.DestinationType;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.support.converter.DefaultClassMapper;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
