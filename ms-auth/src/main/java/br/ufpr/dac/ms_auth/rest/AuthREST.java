@@ -27,7 +27,7 @@ public class AuthREST {
     Usuario usuario = repository.findUsuarioByLogin(login.getLogin());
 
     if (usuario != null) {
-      if (usuario.getSenha().equals(login.getSenha())) {
+      if (login.getSenha().equals(usuario.getSenha())) {
         UsuarioDTO usuarioDTO = mapper.map(usuario, UsuarioDTO.class);
         return ResponseEntity.ok().body(usuarioDTO);
       }
