@@ -1,4 +1,4 @@
-package dac.entity.ms_cliente;
+package br.ufpr.dac.ms_cliente.model;
 
 import java.time.LocalDate;
 

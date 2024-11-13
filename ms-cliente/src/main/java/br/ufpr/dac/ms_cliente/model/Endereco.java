@@ -1,4 +1,4 @@
-package dac.entity.ms_cliente;
+package br.ufpr.dac.ms_cliente.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package br.ufpr.dac.orchestrator.services;
+package br.ufpr.dac.ms_cliente.services;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

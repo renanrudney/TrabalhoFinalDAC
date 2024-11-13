@@ -1,4 +1,4 @@
-package dac.entity.ms_cliente;
+package br.ufpr.dac.ms_cliente.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,7 +20,7 @@ public class Cliente
 {
 	@Id
 	@Column(name="id_usuario")
-	private Long idUsuario;
+	private String idUsuario;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_endereco", referencedColumnName="id")
