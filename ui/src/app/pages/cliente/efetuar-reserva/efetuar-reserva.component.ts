@@ -11,11 +11,12 @@ import { TransacaoMilhasService } from '../../../services/transacao-milhas.servi
 import { AeroportoService } from '../../../services/aeroporto.service';
 import { Aeroporto } from '../../../models/aeroporto/aeroporto.model';
 import { Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-efetuar-reserva',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,HttpClientModule],
   templateUrl: './efetuar-reserva.component.html',
   styleUrl: './efetuar-reserva.component.scss'
 })

@@ -3,11 +3,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Reserva } from '../../../models/reserva/reserva.model';
 import { VooService } from '../../../services/voo.service';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-ver-reserva',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,HttpClientModule],
   templateUrl: './ver-reserva.component.html',
   styleUrl: './ver-reserva.component.scss'
 })

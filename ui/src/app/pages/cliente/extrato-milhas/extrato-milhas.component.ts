@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ClienteService } from '../../../services/cliente.service';
 import { AuthService } from '../../../services/auth.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-extrato-milhas',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HttpClientModule],
   templateUrl: './extrato-milhas.component.html',
   styleUrl: './extrato-milhas.component.scss'
 })

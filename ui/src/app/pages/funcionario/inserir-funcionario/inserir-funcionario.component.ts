@@ -6,13 +6,14 @@ import { UserService } from '../../../services/user.service';
 import { NgxMaskDirective,provideNgxMask } from 'ngx-mask';
 import { FuncionarioService } from '../../../services/funcionario.service';
 import { Funcionario } from '../../../models/funcionario/funcionario.model';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-inserir-funcionario',
   standalone: true,
   templateUrl: './inserir-funcionario.component.html',
   styleUrl: './inserir-funcionario.component.scss',
-  imports: [FormsModule,CommonModule,RouterModule,NgxMaskDirective],
+  imports: [FormsModule,CommonModule,RouterModule,NgxMaskDirective,HttpClientModule],
   providers: [provideNgxMask()]
 })
 

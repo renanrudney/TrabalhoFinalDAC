@@ -4,16 +4,19 @@ import { Reserva } from '../../../models/reserva/reserva.model';
 import { ReservaService } from '../../../services/reserva.service';
 import { VooService } from '../../../services/voo.service';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-cancelar-reserva',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './cancelar-reserva.component.html',
   styleUrl: './cancelar-reserva.component.scss',
 })
+
 export class CancelarReservaComponent {
   @Input() reserva!: Reserva;
+  
   constructor(public activeModal: NgbActiveModal, private reservaService: ReservaService, private vooService: VooService) {}
 
   cancelarReserva(codigoReserva: string): void {

@@ -6,11 +6,12 @@ import { VooService } from '../../../services/voo.service';
 import { Aeroporto } from '../../../models/aeroporto/aeroporto.model';
 import { AeroportoService } from '../../../services/aeroporto.service';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-cadastro-voo',
   standalone: true,
-  imports: [CommonModule, FormsModule,NgxMaskDirective],
+  imports: [CommonModule, FormsModule,NgxMaskDirective,HttpClientModule],
   providers: [provideNgxMask()],
   templateUrl: './cadastro-voo.component.html',
   styleUrls: ['./cadastro-voo.component.scss']

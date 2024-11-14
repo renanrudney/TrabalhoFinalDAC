@@ -7,11 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { VooService } from '../../../services/voo.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CancelarReservaComponent } from '../cancelar-reserva/cancelar-reserva.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-consultar-reserva',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,HttpClientModule],
   templateUrl: './consultar-reserva.component.html',
   styleUrl: './consultar-reserva.component.scss'
 })

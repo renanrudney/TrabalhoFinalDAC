@@ -19,19 +19,26 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let reserva of Reservas" class="align-middle">
-            <ng-container *ngIf="['RESERVADO', 'EMBARCADO', 'CANCELADO VOO'].includes(reserva.estado)">
-              <td>{{ reserva.codigoReserva }}</td>
-              <td>{{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
-              <td>{{ getVooOrigem(reserva.codigoVoo) }}</td>
-              <td>{{ getVooDestino(reserva.codigoVoo) }}</td>
-              <td>{{ reserva.estado }}</td>
-              <td>
-                <button class="btn btn-primary btn-sm me-1" (click)="abrirModalVerReserva(reserva)">Ver Reserva</button>
-                <button *ngIf="reserva.estado === 'RESERVADO'" class="btn btn-danger btn-sm" (click)="abrirModalCancelarReserva(reserva)">Cancelar Reserva</button>
-              </td>
-            </ng-container>
-          </tr>
+          <ng-container *ngIf="Reservas && Reservas.length > 0; else noReservas">
+            <tr *ngFor="let reserva of Reservas" class="align-middle">
+              <ng-container *ngIf="['RESERVADO', 'EMBARCADO', 'CANCELADO VOO'].includes(reserva.estado)">
+                <td>{{ reserva.codigoReserva }}</td>
+                <td>{{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ getVooOrigem(reserva.codigoVoo) }}</td>
+                <td>{{ getVooDestino(reserva.codigoVoo) }}</td>
+                <td>{{ reserva.estado }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm me-1" (click)="abrirModalVerReserva(reserva)">Ver Reserva</button>
+                  <button *ngIf="reserva.estado === 'RESERVADO'" class="btn btn-danger btn-sm" (click)="abrirModalCancelarReserva(reserva)">Cancelar Reserva</button>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-container>
+          <ng-template #noReservas>
+            <tr>
+              <td colspan="6" class="text-center fw-bold">{{ errorMessage || 'Nenhuma reserva encontrada.' }}</td>
+            </tr>
+          </ng-template>
         </tbody>
       </table>      
   </div>

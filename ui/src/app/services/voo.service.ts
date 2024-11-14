@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Voo } from '../models/voo/voo.model';
-import { Aeroporto } from '../models/aeroporto/aeroporto.model';
 import { ReservaService } from './reserva.service';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -79,10 +79,10 @@ export class VooService {
 
   constructor(private reservaService: ReservaService) { }
 
-  getVoos(): Array<Voo> {
-    return this.Voos;
+  getVoos(): Observable<Voo[]> {
+    return of(this.Voos);
   }
-
+  
   getVoosCompra(origem: string, destino: string): Array<Voo> {
     const dataAtual = new Date();
     return this.Voos.filter(voo => 
@@ -98,8 +98,9 @@ export class VooService {
     return this.Voos.filter(voo => {
       return voo.dataHora > agora && voo.dataHora <= dataLimite;
     });
-}
+  }
 
+  //Remover os gets - carregar todos os voos no componente
   getOrigem(codigoVoo: string): string | undefined{
     const vooEncontrado = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
     return vooEncontrado?.origem;

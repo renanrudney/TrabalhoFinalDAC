@@ -3,18 +3,24 @@ import { Reserva } from '../models/reserva/reserva.model';
 import { HistoricoReservaService } from './historico-reserva.service';
 import { ClienteService } from './cliente.service';
 import { TransacaoMilhasService } from './transacao-milhas.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../shared/environment/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservaService {
 
+  private baseUrl = `${environment.apiGatewayUrl}/reservas`;
+
   Reservas: Array<Reserva> = [
     new Reserva('AAA001','TADS0001',new Date('2024-10-15T14:00:00'),'RESERVADO',1,1,100,5),
     new Reserva('AAA002','TADS0007', new Date('2024-10-30T22:00:00'),'RESERVADO',1,1,500,0)
   ]; 
 
-  constructor(private historicoReservaService: HistoricoReservaService, private clienteService: ClienteService, private transacaoMilhasService: TransacaoMilhasService) { }
+  constructor(private historicoReservaService: HistoricoReservaService, private clienteService: ClienteService, 
+    private transacaoMilhasService: TransacaoMilhasService, private http: HttpClient) { }
 
   cancelarReserva(codigoReserva: string): void {
     // Procura a reserva pelo código
@@ -47,8 +53,9 @@ export class ReservaService {
     return this.Reservas.find(reserva => reserva.codigoReserva == codigo) || null
   }
 
-  getReservasByClienteId(clienteId: number): Array<Reserva>{
-    return this.Reservas.filter(reserva => reserva.clienteId === clienteId);
+  getReservasByClienteId(clienteId: number): Observable<Reserva[]>{
+    //return this.Reservas.filter(reserva => reserva.clienteId === clienteId);
+    return this.http.get<Reserva[]>(`${this.baseUrl}/reservas/cliente/${clienteId}`);
   }
 
   embarque(codigoReserva: string, codigoVoo: string): string {
