@@ -32,6 +32,7 @@ export class HomeFuncionarioComponent implements OnInit {
   ngOnInit(): void {
     this.voos = this.vooService.getVoosProximasHoras();
     //Ordenar por dataHora
+    this.voos = this.voos.filter(voo => voo.estado === 'CONFIRMADO');
     this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
   }
   
@@ -39,14 +40,14 @@ export class HomeFuncionarioComponent implements OnInit {
     this.router.navigate(['/confirmar-embarque', codigoVoo]);
   }
 
-  realizarVoo(codigoVoo: string): void {
-    console.log(`Cancelar Voo com ID: ${codigoVoo}`);
-    // Lógica para realziar voo
-    this.voos = this.voos.filter(voo => voo.codigoVoo !== codigoVoo);
-  }
-
   abrirModalCancelarVoo(voo: Voo): void {
     const modalRef = this.modalService.open(CancelarReservaComponent);
     modalRef.componentInstance.voo = voo;
+  }
+
+  realizarVoo(codigoVoo: string): void {
+    this.vooService.realizarVoo(codigoVoo);
+    alert(`Voo ${codigoVoo} foi realizado! Atualizado o estado do voo e das reservas.`);
+    location.reload(); // Recarrega a página
   }
 }

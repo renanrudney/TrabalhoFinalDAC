@@ -31,7 +31,7 @@ export const routes: Routes = [
     { path: 'home-funcionario', component: HomeFuncionarioComponent, canActivate: [funcionarioGuard] },
     { path: 'crud-funcionario', component: CrudFuncionarioComponent, canActivate: [funcionarioGuard] },
     { path: 'cadastro-voo', component: CadastroVooComponent, canActivate: [funcionarioGuard] },
-    { path: 'confirmar-embarque', component: ConfirmarEmbarqueComponent, canActivate: [funcionarioGuard] },
+    { path: 'confirmar-embarque/:codigoVoo', component: ConfirmarEmbarqueComponent, canActivate: [funcionarioGuard] },
     { path: 'inserir-funcionario', component: InserirFuncionarioComponent, canActivate: [funcionarioGuard] },
-    { path: 'alterar-funcionario', component: AlterarFuncionarioComponent, canActivate: [funcionarioGuard] }
+    { path: 'alterar-funcionario/:cpf', component: AlterarFuncionarioComponent, canActivate: [funcionarioGuard] }
 ];

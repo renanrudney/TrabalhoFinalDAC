@@ -8,16 +8,19 @@ export const loginGuard: CanActivateFn = (route, state) => {
 
   if (authService.isAuthenticated()) {
     const userTipo = authService.getUserType(); // 'cliente' ou 'funcionario'
-    
-    // Redireciona conforme o tipo de usuário
-    if (userTipo === 'cliente') {
-      router.navigate(['/home-cliente']);
-    } else if (userTipo === 'funcionario') {
-      router.navigate(['/home-funcionario']);
+
+    // Evita redirecionamento desnecessário ao acessar a rota de login
+    if (state.url === '/login' || state.url === '/autocadastro') {
+      if (userTipo === 'cliente') {
+        router.navigate(['/home-cliente']);
+      } else if (userTipo === 'funcionario') {
+        router.navigate(['/home-funcionario']);
+      }
+      return false;
     }
 
-    return false; // Impede o acesso à página de login se já autenticado
+    return true;
   }
   
-  return true; // Permite acesso à página de login se não autenticado
+  return true; // Permite acesso se o usuário não estiver autenticado
 };

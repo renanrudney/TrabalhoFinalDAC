@@ -68,7 +68,7 @@ export class VooService {
     ),
     new Voo(
       'TADS0007',                 // Código do Voo
-      (new Date('2024-10-31T22:00:00')),                    // Data/Hora do Voo
+      (new Date('2024-11-31T22:00:00')),                    // Data/Hora do Voo
       'CWB',      // Origem
       'GRU',     // Destino
       500,                        // Valor da Passagem
@@ -129,5 +129,10 @@ export class VooService {
       vooEncontrado.estado = "REALIZADO";
       this.reservaService.vooRealizado(vooEncontrado.codigoVoo);
     }
+  }
+
+  cadastrarVoo(codigoVoo: string, dataHora: Date, origem: string, destino: string, valorPassagem: number, totalPoltronas: number): void {
+    const novoVoo: Voo = new Voo (codigoVoo, dataHora, origem, destino, valorPassagem, totalPoltronas, 0, "CONFIRMADO");
+    this.Voos.push(novoVoo);
   }
 }

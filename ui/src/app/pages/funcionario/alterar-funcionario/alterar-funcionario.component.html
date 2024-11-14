@@ -1,7 +1,6 @@
 <div class="container my-3">
   <div class="row">
     <div class="col-12">
-      <button type="button" class="btn-close position-absolute top-0 end-0 mt-5 me-5" aria-label="Close" routerLink="/crud-funcionario"></button>
       <h1 class="text-primary">Alterar Funcionário</h1>
     </div>
   </div>
@@ -9,11 +8,12 @@
   <form #formAlterarFuncionario="ngForm" method="post">
     <div class="row">
       <div class="col-12" id="dados">
-        <h3>1 - Insira seus dados</h3>
+        <h3>Altere os dadosn</h3>
         <div class="row">
+          <!-- Nome -->
           <div class="form-floating col-sm-6 mb-3">
             <input type="text" class="form-control" id="nome" placeholder="Nome completo"
-                   ngModel name="nome" required minlength="2" #nomeCtrl="ngModel">
+                   [(ngModel)]="funcionario.nome" name="nome" required minlength="2" #nomeCtrl="ngModel">
             <label for="nome">Nome</label>
             <i *ngIf="nomeCtrl.valid && nomeCtrl.touched"
                class="bi bi-check-lg text-success position-absolute end-0 top-50 translate-middle-y me-3"></i>
@@ -26,9 +26,11 @@
               O nome deve ter no mínimo 2 caracteres.
             </div>
           </div>
+
+          <!-- E-mail -->
           <div class="form-floating col-sm-6 mb-3">
             <input type="email" class="form-control" id="email" placeholder="email@example.com"
-                   ngModel name="email" required email #emailCtrl="ngModel">
+                   [(ngModel)]="funcionario.email" name="email" required email #emailCtrl="ngModel">
             <label for="email">E-mail</label>
             <i *ngIf="emailCtrl.valid && emailCtrl.touched"
                class="bi bi-check-lg text-success position-absolute end-0 top-50 translate-middle-y me-3"></i>
@@ -39,20 +41,20 @@
             </div>
           </div>
         </div>
+
         <div class="row">
+          <!-- CPF -->
           <div class="form-floating col-sm-6 mb-3">
             <input type="text" class="form-control" id="cpf" placeholder="Precisamos de um CPF válido." 
-                   [(ngModel)]="cpf" inputmode="numeric" name="cpf" required cpf
-                   #cpfCtrl="ngModel" mask="000.000.000-00" disabled>
+                   [(ngModel)]="funcionario.cpf" inputmode="numeric" name="cpf" required cpf #cpfCtrl="ngModel" mask="000.000.000-00" disabled>
             <label for="cpf" class="form-label">CPF</label>
           </div>
 
+          <!-- Telefone -->
           <div class="form-floating col-sm-6 mb-3">
-            <input type="text" class="form-control" id="cpf" placeholder="Precisamos de um Telefone." 
-                   [(ngModel)]="telefone" inputmode="numeric" name="telefone" required telefone
-                   #telefoneCtrl="ngModel" mask="(00)00000-0000">
-
-            <label for="cpf" class="form-label">Telefone</label>
+            <input type="text" class="form-control" id="telefone" placeholder="Precisamos de um Telefone." 
+                   [(ngModel)]="funcionario.telefone" inputmode="numeric" name="telefone" required telefone #telefoneCtrl="ngModel" mask="(00)00000-0000">
+            <label for="telefone" class="form-label">Telefone</label>
             <i *ngIf="telefoneCtrl.valid && telefoneCtrl.touched"
                class="bi bi-check-lg text-success position-absolute end-0 top-50 translate-middle-y me-3"></i>
             <i *ngIf="telefoneCtrl.invalid && telefoneCtrl.touched"

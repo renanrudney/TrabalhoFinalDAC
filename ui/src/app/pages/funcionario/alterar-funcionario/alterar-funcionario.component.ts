@@ -13,13 +13,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './alterar-funcionario.component.scss'
 })
 export class AlterarFuncionarioComponent implements OnInit {
-  
-  funcionario!: Funcionario;
 
+  funcionario!: Funcionario;
   cpf: string = "";
-  nome: string = "";
-  email: string = "";
-  telefone: string = "";
 
   constructor(
     private funcionarioService: FuncionarioService,
@@ -32,33 +28,16 @@ export class AlterarFuncionarioComponent implements OnInit {
       this.funcionarioService.getFuncionarioByCpf(cpfFuncionario).subscribe((funcionario) => {
         if (funcionario) {
           this.funcionario = funcionario;
-          this.preencherFormulario();
         }
       });
     }
   }
 
-  preencherFormulario(): void {
-    if (this.funcionario) {
-      this.nome = this.funcionario.nome;
-      this.email = this.funcionario.email;
-      this.cpf = this.funcionario.cpf;
-      this.telefone = this.funcionario.telefone;
-    }
-  }
-
   onSubmit(form: NgForm) {
     if (form.touched && form.valid) {
-      const funcionarioAlterado: Funcionario = {
-        cpf: this.funcionario.cpf,
-        nome: this.nome,
-        email: this.email,
-        telefone: this.telefone
-      };
-
-      this.funcionarioService.alterarFuncionario(funcionarioAlterado);
+      this.funcionarioService.alterarFuncionario(this.funcionario);
       console.log("Funcionário Alterado com sucesso!");
-      window.history.back();
+       window.history.back();
     } else {
       alert("Nenhum dado foi alterado");
     }

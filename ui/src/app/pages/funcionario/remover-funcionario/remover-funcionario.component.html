@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Remover Funcionario</h4>
+</div>
+<div class="modal-body">
+  <ul class="list-group">
+    <li class="list-group-item">CPF: {{ funcionario.cpf }}</li>
+    <li class="list-group-item">Nome: {{ funcionario.nome }}</li>
+    <li class="list-group-item">Email: {{ funcionario.email }}</li>
+    <li class="list-group-item">Telefone: {{ funcionario.telefone }}</li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close()">Fechar</button>
+  <button type="submit" class="btn btn-danger" (click)="removerFuncionario(funcionario.cpf)">Remover</button>
+</div>

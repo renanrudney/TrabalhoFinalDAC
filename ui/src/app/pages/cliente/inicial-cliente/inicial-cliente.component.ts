@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NavbarComponent } from '../../../shared/navbar/navbar.component';
 import { ClienteService } from '../../../services/cliente.service';
 import { Cliente } from '../../../models/cliente/cliente.model';
 import { Reserva } from '../../../models/reserva/reserva.model';
@@ -16,7 +15,7 @@ import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-tela-inicial-cliente',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './inicial-cliente.component.html',
   styleUrls: ['./inicial-cliente.component.scss']
 })

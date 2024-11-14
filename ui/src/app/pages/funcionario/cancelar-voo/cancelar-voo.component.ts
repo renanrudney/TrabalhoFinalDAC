@@ -18,5 +18,6 @@ export class CancelarVooComponent {
 
   cancelarVoo(codigoVoo: string) {
     this.vooService.cancelarVoo(codigoVoo);
+    this.activeModal.close()
   }
 }

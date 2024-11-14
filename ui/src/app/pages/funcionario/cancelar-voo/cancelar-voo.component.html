@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">Cancelar Reserva</h4>
+  <h4 class="modal-title" id="modal-basic-title">Cancelar Voo</h4>
 </div>
 <div class="modal-body">
   <ul class="list-group">
@@ -7,7 +7,7 @@
     <li class="list-group-item">Data/Hora: {{ voo.dataHora | date: 'dd/MM/yyyy HH:mm' }}</li>
     <li class="list-group-item">Aeroporto Origem: {{ voo.origem }}</li>
     <li class="list-group-item">Aeroporto Destino: {{ voo.destino }}</li>
-    <li class="list-group-item">Valor da Passagem (R$): {{ voo.valorPassagem }}</li>
+    <li class="list-group-item">Valor da Passagem (R$): {{ voo.valorPassagem | currency:'BRL':'symbol':'1.2-2' }}</li>
     <li class="list-group-item">Total de Poltronas: {{ voo.totalPoltronas }}</li>
     <li class="list-group-item">Poltronas Ocupadas: {{ voo.poltronasOcupadas }}</li>
   </ul>
