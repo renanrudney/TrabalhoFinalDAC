@@ -1,5 +1,5 @@
 <div class="container mt-4">
-  <h2 class="text-center">Menu do Funcionario</h2>
+  <h2 class="text-center">Home Funcionario</h2>
   
   <div class="mb-4">
     <h4>Operações:</h4>
@@ -10,7 +10,7 @@
   </div>
 
   <div class="mb-4">
-    <h4>Reservas</h4>
+    <h4>Voos confirmados</h4>
     <table class="table table-bordered">
       <thead class="table-light">
         <tr>
@@ -21,16 +21,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let reserva of reservas">
-          <td>{{ reserva.dataHora }}</td>
-          <td>{{ reserva.aeroportoOrigem }}</td>
-          <td>{{ reserva.aeroportoDestino }}</td>
+        <tr *ngFor="let voo of voos">
+          <td>{{ voo.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ voo.origem }}</td>
+          <td>{{ voo.destino }}</td>
           <td>
-            <!--<button class="btn btn-info" (click)="verConfirmacao(reserva.id)">Confirmação de embarque</button>-->
-            <a routerLink="/confirmar-embarque" class="btn btn-info">Confirmação de embarque</a>
-            <button class="btn btn-success" (click)="realizarVoo(reserva.id)">Realizar Voo</button>
-            <button class="btn btn-danger" (click)="cancelarVoo(reserva.id)">Cancelar</button>
+            <button class="btn btn-info" (click)="confirmarEmbarque(voo.codigoVoo)">Confirmação de embarque</button>
+            <button class="btn btn-success" (click)="realizarVoo(voo.codigoVoo)">Realizar Voo</button>
+            <button class="btn btn-danger" (click)="abrirModalCancelarVoo(voo)">Cancelar</button>
           </td>
+        </tr>
+        <tr *ngIf="voos.length === 0">
+          <td colspan="5" class="text-center fw-bold">Nenhum voo confirmado nas próximas 48 horas.</td>
         </tr>
       </tbody>
     </table>

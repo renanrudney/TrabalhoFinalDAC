@@ -37,9 +37,9 @@ export class InserirFuncionarioComponent {
     this.funcionarioService.criarFuncionario(novoFuncionario).subscribe(
       (response) => {
         this.userService.criarUsuarioFuncionario(novoFuncionario.email);
-        console.log('Funcioanrio criado com sucesso:', response);
-        alert('Seu cadastro foi realizado. Você receberá um e-mail contendo sua senha');
-        this.router.navigate(['/login']);
+        console.log('Funcionario criado com sucesso:', response);
+        alert('Cadastro realizado. O funcionário receberá um e-mail contendo sua senha');
+        this.router.navigate(['/home-funcionario']);
       },
       (error) => {
         console.error('Erro ao criar o funcionario:', error);

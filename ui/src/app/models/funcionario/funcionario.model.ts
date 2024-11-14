@@ -4,6 +4,7 @@ export class Funcionario {
     public nome: string,
     public cpf: string,
     public email: string,
-    public telefone: string
+    public telefone: string,
+    public id?: number
   ){}
 }

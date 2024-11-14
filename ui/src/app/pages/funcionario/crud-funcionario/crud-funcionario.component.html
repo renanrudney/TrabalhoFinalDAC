@@ -1,5 +1,5 @@
 <div class="container mt-4">
-  <h2 class="text-center">Menu do Funcionario</h2>
+  <h2 class="text-center">Gestão de Funcionários</h2>
   
   <div class="mb-4">
     <h4>Operações:</h4>
@@ -17,6 +17,7 @@
           <th>CPF</th>
           <th>Email</th>
           <th>Telefone</th>
+          <th>Opções</th>
         </tr>
       </thead>
       <tbody>
@@ -26,8 +27,8 @@
           <td>{{ funcionario.email }}</td>
           <td>{{ funcionario.telefone }}</td>
           <td>
-            <a class="btn btn-info" routerLink="/alterar-funcionario">Alterar</a>
-            <button class="btn btn-danger" (click)="removerFuncionario(funcionario.id)">Remover</button>
+            <button class="btn btn-info me-1" (click)="alterarFuncionario(funcionario.cpf)">Alterar</button>
+            <button class="btn btn-danger" (click)="AbrirModalRemoverFuncionario(funcionario)">Remover</button>
           </td>
         </tr>
       </tbody>

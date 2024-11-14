@@ -1,15 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-
-interface Funcionario {
-  id: number;
-  nome: String;
-  cpf: string;
-  email: String;
-  telefone: string;
-}
+import { Router, RouterModule } from '@angular/router';
+import { FuncionarioService } from '../../../services/funcionario.service';
+import { Funcionario } from '../../../models/funcionario/funcionario.model';
+import { RemoverFuncionarioComponent } from '../remover-funcionario/remover-funcionario.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-crud-funcionario',
@@ -19,21 +15,28 @@ interface Funcionario {
   styleUrl: './crud-funcionario.component.scss'
 })
 
-export class CrudFuncionarioComponent {
-  funcionarios: Funcionario[] = [
-    { id: 1, nome: 'Fulano da Silva', cpf: '12345678901', email: 'fulano@gmail.com', telefone: '9999-1111' },
-    { id: 2, nome: 'Cicrano da Silva', cpf: '22345678902', email: 'cicrano@gmail.com', telefone: '9999-2222' },
-    { id: 3, nome: 'Beltrano da Silva', cpf: '32345678903', email: 'beltrano@gmail.com', telefone: '9999-3333' },
-  ];
+export class CrudFuncionarioComponent implements OnInit{
+  funcionarios: Funcionario[] = [];
   
-  alterarFuncionario(id: number): void {
-    console.log(`alterar funcionário com ID: ${id}`);
-    // Lógica para ver lista de confirmação
+  constructor(private router: Router, private funcionarioService: FuncionarioService, private modalService: NgbModal) {}
+
+  ngOnInit(): void {
+    this.funcionarioService.getFuncionarios().subscribe(
+      (data) => {
+        this.funcionarios = data; // Armazena os funcionários retornados no array
+      },
+      (error) => {
+        console.error('Erro ao carregar funcionários:', error);
+      }
+    );
   }
 
-  removerFuncionario(id: number): void {
-    console.log(`remover funcionário com ID: ${id}`);
-    // Lógica para cancelar voo
-    this.funcionarios = this.funcionarios.filter(funcionario => funcionario.id !== id);
+  alterarFuncionario(cpf: string): void {
+    this.router.navigate(['/alterar-funcionario', cpf]);
+  }
+
+  AbrirModalRemoverFuncionario(funcionario: Funcionario): void {
+    const modalRef = this.modalService.open(RemoverFuncionarioComponent);
+    modalRef.componentInstance.funcionario = funcionario;
   }
 }

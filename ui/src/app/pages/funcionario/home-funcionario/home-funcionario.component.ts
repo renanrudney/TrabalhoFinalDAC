@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Voo } from '../../../models/voo/voo.model';
+import { VooService } from '../../../services/voo.service';
+import { Router } from '@angular/router';
+import { CancelarReservaComponent } from '../../cliente/cancelar-reserva/cancelar-reserva.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface Reserva {
   id: number;
@@ -18,27 +23,31 @@ interface Reserva {
   styleUrl: './home-funcionario.component.scss'
 })
 
-export class HomeFuncionarioComponent {
-  reservas: Reserva[] = [
-    { id: 1, dataHora: new Date(2024, 9, 5, 14, 30), aeroportoOrigem: 'CWB', aeroportoDestino: 'GRU' },
-    { id: 2, dataHora: new Date(2024, 9, 6, 16, 0), aeroportoOrigem: 'GRU', aeroportoDestino: 'CWB' },
-    { id: 3, dataHora: new Date(2024, 9, 7, 10, 15), aeroportoOrigem: 'CWB', aeroportoDestino: 'SDU' },
-  ];
+export class HomeFuncionarioComponent implements OnInit {
   
-  verConfirmacao(id: number): void {
-    console.log(`Ver confirmação com ID: ${id}`);
-    // Lógica para ver lista de confirmação
+  voos: Voo[] = [];
+
+  constructor (private vooService: VooService, private router: Router, private modalService: NgbModal) {}
+
+  ngOnInit(): void {
+    this.voos = this.vooService.getVoosProximasHoras();
+    //Ordenar por dataHora
+    this.voos = this.voos.filter(voo => voo.estado === 'CONFIRMADO');
+    this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+  }
+  
+  confirmarEmbarque(codigoVoo: string): void {
+    this.router.navigate(['/confirmar-embarque', codigoVoo]);
   }
 
-  realizarVoo(id: number): void {
-    console.log(`Cancelar Voo com ID: ${id}`);
-    // Lógica para realziar voo
-    this.reservas = this.reservas.filter(reserva => reserva.id !== id);
+  abrirModalCancelarVoo(voo: Voo): void {
+    const modalRef = this.modalService.open(CancelarReservaComponent);
+    modalRef.componentInstance.voo = voo;
   }
 
-  cancelarVoo(id: number): void {
-    console.log(`Cancelar Voo com ID: ${id}`);
-    // Lógica para cancelar voo
-    this.reservas = this.reservas.filter(reserva => reserva.id !== id);
+  realizarVoo(codigoVoo: string): void {
+    this.vooService.realizarVoo(codigoVoo);
+    alert(`Voo ${codigoVoo} foi realizado! Atualizado o estado do voo e das reservas.`);
+    location.reload(); // Recarrega a página
   }
 }

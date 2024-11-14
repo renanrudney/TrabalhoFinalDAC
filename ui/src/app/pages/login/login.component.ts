@@ -19,15 +19,15 @@ export class LoginComponent {
   constructor(private userService: UserService, private router: Router) {}
 
   logar() {
-
-    const login: string = this.userService.login(this.login, this.senha);
-    if (login === 'cliente') {
-      // Redireciona para a página inicial ou outra página se o login for bem-sucedido
-      this.router.navigate(['/home-cliente']);      
-    } else if (login === 'funcionario') {
-      this.router.navigate(['/home-funcionario']);
-    } else {
-      this.loginFailed = true; // Exibir mensagem de erro
-    }
+    this.userService.login(this.login, this.senha).subscribe(tipo => { 
+      if (tipo === 'cliente') {
+        // Redireciona para a página inicial ou outra página se o login for bem-sucedido
+        this.router.navigate(['/home-cliente']);      
+      } else if (tipo === 'funcionario') {
+        this.router.navigate(['/home-funcionario']);
+      } else {
+        this.loginFailed = true; // Exibir mensagem de erro
+      }
+    });    
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../models/usuario/usuario.model';
 import { AuthService } from './auth.service';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +15,25 @@ export class UserService {
 
   constructor(private authService: AuthService) { }
 
-  login(username: string, password: string): string {
-    // Simulação de validação (substitua pela sua lógica de back-end real)
+  login(username: string, password: string): Observable<string> {
+    return new Observable<string>(observer => {
+      this.getUsuario(username, password).subscribe(usuario => {
+        if (usuario) {
+          this.authService.logar(usuario);
+          console.log('Login bem-sucedido');
+          observer.next(usuario.tipo); // Emite o tipo de usuário no caso de sucesso
+        } else {
+          console.log('Falha no login: usuário ou senha inválidos.');
+          observer.next(""); // Emite uma string vazia no caso de falha
+        }
+        observer.complete(); // Completa o Observable
+      });
+    });
+  }
+
+  getUsuario(username: string, password: string): Observable<Usuario | undefined> {
     const usuario: Usuario | undefined = this.Usuarios.find(user => user.login === username && user.senha === password);
-    
-    if (usuario) {
-      // Aqui você pode armazenar o token ou qualquer outra lógica que desejar
-      this.authService.logar(usuario);
-      console.log('Login bem-sucedido:', usuario);
-      return usuario.tipo; // Retorna verdadeiro se o login foi bem-sucedido
-    } else {
-      console.log('Falha no login: usuário ou senha inválidos.');
-      return ""; // Retorna falso se o login falhar
-    }
+    return of(usuario);
   }
 
   criarUsuarioCliente(login: string): void {
@@ -41,11 +48,6 @@ export class UserService {
     const user: Usuario = new Usuario(login,senha,"funcionario",undefined);
     this.Usuarios.push(user);
     //Enviar Senha por email
-  }
-
-  isFuncionario(perfil: string): boolean {
-    // Simulação de validação (substitua pela sua lógica de back-end real)
-    return perfil === 'funcionario';
   }
 
   generateRandomPassword(): string {
