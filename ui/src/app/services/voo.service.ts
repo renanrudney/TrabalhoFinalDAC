@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { Voo } from '../models/voo/voo.model';
 import { ReservaService } from './reserva.service';
 import { Observable, of } from 'rxjs';
+import { environment } from '../shared/environment/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VooService {
+
+  private baseUrl = `${environment.apiGatewayUrl}/voos`;
 
   Voos: Array<Voo> = [
     // Voos que já ocorreram
@@ -77,10 +81,11 @@ export class VooService {
     )
   ];
 
-  constructor(private reservaService: ReservaService) { }
+  constructor(private reservaService: ReservaService, private http: HttpClient) { }
 
   getVoos(): Observable<Voo[]> {
-    return of(this.Voos);
+    //return of(this.Voos);
+    return this.http.get<Voo[]>(`${this.baseUrl}`);
   }
   
   getVoosCompra(origem: string, destino: string): Array<Voo> {

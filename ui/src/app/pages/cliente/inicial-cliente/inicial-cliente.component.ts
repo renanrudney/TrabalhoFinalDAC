@@ -12,12 +12,11 @@ import { VerReservaComponent } from '../ver-reserva/ver-reserva.component';
 import { CancelarReservaComponent } from '../cancelar-reserva/cancelar-reserva.component';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-tela-inicial-cliente',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './inicial-cliente.component.html',
   styleUrls: ['./inicial-cliente.component.scss']
 })

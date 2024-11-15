@@ -3,13 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { ReservaService } from '../../../services/reserva.service';
-import { HttpClientModule } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-confirmar-embarque',
   standalone: true,
-  imports: [CommonModule,FormsModule, RouterModule, HttpClientModule],
+  imports: [CommonModule,FormsModule, RouterModule],
   templateUrl: './confirmar-embarque.component.html',
   styleUrl: './confirmar-embarque.component.scss'
 })

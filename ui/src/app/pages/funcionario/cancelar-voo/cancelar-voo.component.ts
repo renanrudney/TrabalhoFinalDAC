@@ -3,12 +3,11 @@ import { Component, Input } from '@angular/core';
 import { Voo } from '../../../models/voo/voo.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { VooService } from '../../../services/voo.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-cancelar-voo',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   templateUrl: './cancelar-voo.component.html',
   styleUrl: './cancelar-voo.component.scss'
 })

@@ -4,12 +4,11 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Funcionario } from '../../../models/funcionario/funcionario.model';
 import { FuncionarioService } from '../../../services/funcionario.service';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-alterar-funcionario',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './alterar-funcionario.component.html',
   styleUrl: './alterar-funcionario.component.scss'
 })

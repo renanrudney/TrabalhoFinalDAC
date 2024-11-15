@@ -7,19 +7,11 @@ import { VooService } from '../../../services/voo.service';
 import { Router } from '@angular/router';
 import { CancelarReservaComponent } from '../../cliente/cancelar-reserva/cancelar-reserva.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClientModule } from '@angular/common/http';
-
-interface Reserva {
-  id: number;
-  dataHora: Date;
-  aeroportoOrigem: string;
-  aeroportoDestino: string;
-}
 
 @Component({
   selector: 'app-home-funcionario',
   standalone: true,
-  imports: [CommonModule,FormsModule, RouterModule, HttpClientModule],
+  imports: [CommonModule,FormsModule, RouterModule],
   templateUrl: './home-funcionario.component.html',
   styleUrl: './home-funcionario.component.scss'
 })

@@ -3,7 +3,7 @@ import { Reserva } from '../models/reserva/reserva.model';
 import { HistoricoReservaService } from './historico-reserva.service';
 import { ClienteService } from './cliente.service';
 import { TransacaoMilhasService } from './transacao-milhas.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../shared/environment/environment';
 import { Observable } from 'rxjs';
 
@@ -54,8 +54,7 @@ export class ReservaService {
   }
 
   getReservasByClienteId(clienteId: number): Observable<Reserva[]>{
-    //return this.Reservas.filter(reserva => reserva.clienteId === clienteId);
-    return this.http.get<Reserva[]>(`${this.baseUrl}/reservas/cliente/${clienteId}`);
+    return this.http.get<Reserva[]>(`${this.baseUrl}/cliente/${clienteId}`);
   }
 
   embarque(codigoReserva: string, codigoVoo: string): string {

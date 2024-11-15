@@ -5,12 +5,11 @@ import { CommonModule } from '@angular/common';
 import { ReservaService } from '../../../services/reserva.service';
 import { Reserva } from '../../../models/reserva/reserva.model';
 import { AuthService } from '../../../services/auth.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-check-in',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   templateUrl: './check-in.component.html',
   styleUrl: './check-in.component.scss'
 })

@@ -4,12 +4,11 @@ import { Reserva } from '../../../models/reserva/reserva.model';
 import { ReservaService } from '../../../services/reserva.service';
 import { VooService } from '../../../services/voo.service';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-cancelar-reserva',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   templateUrl: './cancelar-reserva.component.html',
   styleUrl: './cancelar-reserva.component.scss',
 })
