@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import br.ufpr.dac.ms_cliente.model.Cliente;
 
 
-public interface ClienteRepository extends JpaRepository<Cliente, Long>
+public interface ClienteRepository extends JpaRepository<Cliente, String>
 {
     public Cliente findByCpf(String cpf);
 }
