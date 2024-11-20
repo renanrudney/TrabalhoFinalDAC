@@ -11,15 +11,38 @@ public class Usuario {
 
   private String login;
   private String senha;
-  private int tipo;
+  // private Tipo tipo;
+  private String tipo;
 
-  public Usuario(String id, String login, String senha, int tipo) {
+  // public Usuario(String id, String login, String senha, Tipo tipo) {
+  //   super();
+  //   this.id = id;
+  //   this.login = login;
+  //   this.senha = senha;
+  //   this.tipo = tipo;
+  // }
+
+  public Usuario() {
+  }
+  
+
+  public Usuario(String id, String login, String senha, String tipo) {
     super();
     this.id = id;
     this.login = login;
     this.senha = senha;
     this.tipo = tipo;
   }
+
+
+
+  public Usuario(String login, String senha, String tipo) {
+    this.login = login;
+    this.senha = senha;
+    this.tipo = tipo;
+  }
+
+
 
   public String getId() {
     return id;
@@ -45,11 +68,19 @@ public class Usuario {
     this.senha = senha;
   }
 
-  public int getTipo() {
+  // public Tipo getTipo() {
+  //   return tipo;
+  // }
+
+  // public void setTipo(Tipo tipo) {
+  //   this.tipo = tipo;
+  // }
+
+    public String getTipo() {
     return tipo;
   }
 
-  public void setTipo(int tipo) {
+  public void setTipo(String tipo) {
     this.tipo = tipo;
   }
 }

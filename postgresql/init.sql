@@ -12,7 +12,7 @@ BEGIN
 
     /* MS Funcionario */
     CREATE TABLE IF NOT EXISTS Funcionario.Funcionario (
-        id_usuario INT PRIMARY KEY,
+        id_usuario VARCHAR(255) PRIMARY KEY,
         nome VARCHAR(50) NOT NULL,
         cpf VARCHAR(11) NOT NULL,
         email VARCHAR(30),
@@ -32,7 +32,7 @@ BEGIN
     );
 
     CREATE TABLE IF NOT EXISTS Cliente.Cliente (
-        id_usuario INT PRIMARY KEY,
+        id_usuario VARCHAR(255) PRIMARY KEY,
         id_endereco INT NOT NULL,
         cpf VARCHAR(11) NOT NULL,
         nome VARCHAR(50) NOT NULL,
@@ -44,7 +44,7 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS Cliente.Transacao (
         id SERIAL PRIMARY KEY,
-        id_cliente INT NOT NULL,
+        id_cliente VARCHAR(255) NOT NULL,
         data_hora TIMESTAMP NOT NULL,
         qtd_milhas DOUBLE PRECISION NOT NULL,
         entrada BOOL NOT NULL,
@@ -83,7 +83,7 @@ BEGIN
         cod VARCHAR(6) PRIMARY KEY,
         cod_estado INT NOT NULL,
         cod_voo VARCHAR(8) NOT NULL,
-        id_cliente INT NOT NULL,
+        id_cliente VARCHAR(255) NOT NULL,
         data_hora TIMESTAMP NOT NULL,
         CONSTRAINT fk_reserva_estado FOREIGN KEY (cod_estado) REFERENCES Reserva_cud.Estado_reserva(cod),
         CONSTRAINT fk_reserva_voo FOREIGN KEY (cod_voo) REFERENCES Voo.Voo(cod),
@@ -112,7 +112,7 @@ BEGIN
         cod VARCHAR(6) PRIMARY KEY,
         cod_estado INT NOT NULL,
         cod_voo VARCHAR(8) NOT NULL,
-        id_cliente INT NOT NULL,
+        id_cliente VARCHAR(255) NOT NULL,
         data_hora TIMESTAMP NOT NULL,
         CONSTRAINT fk_reserva_read_estado FOREIGN KEY (cod_estado) REFERENCES Reserva_read.Estado_reserva(cod),
         CONSTRAINT fk_reserva_read_voo FOREIGN KEY (cod_voo) REFERENCES Voo.Voo(cod),
