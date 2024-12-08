@@ -66,6 +66,7 @@ BEGIN
         aeroporto_destino VARCHAR(3) NOT NULL,
         data DATE NOT NULL,
         valor_passagem DOUBLE PRECISION NOT NULL,
+        cod_estado INT NOT NULL,
         qtd_poltronas_total INT NOT NULL,
         qtd_poltronas_ocupadas INT DEFAULT 0,
         CONSTRAINT fk_voo_origem FOREIGN KEY (aeroporto_origem) REFERENCES Voo.Aeroporto(cod),
