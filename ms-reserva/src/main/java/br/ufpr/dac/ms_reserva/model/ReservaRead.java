@@ -11,8 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Reserva", schema = "Reserva_cud")
-public class Reserva implements Serializable {
+@Table(name = "Reserva", schema = "Reserva_read")
+public class ReservaRead implements Serializable {
   @Id
   @Column(name = "cod")
   private String cod;
@@ -30,10 +30,10 @@ public class Reserva implements Serializable {
   @Column(name = "data_hora")
   private LocalDateTime data_hora;
 
-  public Reserva() {
+  public ReservaRead() {
   }
 
-  public Reserva(String cod, EstadoReserva estado, String cod_voo, String id_cliente, LocalDateTime data_hora) {
+  public ReservaRead(String cod, EstadoReserva estado, String cod_voo, String id_cliente, LocalDateTime data_hora) {
     this.cod = cod;
     this.estado = estado;
     this.cod_voo = cod_voo;
@@ -47,14 +47,6 @@ public class Reserva implements Serializable {
 
   public void setCod(String cod) {
     this.cod = cod;
-  }
-
-  public EstadoReserva getEstado() {
-    return estado;
-  }
-
-  public void setEstado(EstadoReserva estado) {
-    this.estado = estado;
   }
 
   public String getCod_voo() {
@@ -79,6 +71,14 @@ public class Reserva implements Serializable {
 
   public void setData_hora(LocalDateTime data_hora) {
     this.data_hora = data_hora;
+  }
+
+  public EstadoReserva getEstado() {
+    return estado;
+  }
+
+  public void setEstado(EstadoReserva estado) {
+    this.estado = estado;
   }
 
   

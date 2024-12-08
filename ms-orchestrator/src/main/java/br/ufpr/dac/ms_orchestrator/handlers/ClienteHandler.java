@@ -21,12 +21,12 @@ import br.ufpr.dac.ms_orchestrator.services.RabbitMQService;
 @Component
 public class ClienteHandler {
   @Autowired
-  private RabbitMQService rabbitMQService;
+  private RabbitTemplate rabbitTemplate;
 
   @RabbitListener(queues = RabbitMQConstants.FILA_USUARIO_CLIENTE_CRIADO)
 	private void usuarioClienteCriadoHandler(String usuarioCliente) {
     System.out.println("Entrou no orchestrator");
-    this.rabbitMQService.enviaMensagem(RabbitMQConstants.FILA_CRIAR_CLIENTE, usuarioCliente);
+    this.rabbitTemplate.convertAndSend(RabbitMQConstants.FILA_CRIAR_CLIENTE, usuarioCliente);
 
     // try {
     //   ClienteDTO cliente =  new ObjectMapper().readValue(usuarioCliente, ClienteDTO.class);
