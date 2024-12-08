@@ -3,13 +3,13 @@ package br.ufpr.dac.ms_auth.model;
 public class UsuarioDTO {
   private String id;
   private String login;
-  private int tipo;
+  private Tipo tipo;
 
   public UsuarioDTO() {
     super();
   }
 
-  public UsuarioDTO(String id, String login, int tipo) {
+  public UsuarioDTO(String id, String login, Tipo tipo) {
     super();
     this.id = id;
     this.login = login;
@@ -32,11 +32,11 @@ public class UsuarioDTO {
     this.login = login;
   }
 
-  public int getTipo() {
+  public Tipo getTipo() {
     return tipo;
   }
 
-  public void setTipo(int tipo) {
+  public void setTipo(Tipo tipo) {
     this.tipo = tipo;
   }
 }

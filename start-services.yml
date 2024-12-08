@@ -1,5 +1,3 @@
-version: '3.5'
-
 services:
   ms-auth:
     image: ms-auth:0.0.1-SNAPSHOT

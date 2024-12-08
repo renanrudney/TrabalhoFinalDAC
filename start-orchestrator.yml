@@ -1,0 +1,5 @@
+services:
+  ms-orchestrator:
+    image: ms-orchestrator:0.0.1-SNAPSHOT
+    ports:
+      - 6000:6000
