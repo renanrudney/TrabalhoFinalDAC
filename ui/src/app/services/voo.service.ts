@@ -97,12 +97,13 @@ export class VooService {
     );
   }
 
-  getVoosProximasHoras(): Array<Voo> {
-    const agora = new Date();
+  getVoosProximasHoras(): Observable<Voo[]> {
+    return this.http.get<Voo[]>(`${this.baseUrl}`);
+    /*const agora = new Date();
     const dataLimite = new Date(agora.getTime() + 48 * 60 * 60 * 1000);
-    return this.Voos.filter(voo => {
+    return of (this.Voos.filter(voo => {
       return voo.dataHora > agora && voo.dataHora <= dataLimite;
-    });
+    }));*/
   }
 
   //Remover os gets - carregar todos os voos no componente

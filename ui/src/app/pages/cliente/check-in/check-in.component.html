@@ -13,15 +13,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let voo of voos">
-          <td>{{ voo.codigoVoo }}</td>
-          <td>{{ voo.origem }}</td>
-          <td>{{ voo.destino }}</td>
-          <td>{{ voo.dataHora | date: 'dd/MM/yyyy HH:mm'}}</td>
-        </tr>
-        <tr *ngIf="voos.length === 0">
-          <td colspan="5" class="text-center fw-bold">Nenhum voo disponível para check-in nas próximas 48 horas.</td>
-        </tr>
+        <ng-container *ngIf="voos && voos.length > 0; else noVoos">
+          <tr *ngFor="let voo of voos">
+            <td>{{ voo.codigoVoo }}</td>
+            <td>{{ voo.origem }}</td>
+            <td>{{ voo.destino }}</td>
+            <td>{{ voo.dataHora | date: 'dd/MM/yyyy HH:mm'}}</td>
+          </tr>
+        </ng-container>
+        <ng-template #noVoos>
+          <tr>
+            <td colspan="5" class="text-center fw-bold">{{ errorMessage || 'Nenhum voo disponível para check-in nas próximas 48 horas.' }}</td>
+          </tr>
+       </ng-template>
       </tbody>
     </table>
   </div>  

@@ -70,13 +70,23 @@ export class InicialClienteComponent implements OnInit
     return voo ? voo.destino : 'N/A';
   }
 
+  getVoo(codigoVoo: string): Voo | undefined{
+    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
+    if (voo){
+      return voo;
+    } else 
+    return undefined;
+  }
+
   abrirModalVerReserva(reserva: Reserva) {
     const modalRef = this.modalService.open(VerReservaComponent);
     modalRef.componentInstance.reserva = reserva;
+    modalRef.componentInstance.voo = this.getVoo(reserva.codigoVoo);
   }
 
   abrirModalCancelarReserva(reserva: Reserva) {
     const modalRef = this.modalService.open(CancelarReservaComponent);
     modalRef.componentInstance.reserva = reserva;
+    modalRef.componentInstance.voo = this.getVoo(reserva.codigoVoo);
   }
 }

@@ -22,8 +22,9 @@ export class ReservaService {
   constructor(private historicoReservaService: HistoricoReservaService, private clienteService: ClienteService, 
     private transacaoMilhasService: TransacaoMilhasService, private http: HttpClient) { }
 
-  cancelarReserva(codigoReserva: string): void {
-    // Procura a reserva pelo código
+  cancelarReserva(codigoReserva: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${codigoReserva}`);
+    /*// Procura a reserva pelo código
     const reservaEncontrada = this.Reservas.find(reserva => reserva.codigoReserva === codigoReserva);
     
     // Se a reserva for encontrada, altera o estado
@@ -40,7 +41,7 @@ export class ReservaService {
       console.log(`Estado da reserva ${codigoReserva} alterado para ${reservaEncontrada.estado}`);
     } else {
       console.log(`Reserva com código ${codigoReserva} não encontrada.`);
-    }
+    }*/
   }
 
   novaReserva(codigoVoo: string, dataHora: Date, clienteId: number, qntdPassagens: number, custoTotal: number, milhasUsadas: number): string {
