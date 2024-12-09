@@ -4,7 +4,10 @@
       <h1 class="text-primary">Alterar Funcionário</h1>
     </div>
   </div>
-
+  <!-- Mensagem de Erro -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
   <form #formAlterarFuncionario="ngForm" method="post">
     <div class="row">
       <div class="col-12" id="dados">

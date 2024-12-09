@@ -16,8 +16,20 @@ export class CancelarVooComponent {
 
   constructor(public activeModal: NgbActiveModal, private vooService: VooService) {}
 
-  cancelarVoo(codigoVoo: string) {
-    this.vooService.cancelarVoo(codigoVoo);
-    this.activeModal.close()
+  cancelarVoo(codigoVoo: string): void {
+    this.vooService.cancelarVoo(codigoVoo).subscribe(
+      (vooCancelado) => {
+        // Sucesso: Exibe mensagem de confirmação
+        console.log('Voo cancelado com sucesso');
+        alert(`Voo ${vooCancelado.codigoVoo} foi cancelado com sucesso.`);
+        this.activeModal.close(); // Fecha o modal
+      },
+      (error) => {
+        // Erro: Exibe mensagem apropriada
+        console.error('Erro ao cancelar o voo:', error);
+        alert('Ocorreu um erro ao cancelar o voo. Tente novamente.');
+      }
+    );
   }
+  
 }

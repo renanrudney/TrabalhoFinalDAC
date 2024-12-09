@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { UserService } from '../../../services/user.service';
 import { NgxMaskDirective,provideNgxMask } from 'ngx-mask';
 import { FuncionarioService } from '../../../services/funcionario.service';
 import { Funcionario } from '../../../models/funcionario/funcionario.model';
@@ -23,7 +22,7 @@ export class InserirFuncionarioComponent {
   email: string = "";
   telefone: string = "";
 
-  constructor(private funcionarioService: FuncionarioService,private router: Router, private userService: UserService) {}
+  constructor(private funcionarioService: FuncionarioService,private router: Router) {}
 
   onSubmit() {
     // Envio dos dados ao backend (a ser implementado)
@@ -36,7 +35,6 @@ export class InserirFuncionarioComponent {
 
     this.funcionarioService.criarFuncionario(novoFuncionario).subscribe(
       (response) => {
-        this.userService.criarUsuarioFuncionario(novoFuncionario.email);
         console.log('Funcionario criado com sucesso:', response);
         alert('Cadastro realizado. O funcionário receberá um e-mail contendo sua senha');
         this.router.navigate(['/home-funcionario']);

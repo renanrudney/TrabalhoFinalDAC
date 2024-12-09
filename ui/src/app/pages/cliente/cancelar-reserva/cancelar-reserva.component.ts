@@ -20,7 +20,8 @@ export class CancelarReservaComponent {
   
   constructor(public activeModal: NgbActiveModal, private reservaService: ReservaService, private vooService: VooService) {}
 
-  cancelarReserva(codigoReserva: string): void {
+  cancelarReserva(codigoReserva: string | undefined ): void {
+    if (codigoReserva)
     this.reservaService.cancelarReserva(codigoReserva).subscribe({
       next: () => {
         console.log('Reserva cancelada com sucesso');

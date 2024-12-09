@@ -47,6 +47,10 @@ export class ReservaService {
     );
   }
 
+  embarque(reserva: string, codigo: string): Observable<Reserva>{
+    return this.http.post<Reserva>(`${this.baseUrl}/${codigo}/embarque`, reserva);
+  }
+
   vooCancelado(codigoVoo: string): void {
     this.Reservas.forEach(reserva => {
         if (reserva.codigoVoo === codigoVoo) {
@@ -63,7 +67,6 @@ export class ReservaService {
           } else {
             reserva.estado === "NÃO REALIZADO"
           }
-          
         }
     });
   }

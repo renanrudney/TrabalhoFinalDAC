@@ -21,8 +21,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 function verifyJWT(req, res, next) {
-  //Skip na verificacao para testes
-  next();
   const token = req.headers['authorization'].replace('Bearer ', '');
   if (!token) {
     return res.status(401).json({

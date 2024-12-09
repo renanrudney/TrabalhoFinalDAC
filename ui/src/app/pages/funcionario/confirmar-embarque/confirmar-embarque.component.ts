@@ -23,11 +23,21 @@ export class ConfirmarEmbarqueComponent implements OnInit{
     this.codigoVoo = this.route.snapshot.paramMap.get('codigoVoo');
   }
 
-  ConfirmarEmbarque(reserva: string) {
+  ConfirmarEmbarque(reserva: string): void {
     if (this.codigoVoo) {
-      const mensagem: string = this.reservaService.embarque(reserva, this.codigoVoo);
-      alert(mensagem);    
-      this.reserva = "";
+      this.reservaService.embarque(reserva, this.codigoVoo).subscribe(
+        (reservaAtualizada) => {
+          // Sucesso: Exibe mensagem de confirmação
+          alert(`Embarque confirmado para a reserva: ${reservaAtualizada.codigoReserva}.`);
+          this.reserva = ""; // Limpa o campo de entrada da reserva
+          location.reload(); // Recarrega a página para atualizar os dados
+        },
+        (error) => {
+          // Erro: Exibe mensagem apropriada
+          console.error('Erro ao confirmar embarque:', error);
+          alert('Ocorreu um erro ao confirmar o embarque. Tente novamente.');
+        }
+      );
     }
   }
 }
