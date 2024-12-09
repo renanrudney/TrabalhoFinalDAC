@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TransacaoMilhas } from '../models/transacaoMilhas/transacao-milhas.model';
-import { Observable, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../shared/environment/environment';
 import { HttpClient } from '@angular/common/http';
 
@@ -21,11 +21,15 @@ export class TransacaoMilhasService {
   constructor(private http: HttpClient) {}
 
   getTransacoes(): Observable<TransacaoMilhas[]> {
-    return of(this.transactions);
+    return this.http.get<TransacaoMilhas[]>(`${this.baseUrl}`);
   }
 
-  getTransacoesCliente(clienteId: number): Array<TransacaoMilhas> {
-    return this.transactions.filter(transacao => transacao.clienteId === clienteId);
+  getTransacoesCliente(clienteId: number): Observable<TransacaoMilhas[]> {
+    return this.getTransacoes().pipe(
+      map((transacoes) =>
+        transacoes.filter((transacao) => transacao.clienteId === clienteId)
+      )
+    );
   }
 
   novaTransacao(clienteId: number, milhas: number, descricao: string, codigoReserva?: string): Observable<TransacaoMilhas> {

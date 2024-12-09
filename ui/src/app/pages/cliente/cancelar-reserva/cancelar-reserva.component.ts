@@ -25,7 +25,6 @@ export class CancelarReservaComponent {
       next: () => {
         console.log('Reserva cancelada com sucesso');
         alert('Reserva cancelada com sucesso.');
-        // Adicione qualquer lógica adicional após o cancelamento
       },
       error: (err: any) => {
         console.error('Erro ao cancelar reserva:', err);

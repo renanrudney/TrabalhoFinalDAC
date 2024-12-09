@@ -17,8 +17,8 @@
     <ul class="list-group list-unstyled">
       <li class="list-group-item">Código da Reserva: {{ reserva.codigoReserva }}</li>
       <li class="list-group-item">Data/Hora: {{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm' }}</li>
-      <li class="list-group-item">Origem: {{ getVooOrigem(reserva.codigoVoo) }}</li>
-      <li class="list-group-item">Destino: {{ getVooDestino(reserva.codigoVoo) }}</li>
+      <li class="list-group-item">Origem: {{ voo?.origem }}</li>
+      <li class="list-group-item">Destino: {{ voo?.destino }}</li>
       <li class="list-group-item">Passagens compradas: {{ reserva.qntdPassagens }}</li>
       <li class="list-group-item">Custo Total (R$): {{ reserva.custoTotal  | currency: 'BRL' : 'symbol':'1.2-2'}}</li>
       <li class="list-group-item">Milhas usadas: {{ reserva.milhasUsadas }}</li>

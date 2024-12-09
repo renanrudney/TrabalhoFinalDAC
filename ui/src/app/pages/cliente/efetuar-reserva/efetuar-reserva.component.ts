@@ -30,6 +30,7 @@ export class EfetuarReservaComponent implements OnInit{
   milhasUsadas: number = 0;
   valorEmDinheiro: number = 0;
   aeroportos: Aeroporto[] = [];
+  errorMessage: string = "";
 
   constructor(private vooService: VooService, private reservaService: ReservaService, private clienteService: ClienteService, 
     private authService: AuthService,private transacaoMilhas: TransacaoMilhasService, private aeroportoService: AeroportoService,
@@ -37,12 +38,39 @@ export class EfetuarReservaComponent implements OnInit{
 
   ngOnInit() {
     const clienteId: number = Number(this.authService.getItem('userId'));
-    this.cliente = this.clienteService.getClienteById(clienteId);
-    this.aeroportos = this.aeroportoService.getAeroportos();
+    this.clienteService.getClienteById(clienteId).subscribe(
+      (cliente) => {
+        this.cliente = cliente;
+        console.log('Cliente carregado:', cliente);
+      },
+      (error) => {
+        console.error('Erro ao carregar cliente:', error);
+        this.errorMessage = 'Erro ao carregar cliente, tente novamente';
+      }
+    );
+    this.aeroportoService.getAeroportos().subscribe(
+      (aeroportos) => {
+        this.aeroportos = aeroportos;
+        console.log('Aeroportos carregados:', aeroportos);
+      },
+      (error) => {
+        console.error('Erro ao carregar aeroportos:', error);
+        this.errorMessage = 'Erro ao carregar aeroportos, tente novamente';
+      }
+    );
   }
 
   buscarVoos() {
-    this.voos.push(...this.vooService.getVoosCompra(this.origem,this.destino));
+    this.vooService.getVoosCompra(this.origem,this.destino).subscribe(
+      (voos) => {
+        this.voos = voos;
+        console.log('Voos para compra carregados:', voos);
+      },
+      (error) => {
+        console.error('Erro ao carregar voos para compra:', error);
+        this.errorMessage = 'Erro ao carregar voos para compra, tente novamente';
+      }
+    );
   }
 
   selecionarVoo(voo: Voo) {
@@ -64,12 +92,18 @@ export class EfetuarReservaComponent implements OnInit{
   confirmarReserva() {
     if (this.vooSelecionado && this.cliente) {
       const clienteId: number = Number(this.cliente.id);
-      const codigo: string = this.reservaService.novaReserva(this.vooSelecionado.codigoVoo,this.vooSelecionado.dataHora,clienteId,this.quantidade,this.valorTotal,this.milhasUsadas);
-      this.clienteService.substrairMilhas(this.milhasUsadas, clienteId);
-      const descricao: string = this.vooSelecionado.origem + '->' + this.vooSelecionado.destino;
-      this.transacaoMilhas.novaTransacao(clienteId,this.milhasUsadas,descricao,codigo);
-      alert(`Reserva confirmada! Codigo da reserva: ${codigo}`);
-      this.router.navigate(['/home-cliente']);
+      this.reservaService.novaReserva(this.vooSelecionado.codigoVoo,this.vooSelecionado.dataHora,clienteId,this.quantidade,this.valorTotal,this.milhasUsadas).subscribe(
+        (reserva) => {
+          // Sucesso
+          alert(`Reserva confirmada! Código da reserva: ${reserva.codigoReserva}`);
+          this.router.navigate(['/home-cliente']);
+        },
+        (error) => {
+          // Erro
+          console.error('Erro ao criar a reserva:', error);
+          alert("Erro ao reservar, tente novamente");
+        }
+      );
     } else {
       alert("Erro ao reservar, tente novamente");
     }

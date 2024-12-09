@@ -32,16 +32,30 @@ export class InicialClienteComponent implements OnInit
   ngOnInit(): void {
     const clienteId: number | null = Number(this.authService.getItem('userId'));
     if (clienteId) {
-      this.clienteLogado = this.clienteService.getClienteById(clienteId);
-      this.carregarVoos();
-      this.carregarReservas(clienteId);
+      this.clienteService.getClienteById(clienteId).subscribe(
+        (cliente) => {
+          if (cliente) {
+            this.clienteLogado = cliente; // Atribui o cliente retornado
+            this.carregarReservas(clienteId);
+          } else {
+            console.error('Cliente não encontrado.');
+          }
+        },
+        (error) => {
+          console.error('Erro ao buscar cliente:', error);
+        }
+      );
     }
+    this.carregarVoos();
   }
 
   carregarVoos(): void {
     this.vooService.getVoos().subscribe(
       (data) => this.voos = data,
-      (error) => this.errorMessage = 'Erro ao carregar voos, tente novamente.'
+      (error) => {
+        console.error('Erro ao carregar voos', error);
+        this.errorMessage = 'Erro ao carregar voos, tente novamente.';
+      }
     );
   }
 

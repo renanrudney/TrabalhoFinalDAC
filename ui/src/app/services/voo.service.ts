@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Voo } from '../models/voo/voo.model';
 import { ReservaService } from './reserva.service';
-import { Observable, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../shared/environment/environment';
 import { HttpClient } from '@angular/common/http';
 
@@ -84,42 +84,40 @@ export class VooService {
   constructor(private reservaService: ReservaService, private http: HttpClient) { }
 
   getVoos(): Observable<Voo[]> {
-    //return of(this.Voos);
     return this.http.get<Voo[]>(`${this.baseUrl}`);
+  }
+
+  getVoo(codigoVoo: string): Observable<Voo> {
+    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}`);
   }
   
-  getVoosCompra(origem: string, destino: string): Array<Voo> {
+  getVoosCompra(origem: string, destino: string): Observable<Voo[]> {
     const dataAtual = new Date();
-    return this.Voos.filter(voo => 
-      voo.origem === origem && 
-      voo.destino === destino && 
-      voo.dataHora > dataAtual
+  
+    return this.getVoos().pipe(
+      map((voos: Voo[]) =>
+        voos.filter(
+          (voo) =>
+            voo.origem === origem &&
+            voo.destino === destino &&
+            new Date(voo.dataHora) > dataAtual
+        )
+      )
     );
-  }
+  }  
 
   getVoosProximasHoras(): Observable<Voo[]> {
-    return this.http.get<Voo[]>(`${this.baseUrl}`);
-    /*const agora = new Date();
-    const dataLimite = new Date(agora.getTime() + 48 * 60 * 60 * 1000);
-    return of (this.Voos.filter(voo => {
-      return voo.dataHora > agora && voo.dataHora <= dataLimite;
-    }));*/
-  }
-
-  //Remover os gets - carregar todos os voos no componente
-  getOrigem(codigoVoo: string): string | undefined{
-    const vooEncontrado = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
-    return vooEncontrado?.origem;
-  }
-
-  getDestino(codigoVoo: string): string | undefined{
-    const vooEncontrado = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
-    return vooEncontrado?.destino;
-  }
-
-  getVooDataHora(codigoVoo: string): Date | undefined {
-    const vooEncontrado = this.Voos.find(voo => voo.codigoVoo === codigoVoo);
-    return vooEncontrado ? vooEncontrado.dataHora : undefined;
+    const agora = new Date();
+    const dataLimite = new Date(agora.getTime() + 48 * 60 * 60 * 1000); // Próximas 48 horas
+  
+    return this.getVoos().pipe(
+      map((voos: Voo[]) =>
+        voos.filter(
+          (voo) =>
+            new Date(voo.dataHora) > agora && new Date(voo.dataHora) <= dataLimite
+        )
+      )
+    );
   }
 
   cancelarVoo(codigoVoo: string): void {

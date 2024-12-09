@@ -1,28 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Usuario } from '../models/usuario/usuario.model';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private router: Router) { }
+  constructor() { }
 
-  logar(usuario: Usuario): void {
-    const token = `${usuario.login}-${usuario.senha}-${usuario.tipo}-${usuario.id}-token`;
+  logar(token: string, userId: number, userType: string): void {
+    // Armazena o token e os dados do usuário no localStorage
     localStorage.setItem('authToken', token);
-    localStorage.setItem('userType', usuario.tipo);
-    localStorage.setItem('userLogin', usuario.login);
-    if (usuario.id) {
-      localStorage.setItem('userId', usuario.id.toString());
-    }
+    localStorage.setItem('userId', userId.toString());
+    localStorage.setItem('userType', userType);
+  
+    console.log('Dados armazenados no localStorage:');
+    console.log(`Token: ${token}, UserId: ${userId}, UserType: ${userType}`);
   }
 
   logout(): void {
-    localStorage.clear();
-    this.router.navigate(['/login']);
-  }
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userType');
+  }  
 
   isAuthenticated(): boolean {
     // Verifica se `localStorage` está disponível

@@ -49,8 +49,8 @@ export class CheckInComponent implements OnInit {
         this.voosProximos = data;
       },
       (error) => {
-        console.error('Erro ao carregar voos', error);
-        this.errorMessage = "Erro ao carregar voos, tente novamente."
+        console.error('Erro ao carregar voos proximas 48h', error);
+        this.errorMessage = "Erro ao carregar voos proximas 48h, tente novamente."
       }
     )
   }
