@@ -1,6 +1,5 @@
 package br.ufpr.dac.ms_orchestrator.connections;
 
-import br.ufpr.dac.common.constants.RabbitMQConstants;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
@@ -13,6 +12,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import br.ufpr.dac.ms_orchestrator.rabbitmq.config.RabbitMQConstants;
 import jakarta.annotation.PostConstruct;
 
 @Component

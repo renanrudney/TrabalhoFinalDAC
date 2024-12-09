@@ -1,5 +1,8 @@
 package br.ufpr.dac.ms_cliente.model;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,14 +19,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cliente 
-{
+public class Cliente implements Serializable {
 	@Id
-	@Column(name="id_usuario")
-	private String idUsuario;
+	@Column(name="id_cliente")
+	private UUID id;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="id_endereco", referencedColumnName="id")
+	@JoinColumn(name="id_endereco", referencedColumnName="id_endereco")
 	private Endereco endereco;
 	
 	@Column(name="cpf")

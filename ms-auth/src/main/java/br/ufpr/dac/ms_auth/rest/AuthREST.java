@@ -2,11 +2,14 @@ package br.ufpr.dac.ms_auth.rest;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.ufpr.dac.ms_auth.model.Login;
 import br.ufpr.dac.ms_auth.model.Usuario;
@@ -21,18 +24,20 @@ public class AuthREST {
   private UsuarioRepository repository;
   @Autowired
   private ModelMapper mapper;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @PostMapping("/login")
   ResponseEntity<UsuarioDTO> login(@RequestBody Login login) {
-    Usuario usuario = repository.findUsuarioByLogin(login.getLogin());
+    Usuario usuario = repository.findByLogin(login.getLogin());
 
     if (usuario != null) {
-      if (login.getSenha().equals(usuario.getSenha())) {
+      if (passwordEncoder.matches(login.getSenha(), usuario.getSenha())) {
         UsuarioDTO usuarioDTO = mapper.map(usuario, UsuarioDTO.class);
         return ResponseEntity.ok().body(usuarioDTO);
       }
     }
 
-    return ResponseEntity.status(401).build();
+    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciais inválidas!");
   }
 }

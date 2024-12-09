@@ -1,8 +1,9 @@
 package br.ufpr.dac.ms_cliente.rest;
 
-import java.util.Map;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,59 +13,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.ufpr.dac.ms_cliente.dto.ClienteDTO;
 import br.ufpr.dac.ms_cliente.model.Cliente;
 import br.ufpr.dac.ms_cliente.repository.ClienteRepository;
-import br.ufpr.dac.ms_cliente.services.RabbitMQService;
-import br.ufpr.dac.ms_orchestrator.dto.ClienteDTO;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @CrossOrigin
 @RestController
 public class ClienteREST {
   @Autowired
-  private ClienteRepository repoCliente;
+  private ClienteRepository clienteRepository;
   @Autowired
-  private ModelMapper mapper;
+  private ModelMapper modelMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
 
-  @Autowired
-  private RabbitMQService rabbitMQService;
+  private final static String FILA_CLIENTE_CRIADO = "CLIENTE_CRIADO";
 
-  private final static String FILA_CRIAR_USUARIO_CLIENTE = "CRIAR_USUARIO_CLIENTE";
+  @PostMapping("/clientes")
+	public ResponseEntity<ClienteDTO> criarCliente(@RequestBody ClienteDTO clienteDTO) throws JsonProcessingException {
 
-  @PostMapping("/Cliente")
-	public ResponseEntity<ClienteDTO> criarCliente(@RequestBody ClienteDTO ClienteRecebido) {
-
-		// Validar se o Cliente já existe
-		Cliente clienteJaExiste = repoCliente.findByCpf(ClienteRecebido.getCpf());
+		Cliente clienteJaExiste = clienteRepository.findByCpf(clienteDTO.getCpf());
 		if (clienteJaExiste != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe um Cliente com esse CPF!");
 		}
 
-		// Realizar requisição para microsserviço que cria um usuário e retorna o id
-
-    // rabbitMQService.
+		clienteDTO.setId(UUID.randomUUID());
+		clienteDTO.getEndereco().setId(UUID.randomUUID());
+		clienteDTO.setAtivo(true);
+		clienteRepository.saveAndFlush(modelMapper.map(clienteDTO, Cliente.class));
 		
-		// Long idRecebidoMicrosservico = getRandomLong(1L, 100L);
+		rabbitTemplate.convertAndSend(FILA_CLIENTE_CRIADO, objectMapper.writeValueAsString(clienteDTO));
+		return ResponseEntity.ok(clienteDTO);
+	}
 
-		Cliente novoCliente = mapper.map(ClienteRecebido, Cliente.class);
-		// novoCliente.setIdUsuario(idRecebidoMicrosservico);
-
-		novoCliente.setAtivo(true);
-		// novoCliente = repoCliente.save(novoCliente);
-		// Map<String, Object> clienteMap = mapper.map(ClienteRecebido, Map.class);
-		ClienteDTO testdto = mapper.map(novoCliente, ClienteDTO.class);
-		// String test = new ObjectMapper().writeValueAsString(novoCliente);
-
-		System.out.println(testdto.getEmail());
-		try {
-			String test = new ObjectMapper().writeValueAsString(testdto);
-			rabbitMQService.enviaMensagem(FILA_CRIAR_USUARIO_CLIENTE, test);
-		} catch (Exception e) {
-			// TODO: handle exception
+	@GetMapping("/clientes")
+	public ResponseEntity<ClienteDTO> buscarClientesPorEmail(@RequestParam String email) {
+		Cliente cliente = clienteRepository.findByEmail(email);
+		if (cliente == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
 		}
-
-		// return ResponseEntity.created(null).body(mapper.map(novoCliente, ClienteDTO.class));
-    return ResponseEntity.accepted().build();
+		return ResponseEntity.ok(modelMapper.map(cliente, ClienteDTO.class));
 	}
 }

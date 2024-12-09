@@ -22,7 +22,7 @@ BEGIN
 
     /* MS Cliente */
     CREATE TABLE IF NOT EXISTS Cliente.Endereco (
-        id SERIAL PRIMARY KEY,
+        id_endereco UUID PRIMARY KEY,
         rua VARCHAR(30) NOT NULL,
         numero INT NOT NULL,
         complemento VARCHAR(30),
@@ -32,14 +32,14 @@ BEGIN
     );
 
     CREATE TABLE IF NOT EXISTS Cliente.Cliente (
-        id_usuario VARCHAR(255) PRIMARY KEY,
-        id_endereco INT NOT NULL,
+        id UUID PRIMARY KEY,
+        id_endereco UUID NOT NULL,
         cpf VARCHAR(11) NOT NULL,
         nome VARCHAR(50) NOT NULL,
         email VARCHAR(30),
         milhas DOUBLE PRECISION DEFAULT 0,
         ativo BOOL NOT NULL,
-        CONSTRAINT fk_cliente_endereco FOREIGN KEY (id_endereco) REFERENCES Cliente.Endereco(id)
+        CONSTRAINT fk_cliente_endereco FOREIGN KEY (id_endereco) REFERENCES Cliente.Endereco(id_endereco)
     );
 
     CREATE TABLE IF NOT EXISTS Cliente.Transacao (

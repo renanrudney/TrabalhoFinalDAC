@@ -21,14 +21,14 @@ public class MsClienteApplication {
 		return new ModelMapper();
 	}
 
-		@Bean
-	public MessageConverter jsonToMapMessageConverter() {
-			DefaultClassMapper defaultClassMapper = new DefaultClassMapper();
-			defaultClassMapper.setTrustedPackages("br.ufpr.dac.ms_cliente.dto"); // trusted packages
-			Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
-			jackson2JsonMessageConverter.setSupportedContentType(MediaType.ALL);
-			jackson2JsonMessageConverter.setSupportedContentType(MediaType.APPLICATION_JSON);
-			jackson2JsonMessageConverter.setClassMapper(defaultClassMapper);
-			return jackson2JsonMessageConverter;
-	}
+	// 	@Bean
+	// public MessageConverter jsonToMapMessageConverter() {
+	// 		DefaultClassMapper defaultClassMapper = new DefaultClassMapper();
+	// 		defaultClassMapper.setTrustedPackages("br.ufpr.dac.ms_cliente.dto"); // trusted packages
+	// 		Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
+	// 		jackson2JsonMessageConverter.setSupportedContentType(MediaType.ALL);
+	// 		jackson2JsonMessageConverter.setSupportedContentType(MediaType.APPLICATION_JSON);
+	// 		jackson2JsonMessageConverter.setClassMapper(defaultClassMapper);
+	// 		return jackson2JsonMessageConverter;
+	// }
 }

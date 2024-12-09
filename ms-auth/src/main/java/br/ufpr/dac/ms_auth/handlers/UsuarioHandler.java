@@ -1,66 +1,39 @@
 package br.ufpr.dac.ms_auth.handlers;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.ufpr.dac.common.constants.RabbitMQConstants;
-import br.ufpr.dac.ms_auth.dto.ClienteDTO;
-import br.ufpr.dac.ms_auth.model.Tipo;
 import br.ufpr.dac.ms_auth.model.Usuario;
-import br.ufpr.dac.ms_auth.model.UsuarioDTO;
 import br.ufpr.dac.ms_auth.repository.UsuarioRepository;
 import br.ufpr.dac.ms_auth.services.EnviarEmailService;
-import br.ufpr.dac.ms_auth.services.RabbitMQService;
 
 @Component
 public class UsuarioHandler {
   @Autowired
   private UsuarioRepository usuarioRepository;
   @Autowired
-  private ModelMapper mapper;
-  @Autowired
-  private RabbitMQService rabbitMQService;
-  @Autowired
   private EnviarEmailService enviarEmailService;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
-  private final static String FILA_USUARIO_CLIENTE_CRIADO = "USUARIO_CLIENTE_CRIADO";
+  private final static String FILA_CRIAR_USUARIO_CLIENTE = "CRIAR_USUARIO_CLIENTE";
 
-  @RabbitListener(queues = RabbitMQConstants.FILA_CRIAR_USUARIO_CLIENTE)
-  private void criarUsuarioCliente(String stringCliente) {
-    ClienteDTO cliente;
-    try {  
-      cliente = new ObjectMapper().readValue(stringCliente, ClienteDTO.class);
-      Usuario usuarioJaExiste = usuarioRepository.findUsuarioByLogin(cliente.getEmail());
-
-      if (usuarioJaExiste == null) {
-        System.out.println(cliente.getEmail());
-        // String senha = gerarNovaSenha();
-        String senha = "1234";
-        Usuario novoUsuario = new Usuario(cliente.getEmail(),senha,"CLIENTE");
-        usuarioRepository.save(novoUsuario);
-
-        cliente.setIdUsuario(novoUsuario.getId());
-    
-        // enviarEmailService.enviarEmail(cliente.getEmail(), "Você foi adicionado como cliente, aqui está sua senha.", senha);
-
-        // UsuarioDTO usuario = mapper.map(novoUsuario, UsuarioDTO.class);
-        String test = new ObjectMapper().writeValueAsString(cliente);
-        rabbitMQService.enviaMensagem(FILA_USUARIO_CLIENTE_CRIADO, test);
-      } else {
-        String senha = "1234";
-        Usuario novoUsuario = new Usuario(cliente.getEmail(), senha,"CLIENTE");
-        UsuarioDTO usuario = mapper.map(novoUsuario, UsuarioDTO.class);
-        rabbitMQService.enviaMensagem(FILA_USUARIO_CLIENTE_CRIADO, usuario);
-      }
-    } catch (Exception e) {
-      // TODO: handle exception
-      System.out.println(e.getMessage());
+  @RabbitListener(queues = FILA_CRIAR_USUARIO_CLIENTE)
+  private void criarUsuarioCliente(String email) {
+    Usuario usuarioJaExiste = usuarioRepository.findByLogin(email);
+    if (usuarioJaExiste != null) {
+      throw new IllegalArgumentException("Usuário já existe!");
     }
+
+    String senha = gerarNovaSenha();
+    String encodeSenha = passwordEncoder.encode(senha);
+    Usuario novoUsuario = new Usuario(email, encodeSenha, "CLIENTE");
+
+    usuarioRepository.save(novoUsuario);
+    enviarEmailService.enviarEmail(email, "Você foi adicionado como cliente, aqui está sua senha.", senha);
 	}
 
   private String gerarNovaSenha() {
