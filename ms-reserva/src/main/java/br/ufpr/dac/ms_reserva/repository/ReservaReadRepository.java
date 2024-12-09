@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ReservaReadRepository  extends JpaRepository<ReservaRead, String>  {
   public List<ReservaRead> findByCod_voo(String cod_voo);
+  public ReservaRead findByCod(String cod);
 }
