@@ -12,11 +12,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Estado_reserva", schema = "Reserva_cud")
+@Table(name = "Estado_reserva", schema = "Reserva_read")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstadoReserva implements Serializable {
+public class EstadoReservaRead implements Serializable {
   @Id
   @Column(name = "sigla")
   private String sigla;

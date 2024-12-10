@@ -1,4 +1,4 @@
-package br.ufpr.dac.ms_reserva.dto;
+package br.ufpr.dac.ms_orchestrator.dto;
 
 import java.time.LocalDateTime;
 

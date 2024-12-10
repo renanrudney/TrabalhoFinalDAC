@@ -1,6 +1,5 @@
 package br.ufpr.dac.ms_voo.rest;
 
-import java.lang.StackWalker.Option;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -25,8 +24,7 @@ import br.ufpr.dac.ms_voo.repository.VooRepository;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-
+import org.springframework.web.bind.annotation.GetMapping;
 
 @CrossOrigin
 @RestController
@@ -74,8 +72,18 @@ public class VooREST {
     VooDTO vooDTO = modelMapper.map(novoVoo, VooDTO.class);
     return ResponseEntity.ok().body(vooDTO);
   }
-  
 
+  @GetMapping("/voos/{cod}")
+  public ResponseEntity<VooDTO> visualizarVoo(@PathVariable String cod) {
+    Optional<Voo> voo = vooRepository.findByCod(cod);
+
+    if (voo.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voo não existe!");
+    }
+
+    return ResponseEntity.ok().body(modelMapper.map(voo.get(), VooDTO.class));
+  }
+  
   @PostMapping("/voos/{cod}/realizar")
   public ResponseEntity<VooDTO> realizarVoo(@PathVariable String cod) throws JsonProcessingException {
     Optional<Voo> vooExiste = vooRepository.findByCod(cod);
@@ -98,7 +106,6 @@ public class VooREST {
 
     return ResponseEntity.ok().body(vooDTO);
   }
-  
 
   @PostMapping("/voos/{cod}/cancelar")
   public ResponseEntity<VooDTO> cancelarVoo(@PathVariable String cod) throws JsonProcessingException {

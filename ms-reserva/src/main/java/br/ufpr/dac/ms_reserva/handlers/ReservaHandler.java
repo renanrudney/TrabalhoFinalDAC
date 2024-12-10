@@ -2,6 +2,7 @@ package br.ufpr.dac.ms_reserva.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -12,9 +13,10 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.ufpr.dac.ms_reserva.model.EstadoReserva;
+import br.ufpr.dac.ms_reserva.model.EstadoReservaRead;
 import br.ufpr.dac.ms_reserva.model.Reserva;
 import br.ufpr.dac.ms_reserva.model.ReservaRead;
+import br.ufpr.dac.ms_reserva.repository.EstadoReservaReadRepository;
 import br.ufpr.dac.ms_reserva.repository.ReservaReadRepository;
 import br.ufpr.dac.ms_reserva.repository.ReservaRepository;
 
@@ -25,6 +27,8 @@ public class ReservaHandler {
   private ReservaReadRepository readRepository;
   @Autowired
   private ReservaRepository reservaRepository;
+  @Autowired
+  private EstadoReservaReadRepository estadoRepository;
   @Autowired
   private ModelMapper modelMapper;
   @Autowired
@@ -43,11 +47,18 @@ public class ReservaHandler {
     List<ReservaRead> reservasRead = readRepository.findByCod_voo(codVoo);
     List<Reserva> reservasToUpdate = new ArrayList<Reserva>();
 
+    Optional<EstadoReservaRead> embarcado = estadoRepository.findBySigla("EMB");
+    Optional<EstadoReservaRead> realizado = estadoRepository.findBySigla("RD");
+    Optional<EstadoReservaRead> naoRealizado = estadoRepository.findBySigla("NRD");
+
+    if (embarcado.isEmpty() || realizado.isEmpty() || naoRealizado.isPresent())
+      throw new IllegalArgumentException("Estados de reserva indisponíveis");
+
     for (ReservaRead reservaRead : reservasRead) {
-      if (reservaRead.getEstado() == EstadoReserva.EMBARCADO) {
-        reservaRead.setEstado(EstadoReserva.REALIZADO);
+      if (reservaRead.getEstado().getSigla() == embarcado.get().getSigla()) {
+        reservaRead.setEstado(realizado.get());
       } else {
-        reservaRead.setEstado(EstadoReserva.NÃO_REALIZADO);
+        reservaRead.setEstado(naoRealizado.get());
       }
       reservasToUpdate.add(modelMapper.map(reservaRead, Reserva.class));
     }
@@ -61,8 +72,13 @@ public class ReservaHandler {
     List<ReservaRead> reservasRead = readRepository.findByCod_voo(codVoo);
     List<Reserva> reservasToUpdate = new ArrayList<Reserva>();
 
+    Optional<EstadoReservaRead> cancelado = estadoRepository.findBySigla("CANC");
+
+    if (cancelado.isPresent())
+      throw new IllegalArgumentException("Estados de reserva indisponíveis");
+
     for (ReservaRead reservaRead : reservasRead) {
-      reservaRead.setEstado(EstadoReserva.CANCELADO_VOO);
+      reservaRead.setEstado(cancelado.get());
       reservasToUpdate.add(modelMapper.map(reservaRead, Reserva.class));
     }
     reservaRepository.saveAllAndFlush(reservasToUpdate);
