@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.ufpr.dac.ms_orchestrator.dto.ClienteDTO;
+import br.ufpr.dac.ms_orchestrator.dto.FuncionarioDTO;
 import br.ufpr.dac.ms_orchestrator.rabbitmq.config.RabbitMQConstants;
 
 @Component
-public class ClienteHandler {
+public class FuncionarioHandler {
   @Autowired
   private RabbitTemplate rabbitTemplate;
   @Autowired
   private ObjectMapper objectMapper;
 
-  @RabbitListener(queues = RabbitMQConstants.FILA_CLIENTE_CRIADO)
-  private void clienteCriado(String clienteString) throws JsonProcessingException {
-    ClienteDTO cliente = objectMapper.readValue(clienteString, ClienteDTO.class);
-    String email = cliente.getEmail();
-    rabbitTemplate.convertAndSend(RabbitMQConstants.FILA_CRIAR_USUARIO_CLIENTE, email);
+  @RabbitListener(queues = RabbitMQConstants.FILA_FUNCIONARIO_CRIADO)
+  private void funcionarioCriado(String funcionarioString) throws JsonProcessingException {
+    FuncionarioDTO funcionario = objectMapper.readValue(funcionarioString, FuncionarioDTO.class);
+    String email = funcionario.getEmail();
+    rabbitTemplate.convertAndSend(RabbitMQConstants.FILA_CRIAR_USUARIO_FUNCIONARIO, email);
   }
 }

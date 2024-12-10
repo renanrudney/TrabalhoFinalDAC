@@ -12,11 +12,11 @@ BEGIN
 
     /* MS Funcionario */
     CREATE TABLE IF NOT EXISTS Funcionario.Funcionario (
-        id_usuario VARCHAR(255) PRIMARY KEY,
+        id_funcionario UUID PRIMARY KEY,
         nome VARCHAR(50) NOT NULL,
         cpf VARCHAR(11) NOT NULL,
         email VARCHAR(30),
-        telefone VARCHAR(9),
+        telefone VARCHAR(11),
         ativo BOOL NOT NULL
     );
 

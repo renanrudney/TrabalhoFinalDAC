@@ -1,4 +1,4 @@
-package br.ufpr.dac.ms_funcionario.dto;
+package br.ufpr.dac.ms_orchestrator.dto;
 
 import java.util.UUID;
 
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FuncionarioDTO 
-{
+public class FuncionarioDTO {
 	private UUID id;
 	private String nome;
 	private String cpf;

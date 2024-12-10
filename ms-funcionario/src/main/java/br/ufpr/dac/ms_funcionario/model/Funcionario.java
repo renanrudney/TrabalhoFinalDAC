@@ -1,5 +1,7 @@
 package br.ufpr.dac.ms_funcionario.model;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,11 +15,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Funcionario 
-{
+public class Funcionario {
 	@Id
-	@Column(name="id_usuario")
-	private Long idUsuario;
+	@Column(name="id_funcionario")
+	private UUID id;
 	
 	@Column(name="nome")
 	private String nome;

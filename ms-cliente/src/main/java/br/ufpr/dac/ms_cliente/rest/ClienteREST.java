@@ -1,5 +1,6 @@
 package br.ufpr.dac.ms_cliente.rest;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -38,28 +39,33 @@ public class ClienteREST {
   private final static String FILA_CLIENTE_CRIADO = "CLIENTE_CRIADO";
 
   @PostMapping("/clientes")
-	public ResponseEntity<ClienteDTO> criarCliente(@RequestBody ClienteDTO clienteDTO) throws JsonProcessingException {
+	public ResponseEntity<ClienteDTO> criarCliente(@RequestBody ClienteDTO clienteRecebido) throws JsonProcessingException {
+		Optional<Cliente> clienteJaExiste = clienteRepository.findByCpf(clienteRecebido.getCpf());
 
-		Cliente clienteJaExiste = clienteRepository.findByCpf(clienteDTO.getCpf());
-		if (clienteJaExiste != null) {
+		if (clienteJaExiste.isPresent()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe um Cliente com esse CPF!");
 		}
 
-		clienteDTO.setId(UUID.randomUUID());
-		clienteDTO.getEndereco().setId(UUID.randomUUID());
-		clienteDTO.setAtivo(true);
-		clienteRepository.saveAndFlush(modelMapper.map(clienteDTO, Cliente.class));
+		Cliente novoCliente = modelMapper.map(clienteRecebido, Cliente.class);
+		novoCliente.setId(UUID.randomUUID());
+		novoCliente.getEndereco().setId(UUID.randomUUID());
+		novoCliente.setAtivo(true);
+		clienteRepository.saveAndFlush(novoCliente);
 		
+		ClienteDTO clienteDTO = modelMapper.map(novoCliente, ClienteDTO.class);
 		rabbitTemplate.convertAndSend(FILA_CLIENTE_CRIADO, objectMapper.writeValueAsString(clienteDTO));
-		return ResponseEntity.ok(clienteDTO);
+
+		return ResponseEntity.created(null).body(clienteDTO);
 	}
 
 	@GetMapping("/clientes")
 	public ResponseEntity<ClienteDTO> buscarClientesPorEmail(@RequestParam String email) {
-		Cliente cliente = clienteRepository.findByEmail(email);
-		if (cliente == null) {
+		Optional<Cliente> cliente = clienteRepository.findByEmail(email);
+
+		if (cliente.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
 		}
+
 		return ResponseEntity.ok(modelMapper.map(cliente, ClienteDTO.class));
 	}
 }

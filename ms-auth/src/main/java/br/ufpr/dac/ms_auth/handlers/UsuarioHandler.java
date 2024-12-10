@@ -20,6 +20,7 @@ public class UsuarioHandler {
   private PasswordEncoder passwordEncoder;
 
   private final static String FILA_CRIAR_USUARIO_CLIENTE = "CRIAR_USUARIO_CLIENTE";
+  private final static String FILA_CRIAR_USUARIO_FUNCIONARIO = "CRIAR_USUARIO_FUNCIONARIO";
 
   @RabbitListener(queues = FILA_CRIAR_USUARIO_CLIENTE)
   private void criarUsuarioCliente(String email) {
@@ -34,6 +35,21 @@ public class UsuarioHandler {
 
     usuarioRepository.save(novoUsuario);
     enviarEmailService.enviarEmail(email, "Você foi adicionado como cliente, aqui está sua senha.", senha);
+	}
+
+  @RabbitListener(queues = FILA_CRIAR_USUARIO_FUNCIONARIO)
+  private void criarUsuarioFuncionario(String email) {
+    Usuario usuarioJaExiste = usuarioRepository.findByLogin(email);
+    if (usuarioJaExiste != null) {
+      throw new IllegalArgumentException("Usuário já existe!");
+    }
+
+    String senha = gerarNovaSenha();
+    String encodeSenha = passwordEncoder.encode(senha);
+    Usuario novoUsuario = new Usuario(email, encodeSenha, "FUNCIONARIO");
+
+    usuarioRepository.save(novoUsuario);
+    enviarEmailService.enviarEmail(email, "Você foi adicionado como funcionario, aqui está sua senha.", senha);
 	}
 
   private String gerarNovaSenha() {

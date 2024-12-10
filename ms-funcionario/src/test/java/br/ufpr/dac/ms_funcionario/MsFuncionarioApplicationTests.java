@@ -1,10 +1,10 @@
-package br.ufpr.dac.ms_cliente;
+package br.ufpr.dac.ms_funcionario;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsClienteApplicationTests {
+class MsFuncionarioApplicationTests {
 
 	@Test
 	void contextLoads() {

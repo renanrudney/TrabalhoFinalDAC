@@ -16,6 +16,10 @@ sleep 5
 # mvn spring-boot:build-image
 # cd ..
 
+cd ms-funcionario
+mvn spring-boot:build-image
+cd ..
+
 cd gateway
 docker build -t dac-gateway .
 cd ..
