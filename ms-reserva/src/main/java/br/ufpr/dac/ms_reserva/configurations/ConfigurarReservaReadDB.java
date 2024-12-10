@@ -15,7 +15,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import br.ufpr.dac.ms_reserva.read.model.ReservaRead;
+import br.ufpr.dac.ms_reserva.model.ReservaRead;
+
 
 @Configuration
 @EnableJpaRepositories(

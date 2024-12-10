@@ -1,5 +1,8 @@
 package br.ufpr.dac.ms_voo.rest;
 
+import java.lang.StackWalker.Option;
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,26 +47,29 @@ public class VooREST {
 
   @PostMapping("/voos")
   public ResponseEntity<VooDTO> cadastrarVoo(@RequestBody VooDTO vooRecebido) {
-    Voo vooJaExiste = vooRepository.findByCod(vooRecebido.getCod());
-		if (vooJaExiste != null) {
+    Optional<Voo> vooJaExiste = vooRepository.findByCod(vooRecebido.getCod());
+  
+		if (vooJaExiste.isPresent()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe um Voo com esse código!");
 		}
 
     Voo novoVoo = modelMapper.map(vooRecebido, Voo.class);
-
     String origem = novoVoo.getAeroporto_origem();
-    Aeroporto aeroportoOrigem = aeroportoRepository.findByCod(origem);
-    if (aeroportoOrigem == null) {
+    Optional<Aeroporto> aeroportoOrigem = aeroportoRepository.findByCod(origem);
+
+    if (aeroportoOrigem.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Aeroporto origem não existe!");
     }
+  
     String destino = novoVoo.getAeroporto_destino();
-    Aeroporto aeroportoDestino = aeroportoRepository.findByCod(destino);
-    if (aeroportoDestino == null) {
+    Optional<Aeroporto> aeroportoDestino = aeroportoRepository.findByCod(destino);
+
+    if (aeroportoDestino.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Aeroporto destino não existe!");
     }
 
     novoVoo.setEstado(EstadoVoo.CONFIRMADO);
-    vooRepository.save(novoVoo);
+    vooRepository.saveAndFlush(novoVoo);
 
     VooDTO vooDTO = modelMapper.map(novoVoo, VooDTO.class);
     return ResponseEntity.ok().body(vooDTO);
@@ -72,22 +78,23 @@ public class VooREST {
 
   @PostMapping("/voos/{cod}/realizar")
   public ResponseEntity<VooDTO> realizarVoo(@PathVariable String cod) throws JsonProcessingException {
-    Voo voo = vooRepository.findByCod(cod);
+    Optional<Voo> vooExiste = vooRepository.findByCod(cod);
       
-    if (voo == null) {
+    if (vooExiste.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voo não existe!");
     }
+
+    Voo voo = vooExiste.get();
 
     if (voo.getEstado() != EstadoVoo.CONFIRMADO) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Voo não confirmado!");
     }
 
     voo.setEstado(EstadoVoo.REALIZADO);
-    vooRepository.save(voo);
+    vooRepository.saveAndFlush(voo);
 
     VooDTO vooDTO = modelMapper.map(voo, VooDTO.class);
-    String vooMsg = objectMapper.writeValueAsString(vooDTO);
-    rabbitTemplate.convertAndSend(FILA_VOO_REALIZADO, vooMsg);
+    rabbitTemplate.convertAndSend(FILA_VOO_REALIZADO, objectMapper.writeValueAsString(vooDTO));
 
     return ResponseEntity.ok().body(vooDTO);
   }
@@ -95,21 +102,23 @@ public class VooREST {
 
   @PostMapping("/voos/{cod}/cancelar")
   public ResponseEntity<VooDTO> cancelarVoo(@PathVariable String cod) throws JsonProcessingException {
-    Voo voo = vooRepository.findByCod(cod);
-    if (voo == null) {
+    Optional<Voo> vooExiste = vooRepository.findByCod(cod);
+
+    if (vooExiste.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voo não existe!");
     }
+
+    Voo voo = vooExiste.get();
 
     if (voo.getEstado() != EstadoVoo.CONFIRMADO) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Voo não confirmado!");
     }
 
     voo.setEstado(EstadoVoo.CANCELADO);
-    vooRepository.save(voo);
+    vooRepository.saveAndFlush(voo);
 
     VooDTO vooDTO = modelMapper.map(voo, VooDTO.class);
-    String vooMsg = objectMapper.writeValueAsString(vooDTO);
-    rabbitTemplate.convertAndSend(FILA_VOO_CANCELADO, vooMsg);
+    rabbitTemplate.convertAndSend(FILA_VOO_CANCELADO, objectMapper.writeValueAsString(vooDTO));
 
     return ResponseEntity.ok().body(vooDTO);
   }

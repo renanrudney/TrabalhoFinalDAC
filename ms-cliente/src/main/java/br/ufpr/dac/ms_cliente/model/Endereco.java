@@ -1,5 +1,6 @@
 package br.ufpr.dac.ms_cliente.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -15,8 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Endereco 
-{
+public class Endereco implements Serializable {
 	@Id
 	@Column(name="id_endereco")
 	private UUID id;

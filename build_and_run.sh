@@ -12,9 +12,13 @@ sleep 5
 # cd ..
 # docker-compose -f start-orchestrator.yml up -d
 
-# cd ms-auth
-# mvn spring-boot:build-image
-# cd ..
+cd ms-auth
+mvn spring-boot:build-image
+cd ..
+
+cd ms-voo
+mvn spring-boot:build-image
+cd ..
 
 cd ms-funcionario
 mvn spring-boot:build-image
@@ -24,4 +28,4 @@ cd gateway
 docker build -t dac-gateway .
 cd ..
 
-# docker-compose -f start-services.yml up -d
+docker-compose -f start-services.yml up -d

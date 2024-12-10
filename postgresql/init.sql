@@ -55,7 +55,7 @@ BEGIN
     /* MS Voos */
     CREATE TABLE IF NOT EXISTS Voo.Aeroporto (
         cod VARCHAR(3) PRIMARY KEY,
-        nome VARCHAR(30) NOT NULL,
+        nome VARCHAR(50) NOT NULL,
         cidade VARCHAR(30) NOT NULL,
         estado VARCHAR(2) NOT NULL
     );

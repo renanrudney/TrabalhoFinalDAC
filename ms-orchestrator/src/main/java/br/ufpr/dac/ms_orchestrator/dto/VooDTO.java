@@ -1,8 +1,8 @@
-package br.ufpr.dac.ms_voo.dto;
+package br.ufpr.dac.ms_orchestrator.dto;
 
 import java.util.Date;
 
-import br.ufpr.dac.ms_voo.model.EstadoVoo;
+import br.ufpr.dac.ms_orchestrator.dto.enums.EstadoVoo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

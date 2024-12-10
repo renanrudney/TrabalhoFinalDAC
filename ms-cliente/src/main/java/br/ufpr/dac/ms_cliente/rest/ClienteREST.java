@@ -57,7 +57,7 @@ public class ClienteREST {
 
 		return ResponseEntity.created(null).body(clienteDTO);
 	}
-
+ 
 	@GetMapping("/clientes")
 	public ResponseEntity<ClienteDTO> buscarClientesPorEmail(@RequestParam String email) {
 		Optional<Cliente> cliente = clienteRepository.findByEmail(email);
