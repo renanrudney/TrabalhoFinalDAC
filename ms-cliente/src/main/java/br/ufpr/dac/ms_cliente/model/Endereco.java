@@ -1,11 +1,10 @@
 package br.ufpr.dac.ms_cliente.model;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,9 +18,8 @@ import lombok.NoArgsConstructor;
 public class Endereco 
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="endereco_id_seq")
-	@SequenceGenerator(name="endereco_id_seq", sequenceName = "Cliente.endereco_id_seq", allocationSize=1)
-	private Long id;
+	@Column(name="id_endereco")
+	private UUID id;
 	
 	@Column(name="rua")
 	private String rua;

@@ -15,14 +15,14 @@ public class MsOrchestratorApplication {
 		SpringApplication.run(MsOrchestratorApplication.class, args);
 	}
 
-	@Bean
-	public MessageConverter jsonToMapMessageConverter() {
-			DefaultClassMapper defaultClassMapper = new DefaultClassMapper();
-			defaultClassMapper.setTrustedPackages("br.ufpr.dac.ms_orchestrator.dto"); // trusted packages
-			Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
-			jackson2JsonMessageConverter.setSupportedContentType(MediaType.ALL);
-			jackson2JsonMessageConverter.setSupportedContentType(MediaType.APPLICATION_JSON);
-			jackson2JsonMessageConverter.setClassMapper(defaultClassMapper);
-			return jackson2JsonMessageConverter;
-	}
+	// @Bean
+	// public MessageConverter jsonToMapMessageConverter() {
+	// 		DefaultClassMapper defaultClassMapper = new DefaultClassMapper();
+	// 		defaultClassMapper.setTrustedPackages("br.ufpr.dac.ms_orchestrator.dto"); // trusted packages
+	// 		Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
+	// 		jackson2JsonMessageConverter.setSupportedContentType(MediaType.ALL);
+	// 		jackson2JsonMessageConverter.setSupportedContentType(MediaType.APPLICATION_JSON);
+	// 		jackson2JsonMessageConverter.setClassMapper(defaultClassMapper);
+	// 		return jackson2JsonMessageConverter;
+	// }
 }

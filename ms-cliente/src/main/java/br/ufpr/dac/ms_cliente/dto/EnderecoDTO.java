@@ -1,5 +1,7 @@
 package br.ufpr.dac.ms_cliente.dto;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnderecoDTO 
-{
-	private int id;
+public class EnderecoDTO {
+	private UUID id;
 	private String rua;
 	private int numero;
 	private String complemento;
