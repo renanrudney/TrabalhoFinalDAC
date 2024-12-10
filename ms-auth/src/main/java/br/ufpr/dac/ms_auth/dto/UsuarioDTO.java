@@ -1,6 +1,4 @@
-package br.ufpr.dac.ms_auth.model;
-
-import java.io.Serializable;
+package br.ufpr.dac.ms_auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Login implements Serializable {
+public class UsuarioDTO {
+  private String id;
   private String login;
-  private String senha;
+  private String tipo;
 }
