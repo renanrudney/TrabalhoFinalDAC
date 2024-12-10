@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.ufpr.dac.ms_reserva.dto.EmbarqueDTO;
 import br.ufpr.dac.ms_reserva.dto.ReservaDTO;
 import br.ufpr.dac.ms_reserva.model.EstadoReservaRead;
 import br.ufpr.dac.ms_reserva.model.Reserva;
@@ -49,6 +50,7 @@ public class ReservaREST {
   private final static String FILA_CANCELAR_RESERVA_READ = "CANCELAR_RESERVA_READ";
   private final static String FILA_RETIRAR_MILHAS_RESERVA = "RETIRAR_MILHAS_RESERVA";
   private final static String FILA_REEMBOLSAR_MILHAS_RESERVA = "REEMBOLSAR_MILHAS_RESERVA";
+  private final static String FILA_EMBARQUE_RESERVA_READ = "EMBARQUE_RESERVA_READ";
 
   @PostMapping("/reservas")
   public ResponseEntity<ReservaDTO> efetuarReserva(@RequestBody ReservaDTO reservaRecebida) throws JsonProcessingException {
@@ -80,6 +82,31 @@ public class ReservaREST {
     }
 
     ReservaDTO reservaDTO = modelMapper.map(reservaRead, ReservaDTO.class); 
+    return ResponseEntity.ok().body(reservaDTO);
+  }
+
+  @PostMapping("/reservas/{cod}/embarque")
+  public ResponseEntity<ReservaDTO> embarqueReserva(@PathVariable String cod, @RequestBody EmbarqueDTO embarque) throws JsonProcessingException {
+    Optional<ReservaRead> reservaExiste = reservaReadRepository.findByCod(cod);
+
+    if (reservaExiste.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva não existe!");
+
+    if(embarque.getCod_voo() != reservaExiste.get().getCod_voo())
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reserva não é do voo fornecido!");
+
+    Optional<EstadoReservaRead> estado = estadoRepository.findBySigla("EMB");
+
+    if (estado.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Estado não existe!");
+
+    ReservaRead reservaRead = reservaExiste.get();
+    reservaRead.setEstado(estado.get());
+    reservaRepository.saveAndFlush(modelMapper.map(reservaRead, Reserva.class));
+
+    rabbitTemplate.convertAndSend(FILA_EMBARQUE_RESERVA_READ, objectMapper.writeValueAsString(reservaRead));
+
+    ReservaDTO reservaDTO = modelMapper.map(reservaRead, ReservaDTO.class);
     return ResponseEntity.ok().body(reservaDTO);
   }
 

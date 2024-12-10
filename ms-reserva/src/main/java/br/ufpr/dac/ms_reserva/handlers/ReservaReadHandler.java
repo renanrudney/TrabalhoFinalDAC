@@ -23,33 +23,17 @@ public class ReservaReadHandler {
   private final static String FILA_CANCELAR_RESERVA_READ = "CANCELAR_RESERVA_READ";
   private final static String FILA_CHECKIN_RESERVA_READ = "CHECKIN_RESERVA_READ";
   private final static String FILA_REALIZAR_RESERVA_READ = "REALIZAR_RESERVA_READ";
+  private final static String FILA_EMBARQUE_RESERVA_READ = "EMBARQUE_RESERVA_READ";
 
-  @RabbitListener(queues = FILA_RESERVAS_READ_REALIZADO)
-  private void reservaReadRealizado(String reservasString) throws JsonProcessingException {
+
+  @RabbitListener(queues = { FILA_RESERVAS_READ_REALIZADO, FILA_RESERVAS_READ_CANCELADO })
+  private void atualizarReservaReadList(String reservasString) throws JsonProcessingException {
     List<ReservaRead> reservasRead = objectMapper.readValue(reservasString, new TypeReference<List<ReservaRead>>(){});
     readRepository.saveAllAndFlush(reservasRead);
   }
 
-  @RabbitListener(queues = FILA_RESERVAS_READ_CANCELADO)
-  private void reservaReadCancelado(String reservasString) throws JsonProcessingException {
-    List<ReservaRead> reservasRead = objectMapper.readValue(reservasString, new TypeReference<List<ReservaRead>>(){});
-    readRepository.saveAllAndFlush(reservasRead);
-  }
-
-  @RabbitListener(queues = FILA_REALIZAR_RESERVA_READ)
-  private void realizarReservaRead(String reservaString) throws JsonProcessingException {
-    ReservaRead reservaRead = objectMapper.readValue(reservaString, ReservaRead.class);
-    readRepository.saveAndFlush(reservaRead);
-  }
-
-  @RabbitListener(queues = FILA_CHECKIN_RESERVA_READ)
-  private void checkinReservaRead(String reservaString) throws JsonProcessingException {
-    ReservaRead reservaRead = objectMapper.readValue(reservaString, ReservaRead.class);
-    readRepository.saveAndFlush(reservaRead);
-  }
-
-  @RabbitListener(queues = FILA_CANCELAR_RESERVA_READ)
-  private void cancelarReservaRead(String reservaString) throws JsonProcessingException {
+  @RabbitListener(queues = { FILA_CANCELAR_RESERVA_READ, FILA_CHECKIN_RESERVA_READ, FILA_REALIZAR_RESERVA_READ, FILA_EMBARQUE_RESERVA_READ })
+  private void atualizarReservaRead(String reservaString) throws JsonProcessingException {
     ReservaRead reservaRead = objectMapper.readValue(reservaString, ReservaRead.class);
     readRepository.saveAndFlush(reservaRead);
   }
