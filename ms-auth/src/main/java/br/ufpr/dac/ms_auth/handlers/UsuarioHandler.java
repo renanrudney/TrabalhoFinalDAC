@@ -1,5 +1,7 @@
 package br.ufpr.dac.ms_auth.handlers;
 
+import java.util.Optional;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,9 @@ public class UsuarioHandler {
 
   @RabbitListener(queues = FILA_CRIAR_USUARIO_CLIENTE)
   private void criarUsuarioCliente(String email) {
-    Usuario usuarioJaExiste = usuarioRepository.findByLogin(email);
-    if (usuarioJaExiste != null) {
+    Optional<Usuario> usuarioJaExiste = usuarioRepository.findByLogin(email);
+
+    if (usuarioJaExiste.isPresent()) {
       throw new IllegalArgumentException("Usuário já existe!");
     }
 
@@ -39,8 +42,9 @@ public class UsuarioHandler {
 
   @RabbitListener(queues = FILA_CRIAR_USUARIO_FUNCIONARIO)
   private void criarUsuarioFuncionario(String email) {
-    Usuario usuarioJaExiste = usuarioRepository.findByLogin(email);
-    if (usuarioJaExiste != null) {
+    Optional<Usuario> usuarioJaExiste = usuarioRepository.findByLogin(email);
+
+    if (usuarioJaExiste.isPresent()) {
       throw new IllegalArgumentException("Usuário já existe!");
     }
 
