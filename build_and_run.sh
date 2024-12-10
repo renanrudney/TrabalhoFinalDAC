@@ -20,6 +20,10 @@ cd ms-voo
 mvn spring-boot:build-image
 cd ..
 
+cd ms-reserva
+mvn spring-boot:build-image
+cd ..
+
 cd ms-funcionario
 mvn spring-boot:build-image
 cd ..
