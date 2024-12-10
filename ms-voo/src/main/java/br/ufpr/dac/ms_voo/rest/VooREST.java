@@ -1,5 +1,7 @@
 package br.ufpr.dac.ms_voo.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.ufpr.dac.ms_voo.dto.VooDTO;
@@ -42,6 +45,17 @@ public class VooREST {
 
   private final static String FILA_VOO_REALIZADO = "VOO_REALIZADO";
   private final static String FILA_VOO_CANCELADO = "VOO_CANCELADO";
+
+  @GetMapping("/voos")
+  public ResponseEntity<List<VooDTO>> listarVoos() {
+    List<Voo> voos = vooRepository.findAll();
+    List<VooDTO> vooList = new ArrayList<>();
+
+    for (Voo voo : voos)
+      vooList.add(modelMapper.map(voo, VooDTO.class));
+
+    return ResponseEntity.ok().body(vooList);
+  }
 
   @PostMapping("/voos")
   public ResponseEntity<VooDTO> cadastrarVoo(@RequestBody VooDTO vooRecebido) {
