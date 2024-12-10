@@ -16,7 +16,8 @@ export class RemoverFuncionarioComponent {
 
   constructor(public activeModal: NgbActiveModal, private funcionarioService: FuncionarioService) {}
 
-  removerFuncionario(id: number): void {
+  removerFuncionario(id: number | undefined): void {
+    if (id)
     this.funcionarioService.deletarFuncionario(id).subscribe(
       () => {
         // Sucesso: exibe mensagem de confirmação
