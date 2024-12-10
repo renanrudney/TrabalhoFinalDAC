@@ -1,6 +1,11 @@
 <div class="container mt-5">
   <h2 class="text-center mb-4">Efetuar Reserva</h2>
 
+  <!-- Mensagem de Erro -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
   <!-- Campo de busca de voos -->
   <form (ngSubmit)="buscarVoos()">
     <div class="row">

@@ -8,7 +8,7 @@ import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-comprar-milhas',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule,FormsModule,RouterModule],
   templateUrl: './comprar-milhas.component.html',
   styleUrl: './comprar-milhas.component.scss'
 })
@@ -22,9 +22,18 @@ export class ComprarMilhasComponent {
     if (quantidade > 0){
       const clienteId: number = Number(this.authService.getItem('userId'));
       if (clienteId)
-        this.transacaoMilhasService.novaTransacao(clienteId,quantidade,"COMPRA DE MILHAS");
-
-      alert("Compra realizada!");
+        this.transacaoMilhasService.novaTransacao(clienteId,quantidade,"COMPRA DE MILHAS").subscribe({
+          next: (transacao) => {
+            console.log('Compra realizada com sucesso:', transacao);
+            alert('Compra realizada com sucesso.');
+          },
+          error: (err: any) => {
+            console.error('Erro ao comprar  milhas:', err);
+            alert('Ocorreu um erro ao tentar comprar milhas. Por favor, tente novamente.');
+          }
+        }
+      );
+      
       this.router.navigate(['/home-cliente'])
     }
   }

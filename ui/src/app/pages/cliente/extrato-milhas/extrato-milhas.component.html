@@ -1,10 +1,15 @@
 <div class="container mt-5">
   <h2 class="text-center mb-4">Extrato de Milhas</h2>
   
+  <!-- Mensagem de Erro -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
   <!-- Quantidade atual de milhas -->
   <div class="row mb-4">
     <div class="col">
-      <h4>Seu saldo em Milhas: <span class="badge bg-primary">{{ saldoMilhas }}</span></h4>
+      <h4>Seu saldo em Milhas: <span class="badge bg-primary">{{ clienteLogado?.milhas }}</span></h4>
     </div>
   </div>
 

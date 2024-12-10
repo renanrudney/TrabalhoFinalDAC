@@ -1,6 +1,5 @@
 export class Reserva {
   constructor(
-    public codigoReserva: string,
     public codigoVoo: string,
     public dataHora: Date,
     public estado: string,
@@ -8,5 +7,6 @@ export class Reserva {
     public qntdPassagens: number,
     public custoTotal: number,
     public milhasUsadas: number,
+    public codigoReserva?: string
   ) {}
 }

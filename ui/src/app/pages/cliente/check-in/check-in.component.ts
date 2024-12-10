@@ -18,20 +18,41 @@ export class CheckInComponent implements OnInit {
   voos: Array<Voo> = [];
   reservasCliente: Array<Reserva> = [];
   voosProximos: Array<Voo> = [];
+  errorMessage: string = "";
 
   constructor(private vooService: VooService, private reservaService: ReservaService, private authService: AuthService) {}
 
   ngOnInit(): void {
     const clienteId: number = Number(this.authService.getItem('userId'));
-    console.log(`Cliente id no checkin:${clienteId}`);
-    this.reservasCliente.push(...this.reservaService.getReservasByClienteId(clienteId));
-    console.log(this.reservasCliente);
-    this.voosProximos.push(...this.vooService.getVoosProximasHoras());
-    console.log(this.voosProximos)
+    this.carregarReservas(clienteId);
+    this.carregarVoosProximos();
     this.voos.push(...this.voosClienteProximas48H());
-    console.log(this.voos);
-    //Ordena os voos na lista
-    this.voos.sort((a, b) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime());
+    // Ordenar por dataHora após a resposta da API
+    this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+  }
+
+  carregarReservas(clienteId: number): void {
+    this.reservaService.getReservasByClienteId(clienteId).subscribe(
+      (data) => {
+        this.reservasCliente = data;
+      },
+      (error) => {
+        console.error('Erro ao carregar reservas', error);
+        this.errorMessage = "Erro ao carregar reservas, tente novamente."
+      }
+    );
+  }
+
+  carregarVoosProximos(): void {
+    this.vooService.getVoosProximasHoras().subscribe(
+      (data) => {
+        this.voosProximos = data;
+      },
+      (error) => {
+        console.error('Erro ao carregar voos proximas 48h', error);
+        this.errorMessage = "Erro ao carregar voos proximas 48h, tente novamente."
+      }
+    )
   }
 
   voosClienteProximas48H(): Array<Voo> {

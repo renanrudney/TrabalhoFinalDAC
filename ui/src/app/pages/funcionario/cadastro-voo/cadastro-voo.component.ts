@@ -25,11 +25,21 @@ export class CadastroVooComponent implements OnInit{
   poltronasOcupadas: number = 0;
   equivalenteMilhas: number = 0;
   aeroportos: Aeroporto[] = [];
+  errorMessage: string = "";
 
   constructor(private router: Router, private vooService: VooService, private aeroportoService: AeroportoService) {}
 
   ngOnInit(): void {
-    this.aeroportos = this.aeroportoService.getAeroportos();
+    this.aeroportoService.getAeroportos().subscribe(
+      (aeroportos) => {
+        this.aeroportos = aeroportos;
+        console.log('Aeroportos carregados:', aeroportos);
+      },
+      (error) => {
+        console.error('Erro ao carregar aeroportos:', error);
+        this.errorMessage = 'Erro ao carregar aeroportos, tente novamente';
+      }
+    );
   }
 
   calcularMilhas() {
@@ -39,9 +49,17 @@ export class CadastroVooComponent implements OnInit{
 
   cadastrarVoo() {
     // Aqui vai a lógica para salvar o voo no sistema (ex: chamada ao backend)
-    this.vooService.cadastrarVoo(this.codigoVoo, new Date(this.dataHora), this.origem, this.destino, this.valorPassagem, this.totalPoltronas);
-    alert(`Novo voo ${this.codigoVoo} casdastrado!`);
-    // Exemplo de redirecionamento ou lógica pós-cadastro
-    this.router.navigate(['/home-funcionario']);
+    this.vooService.cadastrarVoo(this.codigoVoo, new Date(this.dataHora), this.origem, this.destino, this.valorPassagem, this.totalPoltronas).subscribe(
+      (vooCadastrado) => {
+        // Sucesso: Exibe mensagem e redireciona
+        alert(`Novo voo ${vooCadastrado.codigoVoo} cadastrado com sucesso!`);
+        this.router.navigate(['/home-funcionario']);
+      },
+      (error) => {
+        // Erro: Exibe mensagem apropriada
+        console.error('Erro ao cadastrar voo:', error);
+        alert('Ocorreu um erro ao cadastrar o voo. Tente novamente.');
+      }
+    );
   }
 }

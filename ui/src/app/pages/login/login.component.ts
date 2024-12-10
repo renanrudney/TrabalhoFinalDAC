@@ -19,15 +19,25 @@ export class LoginComponent {
   constructor(private userService: UserService, private router: Router) {}
 
   logar() {
-    this.userService.login(this.login, this.senha).subscribe(tipo => { 
-      if (tipo === 'cliente') {
-        // Redireciona para a página inicial ou outra página se o login for bem-sucedido
-        this.router.navigate(['/home-cliente']);      
-      } else if (tipo === 'funcionario') {
-        this.router.navigate(['/home-funcionario']);
-      } else {
-        this.loginFailed = true; // Exibir mensagem de erro
+    this.userService.login(this.login, this.senha).subscribe(
+      (tipo) => {
+        if (tipo === 'cliente') {
+          // Redireciona para a página inicial do cliente
+          this.router.navigate(['/home-cliente']);
+        } else if (tipo === 'funcionario') {
+          // Redireciona para a página inicial do funcionário
+          this.router.navigate(['/home-funcionario']);
+        } else {
+          // Tipo inesperado (apenas para segurança)
+          console.error('Tipo de usuário desconhecido:', tipo);
+          this.loginFailed = true;
+        }
+      },
+      (error) => {
+        console.error('Erro no login:', error);
+        this.loginFailed = true; // Exibe mensagem de erro
       }
-    });    
+    );
   }
+  
 }

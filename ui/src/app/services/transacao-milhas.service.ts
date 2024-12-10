@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { TransacaoMilhas } from '../models/transacaoMilhas/transacao-milhas.model';
-import {Observable, of} from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { environment } from '../shared/environment/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransacaoMilhasService {
+
+  private baseUrl = `${environment.apiGatewayUrl}/milhas`;
 
   transactions: TransacaoMilhas[] = [
     new TransacaoMilhas(1, new Date(2024,0,1,14,30), 123345, 'entrada', 'COMPRA DE MILHAS'),
@@ -14,18 +18,22 @@ export class TransacaoMilhasService {
     new TransacaoMilhas(4, new Date(2024,4,1,1,14), 9897, 'saida', 'GRU->CWB','AAA001')
   ];
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   getTransacoes(): Observable<TransacaoMilhas[]> {
-    return of(this.transactions);
+    return this.http.get<TransacaoMilhas[]>(`${this.baseUrl}`);
   }
 
-  getTransacoesCliente(clienteId: number): Array<TransacaoMilhas> {
-    return this.transactions.filter(transacao => transacao.clienteId === clienteId);
+  getTransacoesCliente(clienteId: number): Observable<TransacaoMilhas[]> {
+    return this.getTransacoes().pipe(
+      map((transacoes) =>
+        transacoes.filter((transacao) => transacao.clienteId === clienteId)
+      )
+    );
   }
 
-  novaTransacao(clienteId: number, milhas: number, descricao: string, codigoReserva?: string): void {
+  novaTransacao(clienteId: number, milhas: number, descricao: string, codigoReserva?: string): Observable<TransacaoMilhas> {
     const transacao: TransacaoMilhas = new TransacaoMilhas (clienteId,new Date(),milhas,"entrada",descricao, codigoReserva);
-    this.transactions.push(transacao);
+    return this.http.post<TransacaoMilhas>(this.baseUrl, transacao);
   }
 }

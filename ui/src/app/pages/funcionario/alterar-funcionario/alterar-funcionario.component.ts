@@ -15,7 +15,8 @@ import { ActivatedRoute } from '@angular/router';
 export class AlterarFuncionarioComponent implements OnInit {
 
   funcionario!: Funcionario;
-  cpf: string = "";
+  id: number = 0;
+  errorMessage: string = "";
 
   constructor(
     private funcionarioService: FuncionarioService,
@@ -23,23 +24,49 @@ export class AlterarFuncionarioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const cpfFuncionario = this.route.snapshot.paramMap.get('cpf');
-    if (cpfFuncionario) {
-      this.funcionarioService.getFuncionarioByCpf(cpfFuncionario).subscribe((funcionario) => {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+  
+    if (!id || isNaN(id)) {
+      console.error('ID inválido.');
+      this.errorMessage = 'ID do funcionário inválido. Verifique a URL e tente novamente.';
+      return;
+    }
+  
+    this.funcionarioService.getFuncionarioById(id).subscribe(
+      (funcionario) => {
         if (funcionario) {
           this.funcionario = funcionario;
+        } else {
+          console.warn(`Funcionário com ID ${id} não encontrado.`);
+          this.errorMessage = `Funcionário com ID ${id} não encontrado.`;
         }
-      });
-    }
+      },
+      (error) => {
+        console.error('Erro ao buscar o funcionário:', error);
+        this.errorMessage = 'Erro ao carregar os dados do funcionário. Tente novamente mais tarde.';
+      }
+    );
   }
+  
 
-  onSubmit(form: NgForm) {
+  onSubmit(form: NgForm): void {
     if (form.touched && form.valid) {
-      this.funcionarioService.alterarFuncionario(this.funcionario);
-      console.log("Funcionário Alterado com sucesso!");
-       window.history.back();
+      this.funcionarioService.alterarFuncionario(this.funcionario).subscribe(
+        (funcionarioAtualizado) => {
+          // Sucesso: exibe mensagem de confirmação
+          console.log("Funcionário Alterado com sucesso!", funcionarioAtualizado);
+          alert(`Funcionário ${funcionarioAtualizado.nome} alterado com sucesso!`);
+          window.history.back(); // Volta à página anterior
+        },
+        (error) => {
+          // Erro: exibe mensagem apropriada
+          console.error('Erro ao alterar o funcionário:', error);
+          alert('Ocorreu um erro ao alterar o funcionário. Tente novamente.');
+        }
+      );
     } else {
-      alert("Nenhum dado foi alterado");
+      alert("Nenhum dado foi alterado ou o formulário é inválido.");
     }
   }
+  
 }

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,7 @@ export class NavbarComponent implements OnInit{
   
   userTipo: string | null = null;
 
-  constructor (private authService: AuthService) {}
+  constructor (private authService: AuthService, private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     this.getUserTipo();
@@ -25,6 +26,13 @@ export class NavbarComponent implements OnInit{
   }
 
   logout() {
-    this.authService.logout();
+    this.userService.logout().subscribe(
+      () => {
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        console.error('Erro ao deslogar:', error);
+      }
+    );
   }
 }

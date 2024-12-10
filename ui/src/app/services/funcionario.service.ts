@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Funcionario } from '../models/funcionario/funcionario.model';
 import { Observable, of } from 'rxjs';
+import { environment } from '../shared/environment/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,36 +15,27 @@ export class FuncionarioService {
     new Funcionario('Beltrano da Silva', '32345678903', 'beltrano@gmail.com', '9999-3333', 3)    
   ];
 
-  constructor() { }
+  private baseUrl = `${environment.apiGatewayUrl}/funcionarios`;
+
+  constructor(private http: HttpClient) { }
 
   criarFuncionario(novoFuncionario: Funcionario): Observable<Funcionario> {
-    this.funcionarios.push(novoFuncionario);
-    return of (novoFuncionario);
+    return this.http.post<Funcionario>(this.baseUrl, novoFuncionario);
   }
 
-  alterarFuncionario(funcionarioAlterado: Funcionario): void {
-    const funcionarioExistente = this.funcionarios.find(funcionario => funcionario.cpf === funcionarioAlterado.cpf);
-    
-    if (funcionarioExistente) {
-      funcionarioExistente.nome = funcionarioAlterado.nome;
-      funcionarioExistente.email = funcionarioAlterado.email;
-      funcionarioExistente.telefone = funcionarioAlterado.telefone;
-    }
+  alterarFuncionario(funcionarioAlterado: Funcionario): Observable<Funcionario> {
+    return this.http.put<Funcionario>(`${this.baseUrl}/${funcionarioAlterado.id}`, funcionarioAlterado);
   }
   
-  getFuncionarioByCpf(cpfFuncionario: string): Observable<Funcionario | null> {
-    const funcionario = this.funcionarios.find(funcionario => funcionario.cpf === cpfFuncionario) || null;
-    return of(funcionario);
+  getFuncionarioById(id: number): Observable<Funcionario> {
+    return this.http.get<Funcionario>(`${this.baseUrl}/${id}`);
   }
 
   getFuncionarios(): Observable<Funcionario[]> {
-    return of(this.funcionarios);
+    return this.http.get<Funcionario[]>(this.baseUrl);
   }
 
-  deletarFuncionario(cpf: string): void {
-    const index = this.funcionarios.findIndex(funcionario => funcionario.cpf === cpf);
-    if (index !== -1) {
-      this.funcionarios.splice(index, 1);
-    }
+  deletarFuncionario(id: number): Observable<Funcionario> {
+    return this.http.delete<Funcionario>(`${this.baseUrl}/${id}`);
   }
 }

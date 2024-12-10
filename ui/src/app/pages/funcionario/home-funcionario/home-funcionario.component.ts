@@ -8,13 +8,6 @@ import { Router } from '@angular/router';
 import { CancelarReservaComponent } from '../../cliente/cancelar-reserva/cancelar-reserva.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-interface Reserva {
-  id: number;
-  dataHora: Date;
-  aeroportoOrigem: string;
-  aeroportoDestino: string;
-}
-
 @Component({
   selector: 'app-home-funcionario',
   standalone: true,
@@ -26,14 +19,28 @@ interface Reserva {
 export class HomeFuncionarioComponent implements OnInit {
   
   voos: Voo[] = [];
+  mensagemErro: string = "";
 
   constructor (private vooService: VooService, private router: Router, private modalService: NgbModal) {}
 
   ngOnInit(): void {
-    this.voos = this.vooService.getVoosProximasHoras();
-    //Ordenar por dataHora
-    this.voos = this.voos.filter(voo => voo.estado === 'CONFIRMADO');
-    this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+    this.vooService.getVoosProximasHoras().subscribe(
+      (voos) => {
+        if (voos.length > 0) {
+          this.voos = voos; // Atualiza a lista de voos no componente
+
+          //Ordenar por dataHora
+          this.voos = this.voos.filter(voo => voo.estado === 'CONFIRMADO');
+          this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+        } else {
+          this.mensagemErro = 'Nenhum voo encontrado nas próximas 48 horas.';
+        }
+      },
+      (error) => {
+        console.error('Erro ao buscar voos próximos:', error);
+        this.mensagemErro = 'Ocorreu um erro ao buscar voos. Tente novamente.';
+      }
+    );
   }
   
   confirmarEmbarque(codigoVoo: string): void {
@@ -46,8 +53,17 @@ export class HomeFuncionarioComponent implements OnInit {
   }
 
   realizarVoo(codigoVoo: string): void {
-    this.vooService.realizarVoo(codigoVoo);
-    alert(`Voo ${codigoVoo} foi realizado! Atualizado o estado do voo e das reservas.`);
-    location.reload(); // Recarrega a página
-  }
+    this.vooService.realizarVoo(codigoVoo).subscribe(
+      () => {
+        // Sucesso: exibe mensagem e recarrega a página
+        alert(`Voo ${codigoVoo} foi realizado! Atualizado o estado do voo e das reservas.`);
+        location.reload();
+      },
+      (error) => {
+        // Erro: exibe mensagem apropriada
+        console.error('Erro ao realizar o voo:', error);
+        alert(`Ocorreu um erro ao realizar o voo ${codigoVoo}. Tente novamente.`);
+      }
+    );
+  }  
 }

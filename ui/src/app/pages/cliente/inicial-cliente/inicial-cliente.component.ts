@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ClienteService } from '../../../services/cliente.service';
 import { Cliente } from '../../../models/cliente/cliente.model';
 import { Reserva } from '../../../models/reserva/reserva.model';
+import { Voo } from '../../../models/voo/voo.model';
 import { VooService } from '../../../services/voo.service';
 import { ReservaService } from '../../../services/reserva.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -23,34 +24,83 @@ export class InicialClienteComponent implements OnInit
 {
   clienteLogado: Cliente | undefined = undefined;
   Reservas: Array<Reserva> = [];
+  voos: Array<Voo> = [];
+  errorMessage: string = "";
 
- constructor(private clienteService: ClienteService, private vooService: VooService, private reservaService: ReservaService, private modalService: NgbModal, private authService: AuthService) {}
+  constructor(private clienteService: ClienteService, private vooService: VooService, private reservaService: ReservaService, private modalService: NgbModal, private authService: AuthService) {}
 
   ngOnInit(): void {
     const clienteId: number | null = Number(this.authService.getItem('userId'));
-    if (clienteId){
-      this.clienteLogado = this.clienteService.getClienteById(clienteId);
-      this.Reservas.push(...this.reservaService.getReservasByClienteId(clienteId));
-      //Ordenar por dataHora
-      this.Reservas.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+    if (clienteId) {
+      this.clienteService.getClienteById(clienteId).subscribe(
+        (cliente) => {
+          if (cliente) {
+            this.clienteLogado = cliente; // Atribui o cliente retornado
+            this.carregarReservas(clienteId);
+          } else {
+            console.error('Cliente não encontrado.');
+          }
+        },
+        (error) => {
+          console.error('Erro ao buscar cliente:', error);
+        }
+      );
     }
+    this.carregarVoos();
   }
 
-  getVooOrigem(codigoVoo: string): string | undefined {
-    return this.vooService.getOrigem(codigoVoo);
+  carregarVoos(): void {
+    this.vooService.getVoos().subscribe(
+      (data) => this.voos = data,
+      (error) => {
+        console.error('Erro ao carregar voos', error);
+        this.errorMessage = 'Erro ao carregar voos, tente novamente.';
+      }
+    );
   }
 
-  getVooDestino(codigoVoo: string): string | undefined{
-    return this.vooService.getDestino(codigoVoo);
+  carregarReservas(clienteId: number): void {
+    this.reservaService.getReservasByClienteId(clienteId).subscribe(
+      (data) => {
+        this.Reservas = data;
+
+        // Ordenar por dataHora após a resposta da API
+        this.Reservas.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+      },
+      (error) => {
+        console.error('Erro ao carregar reservas', error);
+        this.errorMessage = 'Erro ao carregar reservas, tente novamente.'
+      }
+    );
+  }
+
+  getVooOrigem(codigoVoo: string): string {
+    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
+    return voo ? voo.origem : 'N/A';
+  }
+  
+  getVooDestino(codigoVoo: string): string {
+    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
+    return voo ? voo.destino : 'N/A';
+  }
+
+  getVoo(codigoVoo: string): Voo | undefined{
+    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
+    if (voo){
+      return voo;
+    } else 
+    return undefined;
   }
 
   abrirModalVerReserva(reserva: Reserva) {
     const modalRef = this.modalService.open(VerReservaComponent);
     modalRef.componentInstance.reserva = reserva;
+    modalRef.componentInstance.voo = this.getVoo(reserva.codigoVoo);
   }
 
   abrirModalCancelarReserva(reserva: Reserva) {
     const modalRef = this.modalService.open(CancelarReservaComponent);
     modalRef.componentInstance.reserva = reserva;
+    modalRef.componentInstance.voo = this.getVoo(reserva.codigoVoo);
   }
 }

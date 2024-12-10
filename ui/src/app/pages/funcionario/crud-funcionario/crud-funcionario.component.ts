@@ -31,8 +31,8 @@ export class CrudFuncionarioComponent implements OnInit{
     );
   }
 
-  alterarFuncionario(cpf: string): void {
-    this.router.navigate(['/alterar-funcionario', cpf]);
+  alterarFuncionario(id: number | undefined): void {
+    this.router.navigate(['/alterar-funcionario', id]);
   }
 
   AbrirModalRemoverFuncionario(funcionario: Funcionario): void {

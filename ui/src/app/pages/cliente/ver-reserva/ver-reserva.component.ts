@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Reserva } from '../../../models/reserva/reserva.model';
-import { VooService } from '../../../services/voo.service';
+import { Voo } from '../../../models/voo/voo.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,13 +13,15 @@ import { CommonModule } from '@angular/common';
 })
 export class VerReservaComponent {
   @Input() reserva!: Reserva;
-  constructor(public activeModal: NgbActiveModal, private vooService: VooService) {}
+  @Input() voo!: Voo;
 
-  getVooOrigem(codigoVoo: string): string | undefined {
-    return this.vooService.getOrigem(codigoVoo);
+  constructor(public activeModal: NgbActiveModal) {}
+
+  getVooOrigem(): string {
+    return this.voo ? this.voo.origem : 'N/A';
   }
 
-  getVooDestino(codigoVoo: string): string | undefined{
-    return this.vooService.getDestino(codigoVoo);
+  getVooDestino(): string {
+    return this.voo ? this.voo.destino : 'N/A';
   }
 }
