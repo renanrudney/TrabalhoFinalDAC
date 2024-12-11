@@ -63,7 +63,7 @@ public class TransacaoREST {
 		if (clienteJaExiste.isEmpty())
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente não encontrado!");
 
-		List<Transacao> transacoes = transacaoRepository.findByIdCliente(idCliente);
+		List<Transacao> transacoes = transacaoRepository.findByCliente(clienteJaExiste.get());
 		List<TransacaoDTO> list = new ArrayList<>();
 
     for (Transacao transacao : transacoes)

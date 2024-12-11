@@ -21,10 +21,10 @@ export class LoginComponent {
   logar() {
     this.userService.login(this.login, this.senha).subscribe(
       (tipo) => {
-        if (tipo === 'cliente') {
+        if (tipo === 'CLIENTE') {
           // Redireciona para a página inicial do cliente
           this.router.navigate(['/home-cliente']);
-        } else if (tipo === 'funcionario') {
+        } else if (tipo === 'FUNCIONARIO') {
           // Redireciona para a página inicial do funcionário
           this.router.navigate(['/home-funcionario']);
         } else {

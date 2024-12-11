@@ -1,21 +1,16 @@
 package br.ufpr.dac.ms_orchestrator.connections;
 
-
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Binding.DestinationType;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.support.converter.DefaultClassMapper;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import br.ufpr.dac.ms_orchestrator.rabbitmq.config.RabbitMQConstants;
 import jakarta.annotation.PostConstruct;
 
-@Component
+@Configuration
 public class RabbitMQConnection {
   private static final String NOME_EXCHANGE = "amq.direct";
   private AmqpAdmin amqpAdmin;

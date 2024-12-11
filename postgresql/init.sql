@@ -23,7 +23,7 @@ BEGIN
     /* MS Cliente */
     CREATE TABLE IF NOT EXISTS Cliente.Endereco (
         id_endereco UUID PRIMARY KEY,
-        rua VARCHAR(30) NOT NULL,
+        rua VARCHAR(50) NOT NULL,
         numero INT NOT NULL,
         complemento VARCHAR(30),
         cep VARCHAR(8) NOT NULL,
@@ -36,7 +36,7 @@ BEGIN
         id_endereco UUID NOT NULL,
         cpf VARCHAR(11) NOT NULL,
         nome VARCHAR(50) NOT NULL,
-        email VARCHAR(30),
+        email VARCHAR(50),
         milhas DOUBLE PRECISION DEFAULT 0,
         ativo BOOL NOT NULL,
         CONSTRAINT fk_cliente_endereco FOREIGN KEY (id_endereco) REFERENCES Cliente.Endereco(id_endereco)
@@ -44,12 +44,12 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS Cliente.Transacao (
         id SERIAL PRIMARY KEY,
-        id_cliente VARCHAR(255) NOT NULL,
+        id_cliente UUID NOT NULL,
         data_hora TIMESTAMP NOT NULL,
         qtd_milhas DOUBLE PRECISION NOT NULL,
         entrada BOOL NOT NULL,
         descricao VARCHAR(100),
-        CONSTRAINT fk_transacao_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id_usuario)
+        CONSTRAINT fk_transacao_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id)
     );
 
     /* MS Voos */
@@ -81,26 +81,26 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS Reserva_cud.Reserva (
         cod VARCHAR(6) PRIMARY KEY,
-        cod_estado INT NOT NULL,
+        cod_estado VARCHAR(5) NOT NULL,
         cod_voo VARCHAR(8) NOT NULL,
-        id_cliente VARCHAR(255) NOT NULL,
+        id_cliente UUID NOT NULL,
         data_hora TIMESTAMP NOT NULL,
         milhas DOUBLE PRECISION DEFAULT 0,
         valor DOUBLE PRECISION DEFAULT 0,
-        CONSTRAINT fk_reserva_estado FOREIGN KEY (cod_estado) REFERENCES Reserva_cud.Estado_reserva(cod),
+        CONSTRAINT fk_reserva_estado FOREIGN KEY (cod_estado) REFERENCES Reserva_cud.Estado_reserva(sigla),
         CONSTRAINT fk_reserva_voo FOREIGN KEY (cod_voo) REFERENCES Voo.Voo(cod),
-        CONSTRAINT fk_reserva_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id_usuario)
+        CONSTRAINT fk_reserva_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id)
     );
 
     CREATE TABLE IF NOT EXISTS Reserva_cud.Log_reserva (
         id SERIAL PRIMARY KEY,
         cod_reserva VARCHAR(6) NOT NULL,
-        estado_origem INT NOT NULL,
-        estado_destino INT NOT NULL,
+        estado_origem VARCHAR(5) NOT NULL,
+        estado_destino VARCHAR(5) NOT NULL,
         data_hora TIMESTAMP NOT NULL,
         CONSTRAINT fk_log_reserva_reserva FOREIGN KEY (cod_reserva) REFERENCES Reserva_cud.Reserva(cod),
-        CONSTRAINT fk_log_reserva_estado_origem FOREIGN KEY (estado_origem) REFERENCES Reserva_cud.Estado_reserva(cod),
-        CONSTRAINT fk_log_reserva_estado_destino FOREIGN KEY (estado_destino) REFERENCES Reserva_cud.Estado_reserva(cod)
+        CONSTRAINT fk_log_reserva_estado_origem FOREIGN KEY (estado_origem) REFERENCES Reserva_cud.Estado_reserva(sigla),
+        CONSTRAINT fk_log_reserva_estado_destino FOREIGN KEY (estado_destino) REFERENCES Reserva_cud.Estado_reserva(sigla)
     );
 
     /* MS Reserva para Read */
@@ -111,15 +111,15 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS Reserva_read.Reserva (
         cod VARCHAR(6) PRIMARY KEY,
-        cod_estado INT NOT NULL,
+        cod_estado VARCHAR(5) NOT NULL,
         cod_voo VARCHAR(8) NOT NULL,
-        id_cliente VARCHAR(255) NOT NULL,
+        id_cliente UUID NOT NULL,
         data_hora TIMESTAMP NOT NULL,
         milhas DOUBLE PRECISION DEFAULT 0,
         valor DOUBLE PRECISION DEFAULT 0,
-        CONSTRAINT fk_reserva_read_estado FOREIGN KEY (cod_estado) REFERENCES Reserva_read.Estado_reserva(cod),
+        CONSTRAINT fk_reserva_read_estado FOREIGN KEY (cod_estado) REFERENCES Reserva_read.Estado_reserva(sigla),
         CONSTRAINT fk_reserva_read_voo FOREIGN KEY (cod_voo) REFERENCES Voo.Voo(cod),
-        CONSTRAINT fk_reserva_read_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id_usuario)
+        CONSTRAINT fk_reserva_read_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id)
     );
 
     INSERT INTO voo.aeroporto (cod, cidade, estado, nome) VALUES
@@ -187,6 +187,7 @@ BEGIN
         ('CONF', 'CONFIRMADO'),
         ('CHECK', 'CHECK IN'),
         ('CANC', 'CANCELADO'),
+        ('CAVOO', 'CANCELADO VOO'),
         ('EMB', 'EMBARCADO'),
         ('RD', 'REALIZADO'),
         ('NRD', 'NÃO REALIZADO');
@@ -195,6 +196,7 @@ BEGIN
         ('CONF', 'CONFIRMADO'),
         ('CHECK', 'CHECK IN'),
         ('CANC', 'CANCELADO'),
+        ('CAVOO', 'CANCELADO VOO'),
         ('EMB', 'EMBARCADO'),
         ('RD', 'REALIZADO'),
         ('NRD', 'NÃO REALIZADO');

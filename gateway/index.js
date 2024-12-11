@@ -46,8 +46,8 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
       reqBody = {};
-      reqBody.login = bodyContent.login;
-      reqBody.senha = bodyContent.senha;
+      reqBody.login = bodyContent.username;
+      reqBody.senha = bodyContent.password;
       bodyContent = reqBody;
     }
     catch (e) {
@@ -90,14 +90,12 @@ const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
       reqBody.email = bodyContent.email;
       reqBody.cpf = bodyContent.cpf;
       reqBody.endereco = {
-        id: bodyContent.endereco.id,
-        tipo: bodyContent.endereco.tipo,
-        logradouro: bodyContent.endereco.logradouro,
-        numero: bodyContent.endereco.numero,
-        complemento: bodyContent.endereco.complemento,
-        cep: bodyContent.endereco.cep,
-        cidade: bodyContent.endereco.cidade,
-        estado: bodyContent.endereco.estado
+        rua: bodyContent.rua,
+        numero: bodyContent.numero,
+        complemento: bodyContent.complemento,
+        cep: bodyContent.cep,
+        cidade: bodyContent.cidade,
+        estado: bodyContent.estado,
       };
       bodyContent = reqBody;
     }

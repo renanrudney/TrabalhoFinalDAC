@@ -22,7 +22,7 @@ export class AutocadastroComponent {
   email: string = "";
   ruaNumero: string = "";
   logradouro: string = "";
-  numero: string = "";
+  numero: number = 0;
   complemento: string = "";
   cep: string = "";
   cidade: string = "";
@@ -60,13 +60,12 @@ export class AutocadastroComponent {
 
   onSubmit() {
     // Envio dos dados ao backend (a ser implementado)
-    this.ruaNumero = `${this.logradouro} ${this.numero}`;
-
     const novoCliente: Cliente = {
       cpf: this.cpf,
       nome: this.nome,
       email: this.email,
-      ruaNumero: this.ruaNumero,
+      rua: this.logradouro,
+      numero: this.numero,
       complemento: this.complemento,
       cep: this.cep,
       cidade: this.cidade,

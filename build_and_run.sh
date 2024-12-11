@@ -12,6 +12,7 @@ mvn spring-boot:build-image
 cd ..
 
 docker-compose -f start-orchestrator.yml up -d
+sleep 10
 
 cd ms-auth
 mvn spring-boot:build-image

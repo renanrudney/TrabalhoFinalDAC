@@ -5,4 +5,7 @@ sleep 5
 docker-compose -f start-rabbitmq.yml up -d
 sleep 5
 
+docker-compose -f start-orchestrator.yml up -d
+sleep 5
+
 docker-compose -f start-services.yml up -d

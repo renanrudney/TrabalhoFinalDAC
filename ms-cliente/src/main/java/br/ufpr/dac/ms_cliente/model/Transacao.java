@@ -29,7 +29,7 @@ public class Transacao {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="id_cliente", referencedColumnName="id_usuario")
+	@JoinColumn(name="id_cliente", referencedColumnName="id")
 	private Cliente cliente;
 	
 	@Column(name="data_hora")

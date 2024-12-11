@@ -48,7 +48,7 @@ export class UserService {
   
   logout(): Observable<void> {
     return new Observable<void>((observer) => {
-      this.http.post<void>(this.baseUrl, {}).subscribe(
+      this.http.post<void>(`${this.baseUrl}/logout`, {}).subscribe(
         () => {
           // Limpa o localStorage no AuthService após a chamada bem-sucedida
           this.authService.logout();

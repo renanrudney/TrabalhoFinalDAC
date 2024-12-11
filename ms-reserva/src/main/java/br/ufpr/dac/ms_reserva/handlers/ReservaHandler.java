@@ -72,13 +72,13 @@ public class ReservaHandler {
     List<ReservaRead> reservasRead = readRepository.findByCod_voo(codVoo);
     List<Reserva> reservasToUpdate = new ArrayList<Reserva>();
 
-    Optional<EstadoReservaRead> cancelado = estadoRepository.findBySigla("CANC");
+    Optional<EstadoReservaRead> canceladoVoo = estadoRepository.findBySigla("CAVOO");
 
-    if (cancelado.isPresent())
+    if (canceladoVoo.isPresent())
       throw new IllegalArgumentException("Estados de reserva indisponíveis");
 
     for (ReservaRead reservaRead : reservasRead) {
-      reservaRead.setEstado(cancelado.get());
+      reservaRead.setEstado(canceladoVoo.get());
       reservasToUpdate.add(modelMapper.map(reservaRead, Reserva.class));
     }
     reservaRepository.saveAllAndFlush(reservasToUpdate);

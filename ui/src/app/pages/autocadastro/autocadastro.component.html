@@ -15,7 +15,7 @@
         <div class="row">
           <div class="form-floating col-sm-6 mb-3">
             <input type="text" class="form-control" id="nome" placeholder="Nome completo"
-                   ngModel name="nome" required minlength="2" #nomeCtrl="ngModel">
+              [(ngModel)]="nome" name="nome" required minlength="2" #nomeCtrl="ngModel">
             <label for="nome">Nome</label>
             <i *ngIf="nomeCtrl.valid && nomeCtrl.touched"
                class="bi bi-check-lg text-success position-absolute end-0 top-50 translate-middle-y me-3"></i>
@@ -30,7 +30,7 @@
           </div>
           <div class="form-floating col-sm-6 mb-3">
             <input type="email" class="form-control" id="email" placeholder="email@example.com"
-                   ngModel name="email" required email #emailCtrl="ngModel">
+              [(ngModel)]="email" name="email" required email #emailCtrl="ngModel">
             <label for="email">E-mail</label>
             <i *ngIf="emailCtrl.valid && emailCtrl.touched"
                class="bi bi-check-lg text-success position-absolute end-0 top-50 translate-middle-y me-3"></i>
@@ -92,7 +92,7 @@
 
         <div class="row">
           <div class="form-floating col-sm-6 mb-3">
-            <input type="text" class="form-control" id="numero" placeholder="Número"
+            <input type="number" class="form-control" id="numero" placeholder="Número"
                    [(ngModel)]="numero" name="numero" numeric ngModel #numCtrl="ngModel" required pattern="^[0-9]*$">
             <label for="numero" class="form-label">Número</label>
             <i *ngIf="numCtrl.valid && numCtrl.touched"

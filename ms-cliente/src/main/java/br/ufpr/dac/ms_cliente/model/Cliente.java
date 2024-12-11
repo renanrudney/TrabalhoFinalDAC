@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Cliente implements Serializable {
 	@Id
-	@Column(name="id_cliente")
+	@Column(name="id")
 	private UUID id;
 	
 	@OneToOne(cascade = CascadeType.ALL)

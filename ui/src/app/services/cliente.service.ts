@@ -12,7 +12,7 @@ export class ClienteService {
   private baseUrl = `${environment.apiGatewayUrl}/clientes`;
 
   Clientes: Array<Cliente> = [
-    new Cliente('00000000000','Joao Silva','a@email.com','Rua x,1',null,'80000000','Curitiba','PR',100,1)
+    new Cliente('00000000000','Joao Silva','a@email.com','Rua x,1',0,'80000000','Curitiba','PR','100',1)
   ];
 
   constructor(private http: HttpClient) { }

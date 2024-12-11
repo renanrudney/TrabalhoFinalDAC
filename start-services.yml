@@ -9,23 +9,23 @@ services:
     ports:
       - 5001:5001
 
-  ms-voo:
-    image: ms-voo:0.0.1-SNAPSHOT
-    ports:
-      - 5002:5002
+  # ms-voo:
+  #   image: ms-voo:0.0.1-SNAPSHOT
+  #   ports:
+  #     - 5002:5002
 
-  ms-reserva:
-    image: ms-reserva:0.0.1-SNAPSHOT
-    ports:
-      - 5003:5003
+  # ms-reserva:
+  #   image: ms-reserva:0.0.1-SNAPSHOT
+  #   ports:
+  #     - 5003:5003
 
-  ms-funcionario:
-    image: ms-funcionario:0.0.1-SNAPSHOT
-    ports:
-      - 5004:5004
+  # ms-funcionario:
+  #   image: ms-funcionario:0.0.1-SNAPSHOT
+  #   ports:
+  #     - 5004:5004
   
-  dac-gateway:
-    image: dac-gateway
-    build: .
-    ports:
-      - 3000:3000
+  # dac-gateway:
+  #   image: dac-gateway
+  #   build: .
+  #   ports:
+  #     - 3000:3000

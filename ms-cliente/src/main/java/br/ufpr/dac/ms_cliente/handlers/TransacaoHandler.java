@@ -2,7 +2,6 @@ package br.ufpr.dac.ms_cliente.handlers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +16,6 @@ import br.ufpr.dac.ms_cliente.repository.TransacaoRepository;
 @Component
 public class TransacaoHandler {
   @Autowired
-  private RabbitTemplate rabbitTemplate;
-  @Autowired
   private ObjectMapper objectMapper;
   @Autowired
   private ModelMapper modelMapper;
@@ -26,7 +23,7 @@ public class TransacaoHandler {
   private TransacaoRepository transacaoRepository;
 
   private final static String FILA_RETIRAR_TRANSACAO = "RETIRAR_TRANSACAO";
-  private static final String FILA_REEMBOLSAR_TRANSACAO = "REEMBOLSAR_TRANSACAO";
+  private final static String FILA_REEMBOLSAR_TRANSACAO = "REEMBOLSAR_TRANSACAO";
 
   @RabbitListener(queues = FILA_RETIRAR_TRANSACAO)
   private void retirarTransacao(String transacaoString) throws JsonProcessingException {
