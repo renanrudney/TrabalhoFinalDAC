@@ -21,7 +21,7 @@ export class CancelarVooComponent {
       (vooCancelado) => {
         // Sucesso: Exibe mensagem de confirmação
         console.log('Voo cancelado com sucesso');
-        alert(`Voo ${vooCancelado.codigoVoo} foi cancelado com sucesso.`);
+        alert(`Voo ${vooCancelado.cod} foi cancelado com sucesso.`);
         this.activeModal.close(); // Fecha o modal
       },
       (error) => {

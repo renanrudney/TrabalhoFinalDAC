@@ -22,6 +22,7 @@ app.use(bodyParser.json())
 
 function verifyJWT(req, res, next) {
   const token = req.headers['authorization']?.replace('Bearer ', '');
+  console.log(req.headers['authorization'])
   if (!token) {
     return res.status(401).json({
       auth: false,
@@ -207,17 +208,19 @@ const funcionariosPutServiceProxy = httpProxy('http://host.docker.internal:5004'
 const aeroportoServiceProxy = httpProxy('http://localhost:5002');
 // const voosServiceProxy = httpProxy('http://host.docker.internal:5002');
 const voosServiceProxy = httpProxy('http://localhost:5002');
-const voosPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
+const voosPostServiceProxy = httpProxy('http://localhost:5002', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    console.log(bodyContent)
     try {
       reqBody = {};
-      reqBody.cod = bodyContent.codigoVoo;
-      reqBody.data = bodyContent.dataHora;
-      reqBody.aeroporto_origem = bodyContent.origem;
-      reqBody.aeroporto_destino = bodyContent.destino;
-      reqBody.valor_passagem = bodyContent.valorPassagem;
-      reqBody.qtd_poltronas_total = bodyContent.totalPoltronas;
+      reqBody.cod = bodyContent.cod;
+      reqBody.data = bodyContent.data;
+      reqBody.aeroporto_origem = bodyContent.aeroporto_origem;
+      reqBody.aeroporto_destino = bodyContent.aeroporto_destino;
+      reqBody.valor_passagem = bodyContent.valor_passagem;
+      reqBody.qtd_poltronas_total = bodyContent.qtd_poltronas_total;
       bodyContent = reqBody;
+      console.log(bodyContent)
     }
     catch (e) {
       console.log('- ERRO: ' + e);
@@ -317,20 +320,19 @@ app.delete('/funcionarios/:id', verifyJWT, function (req, res, next) {
 });
 
 // Voos
-app.get('/voos', verifyJWT, function (req, res, next) {
+app.get('/voos', function (req, res, next) {
   voosServiceProxy(req, res, next);
 });
 
-app.post('/voos', verifyJWT, function (req, res, next) {
-  console.log(req.body)
+app.post('/voos', function (req, res, next) {
   voosPostServiceProxy(req, res, next);
 });
 
-app.post('/voos/:id/cancelar', verifyJWT, function (req, res, next) {
+app.post('/voos/:id/cancelar', function (req, res, next) {
   voosServiceProxy(req, res, next);
 });
 
-app.post('/voos/:id/realizar', verifyJWT, function (req, res, next) {
+app.post('/voos/:id/realizar', function (req, res, next) {
   voosServiceProxy(req, res, next);
 });
 

@@ -59,7 +59,7 @@ export class VooService {
   }
 
   realizarVoo(codigoVoo: string): Observable<Voo> {
-    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}/realizar`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
+    return this.http.post<Voo>(`${this.baseUrl}/${codigoVoo}/realizar`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   cadastrarVoo(codigoVoo: string, dataHora: Date, origem: string, destino: string, valorPassagem: number, totalPoltronas: number): Observable<Voo> {

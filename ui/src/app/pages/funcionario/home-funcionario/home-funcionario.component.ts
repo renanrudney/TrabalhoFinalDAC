@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
 import { Voo } from '../../../models/voo/voo.model';
 import { VooService } from '../../../services/voo.service';
 import { Router } from '@angular/router';
-import { CancelarReservaComponent } from '../../cliente/cancelar-reserva/cancelar-reserva.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CancelarVooComponent } from '../cancelar-voo/cancelar-voo.component';
 
 @Component({
   selector: 'app-home-funcionario',
@@ -48,7 +48,7 @@ export class HomeFuncionarioComponent implements OnInit {
   }
 
   abrirModalCancelarVoo(voo: Voo): void {
-    const modalRef = this.modalService.open(CancelarReservaComponent);
+    const modalRef = this.modalService.open(CancelarVooComponent);
     modalRef.componentInstance.voo = voo;
   }
 
