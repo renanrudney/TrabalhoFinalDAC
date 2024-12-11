@@ -4,6 +4,11 @@ services:
     ports:
       - 5000:5000
 
+  ms-cliente:
+    image: ms-cliente:0.0.1-SNAPSHOT
+    ports:
+      - 5001:5001
+
   ms-voo:
     image: ms-voo:0.0.1-SNAPSHOT
     ports:
