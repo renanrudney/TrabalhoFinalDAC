@@ -72,7 +72,7 @@ export class ConsultarReservaComponent {
     }
 
     // Busca o voo correspondente à reserva
-    const dataHora = this.voo?.dataHora;
+    const dataHora = this.voo?.data;
     
     // Verifica se o voo foi encontrado e se está dentro do intervalo de 48 horas
     if (dataHora) {

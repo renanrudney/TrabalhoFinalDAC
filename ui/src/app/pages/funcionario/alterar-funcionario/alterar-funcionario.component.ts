@@ -15,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 export class AlterarFuncionarioComponent implements OnInit {
 
   funcionario!: Funcionario;
-  id: number = 0;
+  id: string = '';
   errorMessage: string = "";
 
   constructor(
@@ -24,9 +24,9 @@ export class AlterarFuncionarioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.params['id'];
   
-    if (!id || isNaN(id)) {
+    if (!id) {
       console.error('ID inválido.');
       this.errorMessage = 'ID do funcionário inválido. Verifique a URL e tente novamente.';
       return;
@@ -35,6 +35,7 @@ export class AlterarFuncionarioComponent implements OnInit {
     this.funcionarioService.getFuncionarioById(id).subscribe(
       (funcionario) => {
         if (funcionario) {
+          console.log(funcionario)
           this.funcionario = funcionario;
         } else {
           console.warn(`Funcionário com ID ${id} não encontrado.`);
@@ -48,7 +49,6 @@ export class AlterarFuncionarioComponent implements OnInit {
     );
   }
   
-
   onSubmit(form: NgForm): void {
     if (form.touched && form.valid) {
       this.funcionarioService.alterarFuncionario(this.funcionario).subscribe(

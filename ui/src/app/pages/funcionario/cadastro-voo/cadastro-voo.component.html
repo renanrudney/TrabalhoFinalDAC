@@ -27,14 +27,14 @@
                 <label for="origem" class="form-label">Aeroporto de Origem:</label>
                 <select class="form-control" id="origem" [(ngModel)]="origem" name="origem" required>
                   <option value="" disabled selected>Selecione o aeroporto de origem</option>
-                  <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.codigo">{{ aeroporto.codigo }} - {{ aeroporto.nome }}</option>
+                  <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.cod">{{ aeroporto.cod }} - {{ aeroporto.nome }}</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="destino" class="form-label">Aeroporto de Destino:</label>
                 <select class="form-control" id="destino" [(ngModel)]="destino" name="destino" required>
                   <option value="" disabled selected>Selecione o aeroporto de destino</option>
-                  <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.codigo">{{ aeroporto.codigo }} - {{ aeroporto.nome }}</option>
+                  <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.cod">{{ aeroporto.cod }} - {{ aeroporto.nome }}</option>
                 </select>
               </div>
             </div>

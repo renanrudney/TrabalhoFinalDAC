@@ -76,17 +76,17 @@ export class InicialClienteComponent implements OnInit
   }
 
   getVooOrigem(codigoVoo: string): string {
-    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
-    return voo ? voo.origem : 'N/A';
+    const voo = this.voos.find(v => v.cod === codigoVoo);
+    return voo ? voo.aeroporto_origem : 'N/A';
   }
   
   getVooDestino(codigoVoo: string): string {
-    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
-    return voo ? voo.destino : 'N/A';
+    const voo = this.voos.find(v => v.cod === codigoVoo);
+    return voo ? voo.aeroporto_destino : 'N/A';
   }
 
   getVoo(codigoVoo: string): Voo | undefined{
-    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
+    const voo = this.voos.find(v => v.cod === codigoVoo);
     if (voo){
       return voo;
     } else 

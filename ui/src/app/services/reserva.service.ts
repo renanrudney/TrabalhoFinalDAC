@@ -23,16 +23,16 @@ export class ReservaService {
     private transacaoMilhasService: TransacaoMilhasService, private http: HttpClient) { }
 
   cancelarReserva(codigoReserva: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${codigoReserva}/cancelar`);
+    return this.http.delete<void>(`${this.baseUrl}/${codigoReserva}/cancelar`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   novaReserva(codigoVoo: string, dataHora: Date, clienteId: string, qntdPassagens: number, custoTotal: number, milhasUsadas: number): Observable<Reserva> {
     const reserva: Reserva = new Reserva (codigoVoo,dataHora,'RESERVADO',clienteId,qntdPassagens,custoTotal,milhasUsadas);
-    return this.http.post<Reserva>(this.baseUrl, reserva);
+    return this.http.post<Reserva>(this.baseUrl, reserva, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   getReserva(codigo: string): Observable<Reserva> {
-    return this.http.get<Reserva>(`${this.baseUrl}/${codigo}`);
+    return this.http.get<Reserva>(`${this.baseUrl}/${codigo}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   getReservas(): Observable<Reserva[]>{
@@ -48,7 +48,7 @@ export class ReservaService {
   }
 
   embarque(reserva: string, codigo: string): Observable<Reserva>{
-    return this.http.post<Reserva>(`${this.baseUrl}/${codigo}/embarque`, reserva);
+    return this.http.post<Reserva>(`${this.baseUrl}/${codigo}/embarque`, reserva, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   vooCancelado(codigoVoo: string): void {

@@ -31,7 +31,7 @@ export class HomeFuncionarioComponent implements OnInit {
 
           //Ordenar por dataHora
           this.voos = this.voos.filter(voo => voo.estado === 'CONFIRMADO');
-          this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+          this.voos.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
         } else {
           this.mensagemErro = 'Nenhum voo encontrado nas próximas 48 horas.';
         }

@@ -20,7 +20,7 @@ export class VooService {
   }
 
   getVoo(codigoVoo: string): Observable<Voo> {
-    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}`);
+    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
   
   getVoosCompra(origem: string, destino: string): Observable<Voo[]> {
@@ -30,9 +30,9 @@ export class VooService {
       map((voos: Voo[]) =>
         voos.filter(
           (voo) =>
-            voo.origem === origem &&
-            voo.destino === destino &&
-            new Date(voo.dataHora) > dataAtual
+            voo.aeroporto_origem === origem &&
+            voo.aeroporto_destino === destino &&
+            new Date(voo.data) > dataAtual
         )
       )
     );
@@ -43,25 +43,27 @@ export class VooService {
     const dataLimite = new Date(agora.getTime() + 48 * 60 * 60 * 1000); // Próximas 48 horas
   
     return this.getVoos().pipe(
-      map((voos: Voo[]) =>
-        voos.filter(
+      map((voos: Voo[]) => {
+        console.log(voos);
+        return voos.filter(
           (voo) =>
-            new Date(voo.dataHora) > agora && new Date(voo.dataHora) <= dataLimite
+            new Date(voo.data) > agora && new Date(voo.data) <= dataLimite
         )
+        }
       )
     );
   }
 
   cancelarVoo(codigoVoo: string): Observable<Voo> {
-    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}/cancelar`);
+    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}/cancelar`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   realizarVoo(codigoVoo: string): Observable<Voo> {
-    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}/realizar`);
+    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}/realizar`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   cadastrarVoo(codigoVoo: string, dataHora: Date, origem: string, destino: string, valorPassagem: number, totalPoltronas: number): Observable<Voo> {
     const novoVoo: Voo = new Voo (codigoVoo, dataHora, origem, destino, valorPassagem, totalPoltronas, 0, "CONFIRMADO");
-    return this.http.post<Voo>(this.baseUrl, novoVoo);
+    return this.http.post<Voo>(this.baseUrl, novoVoo, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 }

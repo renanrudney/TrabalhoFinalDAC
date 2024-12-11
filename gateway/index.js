@@ -79,9 +79,6 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
   }
 });
 
-const aeroportoServiceProxy = httpProxy('http://localhost:8080/aeroporto');
-
-
 // const clientesServiceProxy = httpProxy('http://host.docker.internal:5001');
 const clientesServiceProxy = httpProxy('http://localhost:5001');
 const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
@@ -161,9 +158,11 @@ const milhasPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
   }
 });
 
-const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5003');
-const funcionariosPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
+// const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5003');
+const funcionariosServiceProxy = httpProxy('http://localhost:5004');
+const funcionariosPostServiceProxy = httpProxy('http://localhost:5004', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    console.log(bodyContent)
     try {
       reqBody = {};
       reqBody.nome = bodyContent.nome;
@@ -205,18 +204,19 @@ const funcionariosPutServiceProxy = httpProxy('http://host.docker.internal:5004'
   }
 });
 
+const aeroportoServiceProxy = httpProxy('http://localhost:5002');
 // const voosServiceProxy = httpProxy('http://host.docker.internal:5002');
 const voosServiceProxy = httpProxy('http://localhost:5002');
 const voosPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
       reqBody = {};
-      reqBody.aeroportoOrigem = bodyContent.aeroportoOrigem;
-      reqBody.aeroportoDestino = bodyContent.aeroportoDestino;
-      reqBody.data = bodyContent.data;
-      reqBody.valorPassagem = bodyContent.valorPassagem;
-      reqBody.qtdPoltronasTotal = bodyContent.qtdPoltronasTotal;
-      reqBody.qtdPoltronasOcupadas = bodyContent.qtdPoltronasOcupadas;
+      reqBody.cod = bodyContent.codigoVoo;
+      reqBody.data = bodyContent.dataHora;
+      reqBody.aeroporto_origem = bodyContent.origem;
+      reqBody.aeroporto_destino = bodyContent.destino;
+      reqBody.valor_passagem = bodyContent.valorPassagem;
+      reqBody.qtd_poltronas_total = bodyContent.totalPoltronas;
       bodyContent = reqBody;
     }
     catch (e) {
@@ -304,6 +304,10 @@ app.post('/funcionarios', verifyJWT, function (req, res, next) {
   funcionariosPostServiceProxy(req, res, next);
 });
 
+app.get('/funcionarios/:id', verifyJWT, function (req, res, next) {
+  funcionariosServiceProxy(req, res, next);
+});
+
 app.put('/funcionarios/:id', verifyJWT, function (req, res, next) {
   funcionariosPutServiceProxy(req, res, next);
 });
@@ -318,6 +322,7 @@ app.get('/voos', verifyJWT, function (req, res, next) {
 });
 
 app.post('/voos', verifyJWT, function (req, res, next) {
+  console.log(req.body)
   voosPostServiceProxy(req, res, next);
 });
 

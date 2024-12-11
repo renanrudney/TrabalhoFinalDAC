@@ -28,7 +28,7 @@ export class CheckInComponent implements OnInit {
     this.carregarVoosProximos();
     this.voos.push(...this.voosClienteProximas48H());
     // Ordenar por dataHora após a resposta da API
-    this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+    this.voos.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
   }
 
   carregarReservas(clienteId: string): void {
@@ -57,7 +57,7 @@ export class CheckInComponent implements OnInit {
 
   voosClienteProximas48H(): Array<Voo> {
     return this.voosProximos.filter(voo => 
-      this.reservasCliente.some(reserva => reserva.codigoVoo === voo.codigoVoo)
+      this.reservasCliente.some(reserva => reserva.codigoVoo === voo.cod)
     );
   }
 }

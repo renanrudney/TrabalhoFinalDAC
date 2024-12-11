@@ -22,9 +22,6 @@ public class Aeroporto implements Serializable {
   @Column(name = "cod")
   private String cod;
 
-  @Column(name = "data")
-  private Date data;
-
   @Column(name = "nome")
   private String nome;
 
@@ -33,4 +30,5 @@ public class Aeroporto implements Serializable {
 
   @Column(name = "estado")
   private String estado;
+
 }

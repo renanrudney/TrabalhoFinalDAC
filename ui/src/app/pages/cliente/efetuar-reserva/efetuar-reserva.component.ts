@@ -80,7 +80,7 @@ export class EfetuarReservaComponent implements OnInit{
 
   calcularTotal() {
     if (this.vooSelecionado) {
-      this.valorTotal = this.vooSelecionado.valorPassagem * this.quantidade;
+      this.valorTotal = this.vooSelecionado.valor_passagem * this.quantidade;
       this.calcularDiferenca();
     }
   }
@@ -92,7 +92,7 @@ export class EfetuarReservaComponent implements OnInit{
   confirmarReserva() {
     if (this.vooSelecionado && this.cliente) {
       const clienteId: string = this.cliente.id || '';
-      this.reservaService.novaReserva(this.vooSelecionado.codigoVoo,this.vooSelecionado.dataHora,clienteId,this.quantidade,this.valorTotal,this.milhasUsadas).subscribe(
+      this.reservaService.novaReserva(this.vooSelecionado.cod,this.vooSelecionado.data,clienteId,this.quantidade,this.valorTotal,this.milhasUsadas).subscribe(
         (reserva) => {
           // Sucesso
           alert(`Reserva confirmada! Código da reserva: ${reserva.codigoReserva}`);

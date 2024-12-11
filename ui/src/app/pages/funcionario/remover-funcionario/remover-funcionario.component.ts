@@ -16,19 +16,21 @@ export class RemoverFuncionarioComponent {
 
   constructor(public activeModal: NgbActiveModal, private funcionarioService: FuncionarioService) {}
 
-  removerFuncionario(id: number | undefined): void {
-    if (id)
-    this.funcionarioService.deletarFuncionario(id).subscribe(
-      () => {
-        // Sucesso: exibe mensagem de confirmação
-        alert(`Funcionário com ID ${id} removido com sucesso!`);
-        this.activeModal.close(); // Fecha o modal
-      },
-      (error) => {
-        // Erro: exibe mensagem apropriada
-        console.error('Erro ao remover o funcionário:', error);
-        alert('Ocorreu um erro ao remover o funcionário. Tente novamente.');
-      }
-    );
+  removerFuncionario(id: string | undefined): void {
+    if (id) {
+      console.log('excluindo ' + id);
+      this.funcionarioService.deletarFuncionario(id).subscribe(
+        () => {
+          // Sucesso: exibe mensagem de confirmação
+          alert(`Funcionário com ID ${id} removido com sucesso!`);
+          this.activeModal.close(); // Fecha o modal
+        },
+        (error) => {
+          // Erro: exibe mensagem apropriada
+          console.error('Erro ao remover o funcionário:', error);
+          alert('Ocorreu um erro ao remover o funcionário. Tente novamente.');
+        }
+      );
+    }
   }
 }

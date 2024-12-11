@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TransacaoMilhas } from '../models/transacaoMilhas/transacao-milhas.model';
 import { Observable, map } from 'rxjs';
 import { environment } from '../shared/environment/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +34,6 @@ export class TransacaoMilhasService {
 
   novaTransacao(clienteId: string, milhas: number, descricao: string, codigoReserva?: string): Observable<TransacaoMilhas> {
     const transacao: TransacaoMilhas = new TransacaoMilhas (clienteId,new Date(),milhas,"entrada",descricao, codigoReserva);
-    return this.http.post<TransacaoMilhas>(this.baseUrl, transacao);
+    return this.http.post<TransacaoMilhas>(this.baseUrl, transacao, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 }
