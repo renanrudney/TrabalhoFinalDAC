@@ -1,5 +1,7 @@
 package br.ufpr.dac.ms_funcionario.dto;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FuncionarioDTO 
 {
-	private int idUsuario;
+	private UUID id;
 	private String nome;
 	private String cpf;
 	private String email;

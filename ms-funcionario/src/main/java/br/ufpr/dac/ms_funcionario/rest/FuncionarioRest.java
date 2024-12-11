@@ -3,8 +3,10 @@ package br.ufpr.dac.ms_funcionario.rest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,90 +20,97 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.ufpr.dac.ms_funcionario.dto.FuncionarioDTO;
 import br.ufpr.dac.ms_funcionario.model.Funcionario;
 import br.ufpr.dac.ms_funcionario.repository.FuncionarioRepository;
-import br.ufpr.dac.ms_funcionario.services.RabbitMQService;
-import br.ufpr.dac.ms_orchestrator.dto.FuncionarioDTO;
 
 @CrossOrigin
 @RestController
-public class FuncionarioRest 
-{
+public class FuncionarioREST {
 	@Autowired
-	ModelMapper mapper;
+	private ModelMapper modelMapper;
 	@Autowired
-	FuncionarioRepository repoFuncionario;
+	private ObjectMapper objectMapper;
+	@Autowired
+	private FuncionarioRepository funcionarioRepository;
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
+
+	private final static String FILA_FUNCIONARIO_CRIADO = "FUNCIONARIO_CRIADO";
 	
-	@GetMapping("/funcionario")
-	public List<FuncionarioDTO> buscarTodosFuncionarios()
-	{
-		List<Funcionario> buscarFuncionarios = repoFuncionario.findAll();
+	@GetMapping("/funcionarios")
+	public ResponseEntity<List<FuncionarioDTO>> buscarTodosFuncionarios() {
+		List<Funcionario> buscarFuncionarios = funcionarioRepository.findAllByOrderByNomeAsc();
 		List<FuncionarioDTO> lista = new ArrayList<>();
 		
 		for(Funcionario funcionario : buscarFuncionarios)
-			lista.add(mapper.map(funcionario, FuncionarioDTO.class));
+			lista.add(modelMapper.map(funcionario, FuncionarioDTO.class));
 		
-		return lista;
+		return ResponseEntity.ok(lista);
 	}
-	
-	@GetMapping("/funcionario/{id}")
-	public FuncionarioDTO buscarFuncionario(@PathVariable Long id)
-	{
-		Optional<Funcionario> buscarFuncionario = repoFuncionario.findById(id);
-		
+
+	@GetMapping("/funcionarios/{id}")
+	public ResponseEntity<FuncionarioDTO> buscarFuncionario(@PathVariable UUID id) {
+		Optional<Funcionario> buscarFuncionario = funcionarioRepository.findById(id);
+
 		if(buscarFuncionario.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe funcionário com esse id!");
 		
-		return mapper.map(buscarFuncionario.get(), FuncionarioDTO.class);
+		return ResponseEntity.ok(modelMapper.map(buscarFuncionario.get(), FuncionarioDTO.class));
 	}
 	
-	@SuppressWarnings("null")
-	@PostMapping("/funcionario")
-	public ResponseEntity<FuncionarioDTO> criarFuncionario(@RequestBody FuncionarioDTO funcionarioRecebido)
-	{
-		// Validar Funcionario
+	@PostMapping("/funcionarios")
+	public ResponseEntity<FuncionarioDTO> criarFuncionario(@RequestBody FuncionarioDTO funcionarioRecebido) throws JsonProcessingException {
+		Optional<Funcionario> cpfExiste = funcionarioRepository.findByCpf(funcionarioRecebido.getCpf());
+
+		if (cpfExiste.isPresent())
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Funcionário com esse cpf já existe!");
 		
-		// Realizar requisição para microsserviço que cria um usuário e retorna o id
-		Long idRecebidoMicrosservico = 1L;
-		
-		Funcionario novoFuncionario = mapper.map(funcionarioRecebido, Funcionario.class);
-		novoFuncionario.setIdUsuario(idRecebidoMicrosservico);
-		
+		Optional<Funcionario> emailExiste = funcionarioRepository.findByEmail(funcionarioRecebido.getEmail());
+		if (emailExiste.isPresent())
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Funcionário com esse email já existe!");
+
+		Funcionario novoFuncionario = modelMapper.map(funcionarioRecebido, Funcionario.class);
 		novoFuncionario.setAtivo(true);
-		novoFuncionario = repoFuncionario.save(novoFuncionario);
+		novoFuncionario.setId(UUID.randomUUID());
+		funcionarioRepository.saveAndFlush(novoFuncionario);
+
+		FuncionarioDTO funcionarioDTO = modelMapper.map(novoFuncionario, FuncionarioDTO.class);
+		rabbitTemplate.convertAndSend(FILA_FUNCIONARIO_CRIADO, objectMapper.writeValueAsString(funcionarioDTO));
 		
-		return ResponseEntity.created(null).body(mapper.map(novoFuncionario, FuncionarioDTO.class));
+		return ResponseEntity.created(null).body(funcionarioDTO);
 	}
 	
-	// Se houver alteração de informações da entidade usuário, o orquestrador manda a alteração para o microsserviço correspondente
-	@PutMapping("/funcionario/{id}")
-	public FuncionarioDTO atualizarFuncionario(@PathVariable Long id, @RequestBody FuncionarioDTO funcionarioRecebido)
-	{
-		// Validar Funcionário atualizado
-		
-		Optional<Funcionario> buscarFuncionario = repoFuncionario.findById(id);
+	@PutMapping("/funcionarios/{id}")
+	public ResponseEntity<FuncionarioDTO> atualizarFuncionario(@PathVariable UUID id, @RequestBody FuncionarioDTO funcionarioRecebido) {
+		Optional<Funcionario> buscarFuncionario = funcionarioRepository.findById(id);
 		
 		if(buscarFuncionario.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe funcionário com esse id!");
 		
-		buscarFuncionario.get().setCpf(funcionarioRecebido.getCpf());
-		buscarFuncionario.get().setEmail(funcionarioRecebido.getEmail());
+		Funcionario atualizarFuncionario = buscarFuncionario.get();
+		atualizarFuncionario.setEmail(funcionarioRecebido.getEmail());
+		atualizarFuncionario.setNome(funcionarioRecebido.getNome());
+		atualizarFuncionario.setTelefone(funcionarioRecebido.getTelefone());
+		funcionarioRepository.saveAndFlush(atualizarFuncionario);
 		
-		buscarFuncionario.get().setNome(funcionarioRecebido.getNome());
-		buscarFuncionario.get().setTelefone(funcionarioRecebido.getTelefone());
-		
-		return mapper.map(repoFuncionario.save(buscarFuncionario.get()), FuncionarioDTO.class);
+		return ResponseEntity.ok(modelMapper.map(atualizarFuncionario, FuncionarioDTO.class));
 	}
 	
-	@DeleteMapping("/funcionario/{id}")
-	public FuncionarioDTO removerFuncionario(@PathVariable Long id)
-	{
-		Optional<Funcionario> buscarFuncionario = repoFuncionario.findById(id);
+	@DeleteMapping("/funcionarios/{id}")
+	public ResponseEntity<FuncionarioDTO> removerFuncionario(@PathVariable UUID id) {
+		Optional<Funcionario> buscarFuncionario = funcionarioRepository.findById(id);
 		
 		if(buscarFuncionario.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe funcionário com esse id!");
-		
-		buscarFuncionario.get().setAtivo(false);
-		return mapper.map(repoFuncionario.save(buscarFuncionario.get()), FuncionarioDTO.class);
+
+		Funcionario atualizarFuncionario = buscarFuncionario.get();
+		atualizarFuncionario.setAtivo(false);
+		funcionarioRepository.saveAndFlush(atualizarFuncionario);
+
+		return ResponseEntity.ok(modelMapper.map(atualizarFuncionario, FuncionarioDTO.class));
 	}
 }

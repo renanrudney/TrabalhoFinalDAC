@@ -20,8 +20,8 @@ public class ClienteHandler {
 
   @RabbitListener(queues = RabbitMQConstants.FILA_CLIENTE_CRIADO)
   private void clienteCriado(String clienteString) throws JsonProcessingException {
-    ClienteDTO clienteDTO = objectMapper.readValue(clienteString, ClienteDTO.class);
-    String email = clienteDTO.getEmail();
+    ClienteDTO cliente = objectMapper.readValue(clienteString, ClienteDTO.class);
+    String email = cliente.getEmail();
     rabbitTemplate.convertAndSend(RabbitMQConstants.FILA_CRIAR_USUARIO_CLIENTE, email);
   }
 }

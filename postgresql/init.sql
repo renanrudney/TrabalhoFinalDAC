@@ -12,11 +12,11 @@ BEGIN
 
     /* MS Funcionario */
     CREATE TABLE IF NOT EXISTS Funcionario.Funcionario (
-        id_usuario VARCHAR(255) PRIMARY KEY,
+        id_funcionario UUID PRIMARY KEY,
         nome VARCHAR(50) NOT NULL,
         cpf VARCHAR(11) NOT NULL,
         email VARCHAR(30),
-        telefone VARCHAR(9),
+        telefone VARCHAR(11),
         ativo BOOL NOT NULL
     );
 
@@ -55,7 +55,7 @@ BEGIN
     /* MS Voos */
     CREATE TABLE IF NOT EXISTS Voo.Aeroporto (
         cod VARCHAR(3) PRIMARY KEY,
-        nome VARCHAR(30) NOT NULL,
+        nome VARCHAR(50) NOT NULL,
         cidade VARCHAR(30) NOT NULL,
         estado VARCHAR(2) NOT NULL
     );
@@ -75,8 +75,7 @@ BEGIN
 
     /* MS Reserva para CUD */
     CREATE TABLE IF NOT EXISTS Reserva_cud.Estado_reserva (
-        cod SERIAL PRIMARY KEY,
-        sigla VARCHAR(5) NOT NULL,
+        sigla VARCHAR(5) PRIMARY KEY,
         descricao VARCHAR(50) NOT NULL
     );
 
@@ -86,6 +85,8 @@ BEGIN
         cod_voo VARCHAR(8) NOT NULL,
         id_cliente VARCHAR(255) NOT NULL,
         data_hora TIMESTAMP NOT NULL,
+        milhas DOUBLE PRECISION DEFAULT 0,
+        valor DOUBLE PRECISION DEFAULT 0,
         CONSTRAINT fk_reserva_estado FOREIGN KEY (cod_estado) REFERENCES Reserva_cud.Estado_reserva(cod),
         CONSTRAINT fk_reserva_voo FOREIGN KEY (cod_voo) REFERENCES Voo.Voo(cod),
         CONSTRAINT fk_reserva_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id_usuario)
@@ -104,8 +105,7 @@ BEGIN
 
     /* MS Reserva para Read */
     CREATE TABLE IF NOT EXISTS Reserva_read.Estado_reserva (
-        cod SERIAL PRIMARY KEY,
-        sigla VARCHAR(5) NOT NULL,
+        sigla VARCHAR(5) PRIMARY KEY,
         descricao VARCHAR(50) NOT NULL
     );
 
@@ -115,6 +115,8 @@ BEGIN
         cod_voo VARCHAR(8) NOT NULL,
         id_cliente VARCHAR(255) NOT NULL,
         data_hora TIMESTAMP NOT NULL,
+        milhas DOUBLE PRECISION DEFAULT 0,
+        valor DOUBLE PRECISION DEFAULT 0,
         CONSTRAINT fk_reserva_read_estado FOREIGN KEY (cod_estado) REFERENCES Reserva_read.Estado_reserva(cod),
         CONSTRAINT fk_reserva_read_voo FOREIGN KEY (cod_voo) REFERENCES Voo.Voo(cod),
         CONSTRAINT fk_reserva_read_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente.Cliente(id_usuario)
@@ -180,5 +182,21 @@ BEGIN
         ('TRQ', 'Tarauacá', 'AC', 'Aeroporto Tarauacá'),
         ('TFF', 'Tefé', 'AM', 'Aeroporto Tefé'),
         ('THE', 'Teresina', 'PI', 'Aeroporto Teresina');
+
+    INSERT INTO Reserva_read.Estado_reserva (sigla, descricao) VALUES
+        ('CONF', 'CONFIRMADO'),
+        ('CHECK', 'CHECK IN'),
+        ('CANC', 'CANCELADO'),
+        ('EMB', 'EMBARCADO'),
+        ('RD', 'REALIZADO'),
+        ('NRD', 'NÃO REALIZADO');
+
+    INSERT INTO Reserva_cud.Estado_reserva (sigla, descricao) VALUES
+        ('CONF', 'CONFIRMADO'),
+        ('CHECK', 'CHECK IN'),
+        ('CANC', 'CANCELADO'),
+        ('EMB', 'EMBARCADO'),
+        ('RD', 'REALIZADO'),
+        ('NRD', 'NÃO REALIZADO');
 END
 $$;
