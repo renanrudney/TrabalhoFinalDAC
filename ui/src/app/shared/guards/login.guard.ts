@@ -11,9 +11,9 @@ export const loginGuard: CanActivateFn = (route, state) => {
 
     // Evita redirecionamento desnecessário ao acessar a rota de login
     if (state.url === '/login' || state.url === '/autocadastro') {
-      if (userTipo === 'cliente') {
+      if (userTipo === 'CLIENTE') {
         router.navigate(['/home-cliente']);
-      } else if (userTipo === 'funcionario') {
+      } else if (userTipo === 'FUNCIONARIO') {
         router.navigate(['/home-funcionario']);
       }
       return false;

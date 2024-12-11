@@ -21,6 +21,7 @@ import br.ufpr.dac.ms_cliente.dto.ClienteDTO;
 import br.ufpr.dac.ms_cliente.model.Cliente;
 import br.ufpr.dac.ms_cliente.repository.ClienteRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -57,10 +58,22 @@ public class ClienteREST {
 
 		return ResponseEntity.created(null).body(clienteDTO);
 	}
- 
+
 	@GetMapping("/clientes")
 	public ResponseEntity<ClienteDTO> buscarClientesPorEmail(@RequestParam String email) {
 		Optional<Cliente> cliente = clienteRepository.findByEmail(email);
+
+		if (cliente.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
+		}
+
+		return ResponseEntity.ok(modelMapper.map(cliente, ClienteDTO.class));
+	}
+ 
+	@GetMapping("/clientes/{id}")
+	public ResponseEntity<ClienteDTO> buscarClientePorId(@PathVariable String id) {
+		UUID clienteId = UUID.fromString(id);
+		Optional<Cliente> cliente = clienteRepository.findById(clienteId);
 
 		if (cliente.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");

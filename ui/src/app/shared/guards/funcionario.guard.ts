@@ -7,9 +7,9 @@ export const funcionarioGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isAuthenticated() && authService.getUserType() === 'funcionario') {
+  if (authService.isAuthenticated() && authService.getUserType() === 'FUNCIONARIO') {
     return true; // Permite acesso
-  } else if (authService.getUserType() === 'cliente') {
+  } else if (authService.getUserType() === 'CLIENTE') {
     router.navigate(['/home-cliente']);
     return true;
   } else {

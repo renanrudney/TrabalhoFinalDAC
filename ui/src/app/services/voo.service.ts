@@ -3,7 +3,7 @@ import { Voo } from '../models/voo/voo.model';
 import { ReservaService } from './reserva.service';
 import { Observable, map } from 'rxjs';
 import { environment } from '../shared/environment/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,8 @@ export class VooService {
   constructor(private reservaService: ReservaService, private http: HttpClient) { }
 
   getVoos(): Observable<Voo[]> {
-    return this.http.get<Voo[]>(`${this.baseUrl}`);
+    console.log(localStorage.getItem('authToken'))
+    return this.http.get<Voo[]>(`${this.baseUrl}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   getVoo(codigoVoo: string): Observable<Voo> {

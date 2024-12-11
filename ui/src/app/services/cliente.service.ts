@@ -25,11 +25,15 @@ export class ClienteService {
     return this.http.get<Cliente[]>(this.baseUrl);
   } 
 
-  getClienteById(id: number): Observable<Cliente> {
+  getClienteById(id: string): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.baseUrl}/${id}`);
   }
 
-  getClienteMilhas(id: number): Observable<number | undefined> {
+  getClienteByEmail(email: string): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.baseUrl}?email=${email}`);
+  }
+
+  getClienteMilhas(id: string): Observable<number | undefined> {
     return this.getClientes().pipe(
       map((clientes: Cliente[]) => {
         const cliente = clientes.find((cliente: Cliente) => cliente.id === id);
@@ -38,7 +42,7 @@ export class ClienteService {
     );
   }
 
-  substrairMilhas(milhas: number, clienteId: number): void {
+  substrairMilhas(milhas: number, clienteId: string): void {
     this.Clientes.filter(cliente => {
       if(cliente.id === clienteId){
         cliente.milhas -= milhas;
@@ -46,7 +50,7 @@ export class ClienteService {
     });
   }
 
-  devolderMilhas(milhas: number, clienteId: number): void {
+  devolderMilhas(milhas: number, clienteId: string): void {
     this.Clientes.filter(cliente => {
       if(cliente.id === clienteId){
         cliente.milhas += milhas;

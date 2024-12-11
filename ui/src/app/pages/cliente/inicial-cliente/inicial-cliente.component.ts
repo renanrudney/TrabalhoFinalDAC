@@ -30,13 +30,13 @@ export class InicialClienteComponent implements OnInit
   constructor(private clienteService: ClienteService, private vooService: VooService, private reservaService: ReservaService, private modalService: NgbModal, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const clienteId: number | null = Number(this.authService.getItem('userId'));
-    if (clienteId) {
-      this.clienteService.getClienteById(clienteId).subscribe(
+    const login: string | null = this.authService.getItem('login');
+    if (login) {
+      this.clienteService.getClienteByEmail(encodeURIComponent(login)).subscribe(
         (cliente) => {
           if (cliente) {
             this.clienteLogado = cliente; // Atribui o cliente retornado
-            this.carregarReservas(clienteId);
+            this.carregarReservas(cliente.id as string);
           } else {
             console.error('Cliente não encontrado.');
           }
@@ -50,6 +50,7 @@ export class InicialClienteComponent implements OnInit
   }
 
   carregarVoos(): void {
+    console.log('voos')
     this.vooService.getVoos().subscribe(
       (data) => this.voos = data,
       (error) => {
@@ -59,8 +60,8 @@ export class InicialClienteComponent implements OnInit
     );
   }
 
-  carregarReservas(clienteId: number): void {
-    this.reservaService.getReservasByClienteId(clienteId).subscribe(
+  carregarReservas(clienteId: string): void {
+    this.reservaService.getReservasByClienteId(this.clienteLogado?.id as string).subscribe(
       (data) => {
         this.Reservas = data;
 

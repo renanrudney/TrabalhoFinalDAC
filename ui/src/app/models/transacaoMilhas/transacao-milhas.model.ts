@@ -1,6 +1,6 @@
 export class TransacaoMilhas {
   constructor(
-    public clienteId: number,
+    public clienteId: string,
     public dataHora: Date,
     public quantidadeMilhas: number,
     public tipo: 'entrada' | 'saida',

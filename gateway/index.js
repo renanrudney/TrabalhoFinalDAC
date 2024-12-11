@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 function verifyJWT(req, res, next) {
-  const token = req.headers['authorization'].replace('Bearer ', '');
+  const token = req.headers['authorization']?.replace('Bearer ', '');
   if (!token) {
     return res.status(401).json({
       auth: false,
@@ -61,12 +61,13 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
     return proxyReqOpts;
   },
   userResDecorator: function (proxyRes, proxyResData, userReq, userRes) {
+    console.log(Buffer.from(proxyResData).toString('utf-8'))
     if (proxyRes.statusCode == 200) {
       var str = Buffer.from(proxyResData).toString('utf-8');
       var objBody = JSON.parse(str);
       const id = objBody.id;
       const token = jwt.sign({ id }, process.env.SECRET, {
-        expiresIn: 300 // expira em 5 min
+        expiresIn: '365d' // expira em 5 min
       });
       userRes.status(200);
       return { auth: true, token: token, data: objBody };
@@ -81,7 +82,8 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
 const aeroportoServiceProxy = httpProxy('http://localhost:8080/aeroporto');
 
 
-const clientesServiceProxy = httpProxy('http://host.docker.internal:5001');
+// const clientesServiceProxy = httpProxy('http://host.docker.internal:5001');
+const clientesServiceProxy = httpProxy('http://localhost:5001');
 const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
@@ -111,7 +113,8 @@ const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
   }
 });
 
-const reservasServiceProxy = httpProxy('http://host.docker.internal:5002');
+// const reservasServiceProxy = httpProxy('http://host.docker.internal:5002');
+const reservasServiceProxy = httpProxy('http://localhost:5003');
 const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
@@ -202,8 +205,9 @@ const funcionariosPutServiceProxy = httpProxy('http://host.docker.internal:5004'
   }
 });
 
-const voosServiceProxy = httpProxy('http://host.docker.internal:5004');
-const voosPostServiceProxy = httpProxy('http://host.docker.internal:5004', {
+// const voosServiceProxy = httpProxy('http://host.docker.internal:5002');
+const voosServiceProxy = httpProxy('http://localhost:5002');
+const voosPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
       reqBody = {};
@@ -252,9 +256,13 @@ app.get('/clientes', function (req, res, next) {
   clientesServiceProxy(req, res, next);
 });
 
+app.get('/clientes/:id', function (req, res, next) {
+  clientesServiceProxy(req, res, next);
+});
+
 // Reservas
 app.get('/reservas', verifyJWT, function (req, res, next) {
-  reservasPostServiceProxy(req, res, next);
+  reservasServiceProxy(req, res, next);
 });
 
 app.post('/reservas', verifyJWT, function (req, res, next) {

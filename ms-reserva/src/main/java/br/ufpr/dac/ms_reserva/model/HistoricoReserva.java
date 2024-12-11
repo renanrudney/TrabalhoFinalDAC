@@ -34,11 +34,11 @@ public class HistoricoReserva implements Serializable {
   private Reserva reserva;
 
   @ManyToOne
-	@JoinColumn(name="estado_origem", referencedColumnName="cod")
+	@JoinColumn(name="estado_origem", referencedColumnName="sigla")
   private EstadoReserva estadoOrigem;
 
   @ManyToOne
-	@JoinColumn(name="estado_destino", referencedColumnName="cod")
+	@JoinColumn(name="estado_destino", referencedColumnName="sigla")
   private EstadoReserva estadoDestino;
 
   @Column(name = "data_hora")

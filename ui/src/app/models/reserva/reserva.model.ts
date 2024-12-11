@@ -3,7 +3,7 @@ export class Reserva {
     public codigoVoo: string,
     public dataHora: Date,
     public estado: string,
-    public clienteId: number,
+    public clienteId: string,
     public qntdPassagens: number,
     public custoTotal: number,
     public milhasUsadas: number,

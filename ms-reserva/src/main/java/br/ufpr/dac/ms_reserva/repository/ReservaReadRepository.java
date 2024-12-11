@@ -8,6 +8,6 @@ import java.util.Optional;
 
 
 public interface ReservaReadRepository  extends JpaRepository<ReservaRead, String>  {
-  public List<ReservaRead> findByCod_voo(String cod_voo);
+  public List<ReservaRead> findByCodVoo(String codVoo);
   public Optional<ReservaRead> findByCod(String cod);
 }

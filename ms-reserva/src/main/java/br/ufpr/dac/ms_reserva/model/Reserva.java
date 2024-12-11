@@ -24,11 +24,11 @@ public class Reserva implements Serializable {
   private String cod;
 
   @ManyToOne
-	@JoinColumn(name="cod_estado", referencedColumnName="cod")
+	@JoinColumn(name="cod_estado", referencedColumnName="sigla")
   private EstadoReserva estado;
 
   @Column(name = "cod_voo")
-  private String cod_voo;
+  private String codVoo;
 
   @Column(name = "id_cliente")
   private String id_cliente;

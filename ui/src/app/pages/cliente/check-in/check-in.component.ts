@@ -23,7 +23,7 @@ export class CheckInComponent implements OnInit {
   constructor(private vooService: VooService, private reservaService: ReservaService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const clienteId: number = Number(this.authService.getItem('userId'));
+    const clienteId: string = this.authService.getItem('userId') || '';
     this.carregarReservas(clienteId);
     this.carregarVoosProximos();
     this.voos.push(...this.voosClienteProximas48H());
@@ -31,7 +31,7 @@ export class CheckInComponent implements OnInit {
     this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
   }
 
-  carregarReservas(clienteId: number): void {
+  carregarReservas(clienteId: string): void {
     this.reservaService.getReservasByClienteId(clienteId).subscribe(
       (data) => {
         this.reservasCliente = data;

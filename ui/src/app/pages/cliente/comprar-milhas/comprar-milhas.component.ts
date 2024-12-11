@@ -20,7 +20,7 @@ export class ComprarMilhasComponent {
   comprarMilhas(quantidade: number): void{
     quantidade = this.quantidadeMilhas;
     if (quantidade > 0){
-      const clienteId: number = Number(this.authService.getItem('userId'));
+      const clienteId: string | null = this.authService.getItem('userId');
       if (clienteId)
         this.transacaoMilhasService.novaTransacao(clienteId,quantidade,"COMPRA DE MILHAS").subscribe({
           next: (transacao) => {
