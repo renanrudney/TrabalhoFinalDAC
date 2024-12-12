@@ -200,5 +200,8 @@ BEGIN
         ('EMB', 'EMBARCADO'),
         ('RD', 'REALIZADO'),
         ('NRD', 'NÃO REALIZADO');
+
+    INSERT INTO Funcionario.Funcionario(id_funcionario, nome, cpf, email, telefone, ativo) VALUES
+        ('a069100f-4ae1-40d5-8511-9205af25a686', 'DAC', '99999999999', 'dac@ufpr.br', '99999999999', true);
 END
 $$;

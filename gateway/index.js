@@ -81,7 +81,7 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
 });
 
 // const clientesServiceProxy = httpProxy('http://host.docker.internal:5001');
-const clientesServiceProxy = httpProxy('http://localhost:5001');
+const clientesServiceProxy = httpProxy('http://host.docker.internal:5001');
 const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
@@ -112,8 +112,8 @@ const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
 });
 
 // const reservasServiceProxy = httpProxy('http://host.docker.internal:5002');
-const reservasServiceProxy = httpProxy('http://localhost:5003');
-const reservasPostServiceProxy = httpProxy('http://localhost:5003', {
+const reservasServiceProxy = httpProxy('http://host.docker.internal:5003');
+const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     console.log(bodyContent)
     try {
@@ -137,8 +137,8 @@ const reservasPostServiceProxy = httpProxy('http://localhost:5003', {
   }
 });
 
-const milhasServiceProxy = httpProxy('http://localhost:5001');
-const milhasPostServiceProxy = httpProxy('http://localhost:5001', {
+const milhasServiceProxy = httpProxy('http://host.docker.internal:5001');
+const milhasPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     console.log(bodyContent)
     try {
@@ -162,8 +162,8 @@ const milhasPostServiceProxy = httpProxy('http://localhost:5001', {
 });
 
 // const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5003');
-const funcionariosServiceProxy = httpProxy('http://localhost:5004');
-const funcionariosPostServiceProxy = httpProxy('http://localhost:5004', {
+const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5004');
+const funcionariosPostServiceProxy = httpProxy('http://host.docker.internal:5004', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     console.log(bodyContent)
     try {
@@ -185,7 +185,7 @@ const funcionariosPostServiceProxy = httpProxy('http://localhost:5004', {
     return proxyReqOpts;
   }
 });
-const funcionariosPutServiceProxy = httpProxy('http://localhost:5004', {
+const funcionariosPutServiceProxy = httpProxy('http://host.docker.internal:5004', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
       reqBody = {};
@@ -207,10 +207,10 @@ const funcionariosPutServiceProxy = httpProxy('http://localhost:5004', {
   }
 });
 
-const aeroportoServiceProxy = httpProxy('http://localhost:5002');
+const aeroportoServiceProxy = httpProxy('http://host.docker.internal:5002');
 // const voosServiceProxy = httpProxy('http://host.docker.internal:5002');
-const voosServiceProxy = httpProxy('http://localhost:5002');
-const voosPostServiceProxy = httpProxy('http://localhost:5002', {
+const voosServiceProxy = httpProxy('http://host.docker.internal:5002');
+const voosPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     console.log(bodyContent)
     try {

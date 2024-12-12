@@ -56,8 +56,9 @@ export class CheckInComponent implements OnInit {
   }
 
   voosClienteProximas48H(): Array<Voo> {
-    return this.voosProximos.filter(voo => 
-      this.reservasCliente.some(reserva => reserva.codVoo === voo.cod)
-    );
+    return this.voosProximos
+    // return this.voosProximos.filter(voo => 
+    //   this.reservasCliente.some(reserva => reserva.codVoo === voo.cod)
+    // );
   }
 }

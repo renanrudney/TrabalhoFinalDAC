@@ -21,7 +21,7 @@
         <tbody>
           <ng-container *ngIf="Reservas && Reservas.length > 0; else noReservas">
             <tr *ngFor="let reserva of Reservas" class="align-middle">
-              <ng-container *ngIf="['RESERVADO', 'EMBARCADO', 'CANCELADO VOO'].includes(reserva.estado)">
+              <ng-container>
                 <td>{{ reserva.cod }}</td>
                 <td>{{ reserva.data_hora | date: 'dd/MM/yyyy HH:mm' }}</td>
                 <td>{{ getVooOrigem(reserva.codVoo) }}</td>

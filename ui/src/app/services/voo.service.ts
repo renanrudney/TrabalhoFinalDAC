@@ -15,7 +15,6 @@ export class VooService {
   constructor(private reservaService: ReservaService, private http: HttpClient) { }
 
   getVoos(): Observable<Voo[]> {
-    console.log(localStorage.getItem('authToken'))
     return this.http.get<Voo[]>(`${this.baseUrl}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
@@ -28,12 +27,15 @@ export class VooService {
   
     return this.getVoos().pipe(
       map((voos: Voo[]) =>
-        voos.filter(
+      {
+        console.log(voos)
+        console.log(origem)
+        console.log(destino)
+        return voos.filter(
           (voo) =>
-            voo.aeroporto_origem === origem &&
-            voo.aeroporto_destino === destino &&
-            new Date(voo.data) > dataAtual
-        )
+            voo.aeroporto_origem == origem &&
+            voo.aeroporto_destino == destino
+        )}
       )
     );
   }  
@@ -41,17 +43,17 @@ export class VooService {
   getVoosProximasHoras(): Observable<Voo[]> {
     const agora = new Date();
     const dataLimite = new Date(agora.getTime() + 48 * 60 * 60 * 1000); // Próximas 48 horas
-  
-    return this.getVoos().pipe(
-      map((voos: Voo[]) => {
-        console.log(voos);
-        return voos.filter(
-          (voo) =>
-            new Date(voo.data) > agora && new Date(voo.data) <= dataLimite
-        )
-        }
-      )
-    );
+    return this.getVoos()
+    // return this.getVoos().pipe(
+    //   map((voos: Voo[]) => {
+    //     console.log(voos);
+    //     return voos.filter(
+    //       (voo) =>
+    //         new Date(voo.data) <= dataLimite
+    //     )
+    //     }
+    //   )
+    // );
   }
 
   cancelarVoo(codigoVoo: string): Observable<Voo> {

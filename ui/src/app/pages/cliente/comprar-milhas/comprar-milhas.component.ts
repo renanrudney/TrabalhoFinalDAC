@@ -26,6 +26,7 @@ export class ComprarMilhasComponent {
           next: (transacao) => {
             console.log('Compra realizada com sucesso:', transacao);
             alert('Compra realizada com sucesso.');
+            this.router.navigate(['/home-cliente'])
           },
           error: (err: any) => {
             console.error('Erro ao comprar  milhas:', err);
