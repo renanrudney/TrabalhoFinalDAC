@@ -15,13 +15,13 @@
   <div *ngIf="reserva" class="mt-4">
     <h4>Detalhes da Reserva</h4>
     <ul class="list-group list-unstyled">
-      <li class="list-group-item">Código da Reserva: {{ reserva.codigoReserva }}</li>
-      <li class="list-group-item">Data/Hora: {{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm' }}</li>
+      <li class="list-group-item">Código da Reserva: {{ reserva.cod }}</li>
+      <li class="list-group-item">Data/Hora: {{ reserva.data_hora | date: 'dd/MM/yyyy HH:mm' }}</li>
       <li class="list-group-item">Origem: {{ voo?.aeroporto_origem }}</li>
       <li class="list-group-item">Destino: {{ voo?.aeroporto_destino }}</li>
       <li class="list-group-item">Passagens compradas: {{ reserva.qntdPassagens }}</li>
-      <li class="list-group-item">Custo Total (R$): {{ reserva.custoTotal  | currency: 'BRL' : 'symbol':'1.2-2'}}</li>
-      <li class="list-group-item">Milhas usadas: {{ reserva.milhasUsadas }}</li>
+      <li class="list-group-item">Custo Total (R$): {{ reserva.valorGasto  | currency: 'BRL' : 'symbol':'1.2-2'}}</li>
+      <li class="list-group-item">Milhas usadas: {{ reserva.milhasGasto }}</li>
       <li class="list-group-item">Estado da Reserva: {{ reserva.estado }}</li>
     </ul>
 

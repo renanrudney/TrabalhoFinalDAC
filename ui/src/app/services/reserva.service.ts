@@ -42,7 +42,7 @@ export class ReservaService {
   getReservasByClienteId(clienteId: string): Observable<Reserva[]> {
     return this.getReservas().pipe(
       map((reservas: Reserva[]) => 
-        reservas.filter((reserva: Reserva) => reserva.clienteId === clienteId)
+        reservas.filter((reserva: Reserva) => reserva.id_cliente === clienteId)
       )
     );
   }
@@ -53,7 +53,7 @@ export class ReservaService {
 
   vooCancelado(codigoVoo: string): void {
     this.Reservas.forEach(reserva => {
-        if (reserva.codigoVoo === codigoVoo) {
+        if (reserva.codVoo === codigoVoo) {
             reserva.estado = "CANCELADO VOO";
         }
     });
@@ -61,7 +61,7 @@ export class ReservaService {
 
   vooRealizado(codigoVoo: string): void {
     this.Reservas.forEach(reserva => {
-        if (reserva.codigoVoo === codigoVoo) {
+        if (reserva.codVoo === codigoVoo) {
           if (reserva.estado === "EMBARCADO"){
             reserva.estado = "REALIZADO";
           } else {

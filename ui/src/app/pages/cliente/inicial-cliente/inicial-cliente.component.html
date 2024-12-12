@@ -22,10 +22,10 @@
           <ng-container *ngIf="Reservas && Reservas.length > 0; else noReservas">
             <tr *ngFor="let reserva of Reservas" class="align-middle">
               <ng-container *ngIf="['RESERVADO', 'EMBARCADO', 'CANCELADO VOO'].includes(reserva.estado)">
-                <td>{{ reserva.codigoReserva }}</td>
-                <td>{{ reserva.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
-                <td>{{ getVooOrigem(reserva.codigoVoo) }}</td>
-                <td>{{ getVooDestino(reserva.codigoVoo) }}</td>
+                <td>{{ reserva.cod }}</td>
+                <td>{{ reserva.data_hora | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ getVooOrigem(reserva.codVoo) }}</td>
+                <td>{{ getVooDestino(reserva.codVoo) }}</td>
                 <td>{{ reserva.estado }}</td>
                 <td>
                   <button class="btn btn-primary btn-sm me-1" (click)="abrirModalVerReserva(reserva)">Ver Reserva</button>

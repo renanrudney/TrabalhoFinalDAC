@@ -11,7 +11,7 @@
     <!-- Links e ações da navbar -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Links de navegação centralizados -->
-      <ul *ngIf="userTipo === 'cliente'" class="navbar-nav mx-auto">
+      <ul *ngIf="userTipo === 'CLIENTE'" class="navbar-nav mx-auto">
         <li class="nav-item">
           <a routerLink="/home-cliente" routerLinkActive="active"  class="nav-link">Home</a>
         </li>
@@ -33,7 +33,7 @@
       </ul>
       
       <!-- Links para o Funcionário, substituindo os links do Cliente quando aplicável -->
-      <ul *ngIf="userTipo === 'funcionario'" class="navbar-nav mx-auto">
+      <ul *ngIf="userTipo === 'FUNCIONARIO'" class="navbar-nav mx-auto">
         <li class="nav-item">
           <a routerLink="/home-funcionario" routerLinkActive="active"  class="nav-link">Home</a>
         </li>

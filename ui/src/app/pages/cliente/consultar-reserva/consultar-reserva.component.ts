@@ -29,7 +29,7 @@ export class ConsultarReservaComponent {
       (reserva) => {
         if (reserva) {
           this.reserva = reserva;
-          this.vooService.getVoo(reserva.codigoVoo).subscribe(
+          this.vooService.getVoo(reserva.codVoo).subscribe(
             (voo) => {
               if (voo) {
                 console.log('Voo encontrado:', voo);

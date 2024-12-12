@@ -1,6 +1,6 @@
 package br.ufpr.dac.ms_orchestrator.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class ReservaDTO {
   private String cod;
   private EstadoReservaDTO estado;
-  private String cod_voo;
+  private String codVoo;
   private String id_cliente;
-  private LocalDateTime data_hora;
+  private Date data_hora;
   private double valorGasto;
   private double milhasGasto;
 }

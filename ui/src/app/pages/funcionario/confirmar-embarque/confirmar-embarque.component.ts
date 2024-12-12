@@ -28,7 +28,7 @@ export class ConfirmarEmbarqueComponent implements OnInit{
       this.reservaService.embarque(reserva, this.codigoVoo).subscribe(
         (reservaAtualizada) => {
           // Sucesso: Exibe mensagem de confirmação
-          alert(`Embarque confirmado para a reserva: ${reservaAtualizada.codigoReserva}.`);
+          alert(`Embarque confirmado para a reserva: ${reservaAtualizada.cod}.`);
           this.reserva = ""; // Limpa o campo de entrada da reserva
           location.reload(); // Recarrega a página para atualizar os dados
         },

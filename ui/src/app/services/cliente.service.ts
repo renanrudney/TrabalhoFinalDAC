@@ -18,19 +18,19 @@ export class ClienteService {
   constructor(private http: HttpClient) { }
 
   criarCliente(novoCliente: Cliente): Observable<Cliente> {
-    return this.http.post<Cliente>(`${this.baseUrl}`, novoCliente, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
+    return this.http.post<Cliente>(`${this.baseUrl}`, novoCliente, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') })});
   }
 
   getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(this.baseUrl, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
+    return this.http.get<Cliente[]>(this.baseUrl, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') })});
   } 
 
   getClienteById(id: string): Observable<Cliente> {
-    return this.http.get<Cliente>(`${this.baseUrl}/${id}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
+    return this.http.get<Cliente>(`${this.baseUrl}/${id}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') })});
   }
 
   getClienteByEmail(email: string): Observable<Cliente> {
-    return this.http.get<Cliente>(`${this.baseUrl}?email=${email}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
+    return this.http.get<Cliente>(`${this.baseUrl}?email=${email}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') })});
   }
 
   getClienteMilhas(id: string): Observable<number | undefined> {

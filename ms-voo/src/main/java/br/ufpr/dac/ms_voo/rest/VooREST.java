@@ -98,7 +98,7 @@ public class VooREST {
 
     return ResponseEntity.ok().body(modelMapper.map(voo.get(), VooDTO.class));
   }
-  
+
   @PostMapping("/voos/{cod}/realizar")
   public ResponseEntity<VooDTO> realizarVoo(@PathVariable String cod) throws JsonProcessingException {
     Optional<Voo> vooExiste = vooRepository.findByCod(cod);

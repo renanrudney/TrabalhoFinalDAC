@@ -57,13 +57,8 @@ public class TransacaoREST {
 	}
  
 	@GetMapping("/milhas")
-	public ResponseEntity<List<TransacaoDTO>> listarTransacoes(@RequestParam UUID idCliente) {
-		Optional<Cliente> clienteJaExiste = clienteRepository.findById(idCliente);
-
-		if (clienteJaExiste.isEmpty())
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente não encontrado!");
-
-		List<Transacao> transacoes = transacaoRepository.findByCliente(clienteJaExiste.get());
+	public ResponseEntity<List<TransacaoDTO>> listarTransacoes() {
+		List<Transacao> transacoes = transacaoRepository.findAll();
 		List<TransacaoDTO> list = new ArrayList<>();
 
     for (Transacao transacao : transacoes)

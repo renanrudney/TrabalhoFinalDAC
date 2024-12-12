@@ -51,7 +51,7 @@ public class ReservaHandler {
     Optional<EstadoReservaRead> realizado = estadoRepository.findBySigla("RD");
     Optional<EstadoReservaRead> naoRealizado = estadoRepository.findBySigla("NRD");
 
-    if (embarcado.isEmpty() || realizado.isEmpty() || naoRealizado.isPresent())
+    if (embarcado.isEmpty() || realizado.isEmpty() || naoRealizado.isEmpty())
       throw new IllegalArgumentException("Estados de reserva indisponíveis");
 
     for (ReservaRead reservaRead : reservasRead) {
@@ -74,7 +74,7 @@ public class ReservaHandler {
 
     Optional<EstadoReservaRead> canceladoVoo = estadoRepository.findBySigla("CAVOO");
 
-    if (canceladoVoo.isPresent())
+    if (canceladoVoo.isEmpty())
       throw new IllegalArgumentException("Estados de reserva indisponíveis");
 
     for (ReservaRead reservaRead : reservasRead) {

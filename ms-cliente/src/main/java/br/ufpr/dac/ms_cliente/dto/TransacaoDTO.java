@@ -17,4 +17,10 @@ public class TransacaoDTO {
   private Double qtdMilhas;
   private boolean entrada;
   private String descricao;
+
+  public TransacaoDTO(UUID idCliente, Date dataHora, Double qtdMilhas) {
+    this.idCliente = idCliente;
+    this.dataHora = dataHora;
+    this.qtdMilhas = qtdMilhas;
+  }
 }

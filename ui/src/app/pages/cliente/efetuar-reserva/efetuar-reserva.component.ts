@@ -37,7 +37,7 @@ export class EfetuarReservaComponent implements OnInit{
     private router: Router) {}
 
   ngOnInit() {
-    const clienteId: string = this.authService.getItem('userId') || '';
+    const clienteId: string = this.authService.getItem('clienteId') || '';
     this.clienteService.getClienteById(clienteId).subscribe(
       (cliente) => {
         this.cliente = cliente;
@@ -95,7 +95,7 @@ export class EfetuarReservaComponent implements OnInit{
       this.reservaService.novaReserva(this.vooSelecionado.cod,this.vooSelecionado.data,clienteId,this.quantidade,this.valorTotal,this.milhasUsadas).subscribe(
         (reserva) => {
           // Sucesso
-          alert(`Reserva confirmada! Código da reserva: ${reserva.codigoReserva}`);
+          alert(`Reserva confirmada! Código da reserva: ${reserva.cod}`);
           this.router.navigate(['/home-cliente']);
         },
         (error) => {

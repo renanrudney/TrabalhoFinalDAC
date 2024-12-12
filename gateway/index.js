@@ -113,17 +113,16 @@ const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
 
 // const reservasServiceProxy = httpProxy('http://host.docker.internal:5002');
 const reservasServiceProxy = httpProxy('http://localhost:5003');
-const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
+const reservasPostServiceProxy = httpProxy('http://localhost:5003', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    console.log(bodyContent)
     try {
       reqBody = {};
-      reqBody.dataHora = bodyContent.dataHora;
-      reqBody.estadoReserva = bodyContent.estadoReserva;
-      reqBody.codigoVoo = bodyContent.codigoVoo;
-      reqBody.idCliente = bodyContent.clienteId;
-      reqBody.qntdPassagens = bodyContent.qntdPassagens;
-      reqBody.custoTotal = bodyContent.custoTotal;
-      reqBody.milhasUsadas= bodyContent.milhasUsadas;
+      reqBody.data_hora = bodyContent.data_hora;
+      reqBody.codVoo = bodyContent.codVoo;
+      reqBody.id_cliente = bodyContent.id_cliente;
+      reqBody.valorGasto = bodyContent.valorGasto;
+      reqBody.milhasGasto= bodyContent.milhasGasto;
       bodyContent = reqBody;
     }
     catch (e) {
@@ -138,13 +137,16 @@ const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   }
 });
 
-const milhasServiceProxy = httpProxy('http://host.docker.internal:5003');
-const milhasPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
+const milhasServiceProxy = httpProxy('http://localhost:5001');
+const milhasPostServiceProxy = httpProxy('http://localhost:5001', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    console.log(bodyContent)
     try {
       reqBody = {};
       reqBody.idCliente = bodyContent.idCliente;
-      reqBody.qntdMilhas = bodyContent.qntdMilhas;
+      reqBody.qtdMilhas = bodyContent.qtdMilhas;
+      reqBody.dataHora = bodyContent.dataHora;
+
       bodyContent = reqBody;
     }
     catch (e) {
@@ -183,7 +185,7 @@ const funcionariosPostServiceProxy = httpProxy('http://localhost:5004', {
     return proxyReqOpts;
   }
 });
-const funcionariosPutServiceProxy = httpProxy('http://host.docker.internal:5004', {
+const funcionariosPutServiceProxy = httpProxy('http://localhost:5004', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
       reqBody = {};
@@ -269,7 +271,7 @@ app.get('/reservas', verifyJWT, function (req, res, next) {
 });
 
 app.post('/reservas', verifyJWT, function (req, res, next) {
-  reservasServiceProxy(req, res, next);
+  reservasPostServiceProxy(req, res, next);
 });
 
 app.get('/reservas/:id', verifyJWT, function (req, res, next) {
@@ -289,7 +291,7 @@ app.post('/reservas/:id/embarque', verifyJWT, function (req, res, next) {
 });
 
 // Milhas
-app.get('/milhas', verifyJWT, function (req, res, next) {
+app.get('/milhas', function (req, res, next) {
   milhasServiceProxy(req, res, next);
 });
 
@@ -321,6 +323,10 @@ app.delete('/funcionarios/:id', verifyJWT, function (req, res, next) {
 
 // Voos
 app.get('/voos', function (req, res, next) {
+  voosServiceProxy(req, res, next);
+});
+
+app.get('/voos/:id', function (req, res, next) {
   voosServiceProxy(req, res, next);
 });
 

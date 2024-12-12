@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Voo } from '../../../models/voo/voo.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { VooService } from '../../../services/voo.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cancelar-voo',
@@ -14,7 +15,7 @@ import { VooService } from '../../../services/voo.service';
 export class CancelarVooComponent {
   @Input() voo!: Voo;
 
-  constructor(public activeModal: NgbActiveModal, private vooService: VooService) {}
+  constructor(public activeModal: NgbActiveModal, private vooService: VooService, private router: Router) {}
 
   cancelarVoo(codigoVoo: string): void {
     this.vooService.cancelarVoo(codigoVoo).subscribe(
@@ -23,6 +24,7 @@ export class CancelarVooComponent {
         console.log('Voo cancelado com sucesso');
         alert(`Voo ${vooCancelado.cod} foi cancelado com sucesso.`);
         this.activeModal.close(); // Fecha o modal
+        this.router.navigate(['/home-funcionario'])
       },
       (error) => {
         // Erro: Exibe mensagem apropriada

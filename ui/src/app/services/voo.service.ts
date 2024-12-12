@@ -55,7 +55,7 @@ export class VooService {
   }
 
   cancelarVoo(codigoVoo: string): Observable<Voo> {
-    return this.http.get<Voo>(`${this.baseUrl}/${codigoVoo}/cancelar`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
+    return this.http.post<Voo>(`${this.baseUrl}/${codigoVoo}/cancelar`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') || '' })});
   }
 
   realizarVoo(codigoVoo: string): Observable<Voo> {

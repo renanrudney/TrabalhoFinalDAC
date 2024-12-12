@@ -105,7 +105,7 @@ public class ReservaREST {
     if (reservaExiste.isEmpty())
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva não existe!");
 
-    if(embarque.getCod_voo() != reservaExiste.get().getCodVoo())
+    if(embarque.getCodVoo() != reservaExiste.get().getCodVoo())
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reserva não é do voo fornecido!");
 
     Optional<EstadoReservaRead> estado = estadoRepository.findBySigla("EMB");
