@@ -1,0 +1,16 @@
+{
+  "routes": [
+    "/autocadastro",
+    "/cadastro-voo",
+    "/check-in",
+    "/comprar-milhas",
+    "/consultar-reserva",
+    "/crud-funcionario",
+    "/efetuar-reserva",
+    "/extrato-milhas",
+    "/home-cliente",
+    "/home-funcionario",
+    "/inserir-funcionario",
+    "/login"
+  ]
+}

@@ -11,7 +11,7 @@ const helmet = require('helmet')
 const cors = require('cors');
 
 app.use(cors({
-  origin: 'http://localhost:4200'
+  origin: 'http://host.docker.internal:4200'
 }));
 
 // parse application/x-www-form-urlencoded
