@@ -1,12 +1,12 @@
 export class Reserva {
   constructor(
-    public codigoVoo: string,
-    public dataHora: Date,
+    public codVoo: string,
+    public data_hora: Date,
     public estado: string,
-    public clienteId: number,
+    public id_cliente: string,
     public qntdPassagens: number,
-    public custoTotal: number,
-    public milhasUsadas: number,
-    public codigoReserva?: string
+    public valorGasto: number,
+    public milhasGasto: number,
+    public cod?: string
   ) {}
 }

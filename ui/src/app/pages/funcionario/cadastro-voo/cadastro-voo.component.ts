@@ -52,7 +52,7 @@ export class CadastroVooComponent implements OnInit{
     this.vooService.cadastrarVoo(this.codigoVoo, new Date(this.dataHora), this.origem, this.destino, this.valorPassagem, this.totalPoltronas).subscribe(
       (vooCadastrado) => {
         // Sucesso: Exibe mensagem e redireciona
-        alert(`Novo voo ${vooCadastrado.codigoVoo} cadastrado com sucesso!`);
+        alert(`Novo voo ${vooCadastrado.cod} cadastrado com sucesso!`);
         this.router.navigate(['/home-funcionario']);
       },
       (error) => {

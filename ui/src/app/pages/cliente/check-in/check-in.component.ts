@@ -23,15 +23,15 @@ export class CheckInComponent implements OnInit {
   constructor(private vooService: VooService, private reservaService: ReservaService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const clienteId: number = Number(this.authService.getItem('userId'));
+    const clienteId: string = this.authService.getItem('userId') || '';
     this.carregarReservas(clienteId);
     this.carregarVoosProximos();
     this.voos.push(...this.voosClienteProximas48H());
     // Ordenar por dataHora após a resposta da API
-    this.voos.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+    this.voos.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
   }
 
-  carregarReservas(clienteId: number): void {
+  carregarReservas(clienteId: string): void {
     this.reservaService.getReservasByClienteId(clienteId).subscribe(
       (data) => {
         this.reservasCliente = data;
@@ -56,8 +56,9 @@ export class CheckInComponent implements OnInit {
   }
 
   voosClienteProximas48H(): Array<Voo> {
-    return this.voosProximos.filter(voo => 
-      this.reservasCliente.some(reserva => reserva.codigoVoo === voo.codigoVoo)
-    );
+    return this.voosProximos
+    // return this.voosProximos.filter(voo => 
+    //   this.reservasCliente.some(reserva => reserva.codVoo === voo.cod)
+    // );
   }
 }

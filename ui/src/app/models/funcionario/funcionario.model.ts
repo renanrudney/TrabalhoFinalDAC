@@ -5,6 +5,7 @@ export class Funcionario {
     public cpf: string,
     public email: string,
     public telefone: string,
-    public id?: number
+    public ativo?: boolean,
+    public id?: string
   ){}
 }

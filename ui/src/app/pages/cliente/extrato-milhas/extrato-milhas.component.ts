@@ -22,7 +22,7 @@ export class ExtratoMilhasComponent implements OnInit{
   constructor(private transacaoMilhasService: TransacaoMilhasService, private clienteService: ClienteService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const clienteId: number = Number(this.authService.getItem('userId'));
+    const clienteId: string  = this.authService.getItem('clienteId') || '';
   
     // Assinando o Observable para obter o saldo de milhas
     this.clienteService.getClienteById(clienteId).subscribe(

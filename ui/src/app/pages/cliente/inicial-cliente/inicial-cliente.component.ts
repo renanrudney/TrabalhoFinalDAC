@@ -30,13 +30,14 @@ export class InicialClienteComponent implements OnInit
   constructor(private clienteService: ClienteService, private vooService: VooService, private reservaService: ReservaService, private modalService: NgbModal, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const clienteId: number | null = Number(this.authService.getItem('userId'));
-    if (clienteId) {
-      this.clienteService.getClienteById(clienteId).subscribe(
+    const login: string | null = this.authService.getItem('login');
+    if (login) {
+      this.clienteService.getClienteByEmail(encodeURIComponent(login)).subscribe(
         (cliente) => {
           if (cliente) {
             this.clienteLogado = cliente; // Atribui o cliente retornado
-            this.carregarReservas(clienteId);
+            this.carregarReservas(cliente.id as string);
+            localStorage.setItem('clienteId', cliente.id as string)
           } else {
             console.error('Cliente não encontrado.');
           }
@@ -51,7 +52,7 @@ export class InicialClienteComponent implements OnInit
 
   carregarVoos(): void {
     this.vooService.getVoos().subscribe(
-      (data) => this.voos = data,
+      (data) => {console.log(data), this.voos = data},
       (error) => {
         console.error('Erro ao carregar voos', error);
         this.errorMessage = 'Erro ao carregar voos, tente novamente.';
@@ -59,13 +60,13 @@ export class InicialClienteComponent implements OnInit
     );
   }
 
-  carregarReservas(clienteId: number): void {
-    this.reservaService.getReservasByClienteId(clienteId).subscribe(
+  carregarReservas(clienteId: string): void {
+    this.reservaService.getReservasByClienteId(this.clienteLogado?.id as string).subscribe(
       (data) => {
         this.Reservas = data;
 
         // Ordenar por dataHora após a resposta da API
-        this.Reservas.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+        this.Reservas.sort((a, b) => new Date(a.data_hora).getTime() - new Date(b.data_hora).getTime());
       },
       (error) => {
         console.error('Erro ao carregar reservas', error);
@@ -75,17 +76,17 @@ export class InicialClienteComponent implements OnInit
   }
 
   getVooOrigem(codigoVoo: string): string {
-    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
-    return voo ? voo.origem : 'N/A';
+    const voo = this.voos.find(v => v.cod === codigoVoo);
+    return voo ? voo.aeroporto_origem : 'N/A';
   }
   
   getVooDestino(codigoVoo: string): string {
-    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
-    return voo ? voo.destino : 'N/A';
+    const voo = this.voos.find(v => v.cod === codigoVoo);
+    return voo ? voo.aeroporto_destino : 'N/A';
   }
 
   getVoo(codigoVoo: string): Voo | undefined{
-    const voo = this.voos.find(v => v.codigoVoo === codigoVoo);
+    const voo = this.voos.find(v => v.cod === codigoVoo);
     if (voo){
       return voo;
     } else 
@@ -95,12 +96,12 @@ export class InicialClienteComponent implements OnInit
   abrirModalVerReserva(reserva: Reserva) {
     const modalRef = this.modalService.open(VerReservaComponent);
     modalRef.componentInstance.reserva = reserva;
-    modalRef.componentInstance.voo = this.getVoo(reserva.codigoVoo);
+    modalRef.componentInstance.voo = this.getVoo(reserva.codVoo);
   }
 
   abrirModalCancelarReserva(reserva: Reserva) {
     const modalRef = this.modalService.open(CancelarReservaComponent);
     modalRef.componentInstance.reserva = reserva;
-    modalRef.componentInstance.voo = this.getVoo(reserva.codigoVoo);
+    modalRef.componentInstance.voo = this.getVoo(reserva.codVoo);
   }
 }

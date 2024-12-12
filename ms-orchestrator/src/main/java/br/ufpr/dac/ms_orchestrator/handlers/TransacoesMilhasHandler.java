@@ -25,7 +25,7 @@ public class TransacoesMilhasHandler {
     TransacaoDTO transacao = new TransacaoDTO();
     transacao.setIdCliente(reserva.getId_cliente());
     transacao.setQtdMilhas(reserva.getMilhasGasto());
-    rabbitTemplate.convertAndSend(RabbitMQConstants.FILA_RETIRAR_TRANSACAO, transacao);
+    rabbitTemplate.convertAndSend(RabbitMQConstants.FILA_RETIRAR_TRANSACAO, objectMapper.writeValueAsString(transacao)); 
   }
 
   @RabbitListener(queues = RabbitMQConstants.FILA_REEMBOLSAR_MILHAS_RESERVA)
@@ -34,6 +34,6 @@ public class TransacoesMilhasHandler {
     TransacaoDTO transacao = new TransacaoDTO();
     transacao.setIdCliente(reserva.getId_cliente());
     transacao.setQtdMilhas(reserva.getMilhasGasto());
-    rabbitTemplate.convertAndSend(RabbitMQConstants.FILA_REEMBOLSAR_TRANSACAO, transacao);
+    rabbitTemplate.convertAndSend(RabbitMQConstants.FILA_REEMBOLSAR_TRANSACAO, objectMapper.writeValueAsString(transacao));
   }
 }

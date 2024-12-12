@@ -5,6 +5,6 @@ db.createCollection('usuario');  // Cria a coleção 'usuario'
 // (Opcional) Insere um exemplo na coleção 'usuario'
 db.usuario.insert({
   login: "dac@ufpr.br",
-  senha: "123456",
-  tipo: "0"
+  senha: "$2a$10$EUOcqb/RgBNlPspThjqg2.sSTEBd72XaPvpRn.F21yB4EFaEmvt2G",
+  tipo: "FUNCIONARIO"
 });

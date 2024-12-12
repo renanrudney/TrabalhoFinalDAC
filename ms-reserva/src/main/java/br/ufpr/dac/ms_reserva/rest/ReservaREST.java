@@ -1,5 +1,7 @@
 package br.ufpr.dac.ms_reserva.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -52,6 +54,17 @@ public class ReservaREST {
   private final static String FILA_REEMBOLSAR_MILHAS_RESERVA = "REEMBOLSAR_MILHAS_RESERVA";
   private final static String FILA_EMBARQUE_RESERVA_READ = "EMBARQUE_RESERVA_READ";
 
+  @GetMapping("/reservas")
+  public ResponseEntity<List<ReservaDTO>> listarReservas() {
+    List<ReservaRead> reservasRead = reservaReadRepository.findAll();
+    List<ReservaDTO> list = new ArrayList<>();
+
+    for (ReservaRead reservaRead : reservasRead)
+      list.add(modelMapper.map(reservaRead, ReservaDTO.class));
+
+    return ResponseEntity.ok().body(list);
+  }
+
   @PostMapping("/reservas")
   public ResponseEntity<ReservaDTO> efetuarReserva(@RequestBody ReservaDTO reservaRecebida) throws JsonProcessingException {
     Optional<EstadoReservaRead> estado = estadoRepository.findBySigla("CONF");
@@ -92,7 +105,7 @@ public class ReservaREST {
     if (reservaExiste.isEmpty())
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva não existe!");
 
-    if(embarque.getCod_voo() != reservaExiste.get().getCod_voo())
+    if(embarque.getCodVoo() != reservaExiste.get().getCodVoo())
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reserva não é do voo fornecido!");
 
     Optional<EstadoReservaRead> estado = estadoRepository.findBySigla("EMB");

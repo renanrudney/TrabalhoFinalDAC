@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Cliente } from '../models/cliente/cliente.model';
 import { Observable, map } from 'rxjs';
 import { environment } from '../shared/environment/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -18,18 +18,22 @@ export class ClienteService {
   constructor(private http: HttpClient) { }
 
   criarCliente(novoCliente: Cliente): Observable<Cliente> {
-    return this.http.post<Cliente>(`${this.baseUrl}`, novoCliente);
+    return this.http.post<Cliente>(`${this.baseUrl}`, novoCliente, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') })});
   }
 
   getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(this.baseUrl);
+    return this.http.get<Cliente[]>(this.baseUrl, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') })});
   } 
 
-  getClienteById(id: number): Observable<Cliente> {
-    return this.http.get<Cliente>(`${this.baseUrl}/${id}`);
+  getClienteById(id: string): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.baseUrl}/${id}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') })});
   }
 
-  getClienteMilhas(id: number): Observable<number | undefined> {
+  getClienteByEmail(email: string): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.baseUrl}?email=${email}`, { headers: new HttpHeaders({ 'Authorization': "Bearer " + localStorage.getItem('authToken') })});
+  }
+
+  getClienteMilhas(id: string): Observable<number | undefined> {
     return this.getClientes().pipe(
       map((clientes: Cliente[]) => {
         const cliente = clientes.find((cliente: Cliente) => cliente.id === id);
@@ -38,7 +42,7 @@ export class ClienteService {
     );
   }
 
-  substrairMilhas(milhas: number, clienteId: number): void {
+  substrairMilhas(milhas: number, clienteId: string): void {
     this.Clientes.filter(cliente => {
       if(cliente.id === clienteId){
         cliente.milhas -= milhas;
@@ -46,7 +50,7 @@ export class ClienteService {
     });
   }
 
-  devolderMilhas(milhas: number, clienteId: number): void {
+  devolderMilhas(milhas: number, clienteId: string): void {
     this.Clientes.filter(cliente => {
       if(cliente.id === clienteId){
         cliente.milhas += milhas;

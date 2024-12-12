@@ -53,8 +53,9 @@ public class FuncionarioREST {
 	}
 
 	@GetMapping("/funcionarios/{id}")
-	public ResponseEntity<FuncionarioDTO> buscarFuncionario(@PathVariable UUID id) {
-		Optional<Funcionario> buscarFuncionario = funcionarioRepository.findById(id);
+	public ResponseEntity<FuncionarioDTO> buscarFuncionario(@PathVariable String id) {
+		UUID uuid = UUID.fromString(id);
+		Optional<Funcionario> buscarFuncionario = funcionarioRepository.findById(uuid);
 
 		if(buscarFuncionario.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe funcionário com esse id!");
@@ -101,8 +102,9 @@ public class FuncionarioREST {
 	}
 	
 	@DeleteMapping("/funcionarios/{id}")
-	public ResponseEntity<FuncionarioDTO> removerFuncionario(@PathVariable UUID id) {
-		Optional<Funcionario> buscarFuncionario = funcionarioRepository.findById(id);
+	public ResponseEntity<FuncionarioDTO> removerFuncionario(@PathVariable String id) {
+		UUID uuid = UUID.fromString(id);
+		Optional<Funcionario> buscarFuncionario = funcionarioRepository.findById(uuid);
 		
 		if(buscarFuncionario.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe funcionário com esse id!");

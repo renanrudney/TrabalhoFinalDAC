@@ -20,12 +20,13 @@ export class ComprarMilhasComponent {
   comprarMilhas(quantidade: number): void{
     quantidade = this.quantidadeMilhas;
     if (quantidade > 0){
-      const clienteId: number = Number(this.authService.getItem('userId'));
+      const clienteId: string | null = this.authService.getItem('clienteId');
       if (clienteId)
         this.transacaoMilhasService.novaTransacao(clienteId,quantidade,"COMPRA DE MILHAS").subscribe({
           next: (transacao) => {
             console.log('Compra realizada com sucesso:', transacao);
             alert('Compra realizada com sucesso.');
+            this.router.navigate(['/home-cliente'])
           },
           error: (err: any) => {
             console.error('Erro ao comprar  milhas:', err);

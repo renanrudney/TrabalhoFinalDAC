@@ -17,7 +17,7 @@ export class UserService {
   login(username: string, password: string): Observable<string> { // Retorna o tipo do usuário como string
     return new Observable<string>((observer) => {
       this.http
-        .post<{ auth: boolean; token: string; data: { id: number; tipo: string } }>(
+        .post<{ auth: boolean; token: string; data: { id: number; tipo: string, login: string } }>(
           `${this.baseUrl}/login`,
           { username, password }
         )
@@ -25,10 +25,10 @@ export class UserService {
           (response) => {
             if (response.auth) {
               const { token, data } = response;
-              const { id, tipo } = data;
+              const { id, tipo, login } = data;
   
               // Armazena os dados no AuthService
-              this.authService.logar(token, id, tipo);
+              this.authService.logar(token, id, tipo, login);
   
               console.log('Login bem-sucedido');
               observer.next(tipo); // Emite o tipo do usuário no caso de sucesso

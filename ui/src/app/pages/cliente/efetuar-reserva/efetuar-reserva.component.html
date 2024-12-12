@@ -13,14 +13,14 @@
         <label for="origem">Aeroporto de Origem</label>
         <select class="form-control" id="origem" [(ngModel)]="origem" name="origem" required>
           <option value="" disabled selected>Selecione o aeroporto de origem</option>
-          <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.codigo">{{ aeroporto.codigo }} - {{ aeroporto.nome }}</option>
+          <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.cod">{{ aeroporto.cod }} - {{ aeroporto.nome }}</option>
         </select>
       </div>
       <div class="col-md-6">
         <label for="destino">Aeroporto de Destino</label>
         <select class="form-control" id="destino" [(ngModel)]="destino" name="destino" required>
           <option value="" disabled selected>Selecione o aeroporto de destino</option>
-          <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.codigo">{{ aeroporto.codigo }} - {{ aeroporto.nome }}</option>
+          <option *ngFor="let aeroporto of aeroportos" [value]="aeroporto.cod">{{ aeroporto.cod }} - {{ aeroporto.nome }}</option>
         </select>
       </div>
     </div>
@@ -47,11 +47,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let voo of voos">
-          <td>{{ voo.codigoVoo }}</td>
-          <td>{{ voo.origem }}</td>
-          <td>{{ voo.destino }}</td>
-          <td>{{ voo.dataHora | date: 'dd/MM/yyyy HH:mm'}}</td>
-          <td>{{ voo.valorPassagem }}</td>
+          <td>{{ voo.cod }}</td>
+          <td>{{ voo.aeroporto_origem }}</td>
+          <td>{{ voo.aeroporto_destino }}</td>
+          <td>{{ voo.data | date: 'dd/MM/yyyy HH:mm'}}</td>
+          <td>{{ voo.valor_passagem }}</td>
           <td>
             <button class="btn btn-success" (click)="selecionarVoo(voo)">Selecionar</button>
           </td>
@@ -63,10 +63,10 @@
   <!-- Detalhes do voo selecionado -->
   <div class="mt-4" *ngIf="vooSelecionado">
     <h3>Detalhes do Voo Selecionado</h3>
-    <p><strong>Origem:</strong> {{ vooSelecionado.origem }}</p>
-    <p><strong>Destino:</strong> {{ vooSelecionado.destino }}</p>
-    <p><strong>Data/Hora:</strong> {{ vooSelecionado.dataHora | date: 'dd/MM/yyyy HH:mm' }}</p>
-    <p><strong>Preço por Assento:</strong> {{ vooSelecionado.valorPassagem }}</p>
+    <p><strong>Origem:</strong> {{ vooSelecionado.aeroporto_origem }}</p>
+    <p><strong>Destino:</strong> {{ vooSelecionado.aeroporto_destino }}</p>
+    <p><strong>Data/Hora:</strong> {{ vooSelecionado.data | date: 'dd/MM/yyyy HH:mm' }}</p>
+    <p><strong>Preço por Assento:</strong> {{ vooSelecionado.valor_passagem }}</p>
     <p><strong>Milhas disponíveis:</strong> {{ cliente?.milhas }}</p>
 
     <!-- Compra de passagens -->

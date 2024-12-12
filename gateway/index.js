@@ -21,7 +21,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 function verifyJWT(req, res, next) {
-  const token = req.headers['authorization'].replace('Bearer ', '');
+  const token = req.headers['authorization']?.replace('Bearer ', '');
+  console.log(req.headers['authorization'])
   if (!token) {
     return res.status(401).json({
       auth: false,
@@ -61,12 +62,13 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
     return proxyReqOpts;
   },
   userResDecorator: function (proxyRes, proxyResData, userReq, userRes) {
+    console.log(Buffer.from(proxyResData).toString('utf-8'))
     if (proxyRes.statusCode == 200) {
       var str = Buffer.from(proxyResData).toString('utf-8');
       var objBody = JSON.parse(str);
       const id = objBody.id;
       const token = jwt.sign({ id }, process.env.SECRET, {
-        expiresIn: 300 // expira em 5 min
+        expiresIn: '365d' // expira em 5 min
       });
       userRes.status(200);
       return { auth: true, token: token, data: objBody };
@@ -78,9 +80,7 @@ const authServiceProxy = httpProxy('http://host.docker.internal:5000', {
   }
 });
 
-const aeroportoServiceProxy = httpProxy('http://localhost:8080/aeroporto');
-
-
+// const clientesServiceProxy = httpProxy('http://host.docker.internal:5001');
 const clientesServiceProxy = httpProxy('http://host.docker.internal:5001');
 const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
@@ -111,18 +111,18 @@ const clientesPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
   }
 });
 
-const reservasServiceProxy = httpProxy('http://host.docker.internal:5002');
-const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
+// const reservasServiceProxy = httpProxy('http://host.docker.internal:5002');
+const reservasServiceProxy = httpProxy('http://host.docker.internal:5003');
+const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    console.log(bodyContent)
     try {
       reqBody = {};
-      reqBody.dataHora = bodyContent.dataHora;
-      reqBody.estadoReserva = bodyContent.estadoReserva;
-      reqBody.codigoVoo = bodyContent.codigoVoo;
-      reqBody.idCliente = bodyContent.clienteId;
-      reqBody.qntdPassagens = bodyContent.qntdPassagens;
-      reqBody.custoTotal = bodyContent.custoTotal;
-      reqBody.milhasUsadas= bodyContent.milhasUsadas;
+      reqBody.data_hora = bodyContent.data_hora;
+      reqBody.codVoo = bodyContent.codVoo;
+      reqBody.id_cliente = bodyContent.id_cliente;
+      reqBody.valorGasto = bodyContent.valorGasto;
+      reqBody.milhasGasto= bodyContent.milhasGasto;
       bodyContent = reqBody;
     }
     catch (e) {
@@ -137,13 +137,16 @@ const reservasPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   }
 });
 
-const milhasServiceProxy = httpProxy('http://host.docker.internal:5003');
-const milhasPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
+const milhasServiceProxy = httpProxy('http://host.docker.internal:5001');
+const milhasPostServiceProxy = httpProxy('http://host.docker.internal:5001', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    console.log(bodyContent)
     try {
       reqBody = {};
       reqBody.idCliente = bodyContent.idCliente;
-      reqBody.qntdMilhas = bodyContent.qntdMilhas;
+      reqBody.qtdMilhas = bodyContent.qtdMilhas;
+      reqBody.dataHora = bodyContent.dataHora;
+
       bodyContent = reqBody;
     }
     catch (e) {
@@ -158,9 +161,11 @@ const milhasPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
   }
 });
 
-const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5003');
-const funcionariosPostServiceProxy = httpProxy('http://host.docker.internal:5003', {
+// const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5003');
+const funcionariosServiceProxy = httpProxy('http://host.docker.internal:5004');
+const funcionariosPostServiceProxy = httpProxy('http://host.docker.internal:5004', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    console.log(bodyContent)
     try {
       reqBody = {};
       reqBody.nome = bodyContent.nome;
@@ -202,18 +207,22 @@ const funcionariosPutServiceProxy = httpProxy('http://host.docker.internal:5004'
   }
 });
 
-const voosServiceProxy = httpProxy('http://host.docker.internal:5004');
-const voosPostServiceProxy = httpProxy('http://host.docker.internal:5004', {
+const aeroportoServiceProxy = httpProxy('http://host.docker.internal:5002');
+// const voosServiceProxy = httpProxy('http://host.docker.internal:5002');
+const voosServiceProxy = httpProxy('http://host.docker.internal:5002');
+const voosPostServiceProxy = httpProxy('http://host.docker.internal:5002', {
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    console.log(bodyContent)
     try {
       reqBody = {};
-      reqBody.aeroportoOrigem = bodyContent.aeroportoOrigem;
-      reqBody.aeroportoDestino = bodyContent.aeroportoDestino;
+      reqBody.cod = bodyContent.cod;
       reqBody.data = bodyContent.data;
-      reqBody.valorPassagem = bodyContent.valorPassagem;
-      reqBody.qtdPoltronasTotal = bodyContent.qtdPoltronasTotal;
-      reqBody.qtdPoltronasOcupadas = bodyContent.qtdPoltronasOcupadas;
+      reqBody.aeroporto_origem = bodyContent.aeroporto_origem;
+      reqBody.aeroporto_destino = bodyContent.aeroporto_destino;
+      reqBody.valor_passagem = bodyContent.valor_passagem;
+      reqBody.qtd_poltronas_total = bodyContent.qtd_poltronas_total;
       bodyContent = reqBody;
+      console.log(bodyContent)
     }
     catch (e) {
       console.log('- ERRO: ' + e);
@@ -252,13 +261,17 @@ app.get('/clientes', function (req, res, next) {
   clientesServiceProxy(req, res, next);
 });
 
+app.get('/clientes/:id', function (req, res, next) {
+  clientesServiceProxy(req, res, next);
+});
+
 // Reservas
 app.get('/reservas', verifyJWT, function (req, res, next) {
-  reservasPostServiceProxy(req, res, next);
+  reservasServiceProxy(req, res, next);
 });
 
 app.post('/reservas', verifyJWT, function (req, res, next) {
-  reservasServiceProxy(req, res, next);
+  reservasPostServiceProxy(req, res, next);
 });
 
 app.get('/reservas/:id', verifyJWT, function (req, res, next) {
@@ -278,7 +291,7 @@ app.post('/reservas/:id/embarque', verifyJWT, function (req, res, next) {
 });
 
 // Milhas
-app.get('/milhas', verifyJWT, function (req, res, next) {
+app.get('/milhas', function (req, res, next) {
   milhasServiceProxy(req, res, next);
 });
 
@@ -296,6 +309,10 @@ app.post('/funcionarios', verifyJWT, function (req, res, next) {
   funcionariosPostServiceProxy(req, res, next);
 });
 
+app.get('/funcionarios/:id', verifyJWT, function (req, res, next) {
+  funcionariosServiceProxy(req, res, next);
+});
+
 app.put('/funcionarios/:id', verifyJWT, function (req, res, next) {
   funcionariosPutServiceProxy(req, res, next);
 });
@@ -305,19 +322,23 @@ app.delete('/funcionarios/:id', verifyJWT, function (req, res, next) {
 });
 
 // Voos
-app.get('/voos', verifyJWT, function (req, res, next) {
+app.get('/voos', function (req, res, next) {
   voosServiceProxy(req, res, next);
 });
 
-app.post('/voos', verifyJWT, function (req, res, next) {
+app.get('/voos/:id', function (req, res, next) {
+  voosServiceProxy(req, res, next);
+});
+
+app.post('/voos', function (req, res, next) {
   voosPostServiceProxy(req, res, next);
 });
 
-app.post('/voos/:id/cancelar', verifyJWT, function (req, res, next) {
+app.post('/voos/:id/cancelar', function (req, res, next) {
   voosServiceProxy(req, res, next);
 });
 
-app.post('/voos/:id/realizar', verifyJWT, function (req, res, next) {
+app.post('/voos/:id/realizar', function (req, res, next) {
   voosServiceProxy(req, res, next);
 });
 

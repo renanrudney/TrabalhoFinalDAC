@@ -18,10 +18,10 @@ export class VerReservaComponent {
   constructor(public activeModal: NgbActiveModal) {}
 
   getVooOrigem(): string {
-    return this.voo ? this.voo.origem : 'N/A';
+    return this.voo ? this.voo.aeroporto_origem : 'N/A';
   }
 
   getVooDestino(): string {
-    return this.voo ? this.voo.destino : 'N/A';
+    return this.voo ? this.voo.aeroporto_destino : 'N/A';
   }
 }

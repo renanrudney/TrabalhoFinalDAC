@@ -26,12 +26,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let voo of voos">
-          <td>{{ voo.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
-          <td>{{ voo.origem }}</td>
-          <td>{{ voo.destino }}</td>
+          <td>{{ voo.data | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ voo.aeroporto_origem }}</td>
+          <td>{{ voo.aeroporto_destino }}</td>
           <td>
-            <button class="btn btn-info" (click)="confirmarEmbarque(voo.codigoVoo)">Confirmação de embarque</button>
-            <button class="btn btn-success" (click)="realizarVoo(voo.codigoVoo)">Realizar Voo</button>
+            <button class="btn btn-info" (click)="confirmarEmbarque(voo.cod)">Confirmação de embarque</button>
+            <button class="btn btn-success" (click)="realizarVoo(voo.cod)">Realizar Voo</button>
             <button class="btn btn-danger" (click)="abrirModalCancelarVoo(voo)">Cancelar</button>
           </td>
         </tr>

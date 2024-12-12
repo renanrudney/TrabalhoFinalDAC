@@ -3,6 +3,7 @@ package br.ufpr.dac.ms_voo.rest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -97,7 +98,7 @@ public class VooREST {
 
     return ResponseEntity.ok().body(modelMapper.map(voo.get(), VooDTO.class));
   }
-  
+
   @PostMapping("/voos/{cod}/realizar")
   public ResponseEntity<VooDTO> realizarVoo(@PathVariable String cod) throws JsonProcessingException {
     Optional<Voo> vooExiste = vooRepository.findByCod(cod);

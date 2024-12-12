@@ -27,11 +27,11 @@
         <ng-container *ngIf="transacoes && transacoes.length > 0; else noTransacoes">
           <tr *ngFor="let transacao of transacoes">
             <td>{{ transacao.dataHora | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td *ngIf="transacao.tipo === 'entrada'">
-              {{ (transacao.quantidadeMilhas * 5) | currency: 'BRL' : 'symbol':'1.2-2' }}
+            <td *ngIf="transacao.entrada === true">
+              {{ (transacao.qtdMilhas * 5) | currency: 'BRL' : 'symbol':'1.2-2' }}
             </td>
-            <td *ngIf="transacao.tipo !== 'entrada'">-</td>
-            <td>{{ transacao.quantidadeMilhas }}</td>
+            <td *ngIf="transacao.entrada === false">-</td>
+            <td>{{ transacao.qtdMilhas }}</td>
             <td>{{ transacao.descricao }}</td>
           </tr>
         </ng-container>

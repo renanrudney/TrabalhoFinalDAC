@@ -3,16 +3,16 @@
 </div>
 <div class="modal-body">
   <ul class="list-group">
-    <li class="list-group-item">Código do Voo: {{ voo.codigoVoo }}</li>
-    <li class="list-group-item">Data/Hora: {{ voo.dataHora | date: 'dd/MM/yyyy HH:mm' }}</li>
-    <li class="list-group-item">Aeroporto Origem: {{ voo.origem }}</li>
-    <li class="list-group-item">Aeroporto Destino: {{ voo.destino }}</li>
-    <li class="list-group-item">Valor da Passagem (R$): {{ voo.valorPassagem | currency:'BRL':'symbol':'1.2-2' }}</li>
-    <li class="list-group-item">Total de Poltronas: {{ voo.totalPoltronas }}</li>
-    <li class="list-group-item">Poltronas Ocupadas: {{ voo.poltronasOcupadas }}</li>
+    <li class="list-group-item">Código do Voo: {{ voo.cod }}</li>
+    <li class="list-group-item">Data/Hora: {{ voo.data | date: 'dd/MM/yyyy HH:mm' }}</li>
+    <li class="list-group-item">Aeroporto Origem: {{ voo.aeroporto_origem }}</li>
+    <li class="list-group-item">Aeroporto Destino: {{ voo.aeroporto_destino }}</li>
+    <li class="list-group-item">Valor da Passagem (R$): {{ voo.valor_passagem | currency:'BRL':'symbol':'1.2-2' }}</li>
+    <li class="list-group-item">Total de Poltronas: {{ voo.qtd_poltronas_total }}</li>
+    <li class="list-group-item">Poltronas Ocupadas: {{ voo.qtd_poltronas_ocupadas }}</li>
   </ul>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="activeModal.close()">Fechar</button>
-  <button type="submit" class="btn btn-danger" (click)="cancelarVoo(voo.codigoVoo)">Cancelar</button>
+  <button type="submit" class="btn btn-danger" (click)="cancelarVoo(voo.cod)">Cancelar</button>
 </div>

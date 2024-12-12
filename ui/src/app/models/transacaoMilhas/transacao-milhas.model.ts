@@ -1,9 +1,9 @@
 export class TransacaoMilhas {
   constructor(
-    public clienteId: number,
+    public idCliente: string,
     public dataHora: Date,
-    public quantidadeMilhas: number,
-    public tipo: 'entrada' | 'saida',
+    public qtdMilhas: number,
+    public entrada: boolean,
     public descricao: string,
     public codigoReserva?: string
   ) {}

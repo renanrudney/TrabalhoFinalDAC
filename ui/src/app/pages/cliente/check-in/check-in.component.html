@@ -15,10 +15,10 @@
       <tbody>
         <ng-container *ngIf="voos && voos.length > 0; else noVoos">
           <tr *ngFor="let voo of voos">
-            <td>{{ voo.codigoVoo }}</td>
-            <td>{{ voo.origem }}</td>
-            <td>{{ voo.destino }}</td>
-            <td>{{ voo.dataHora | date: 'dd/MM/yyyy HH:mm'}}</td>
+            <td>{{ voo.cod }}</td>
+            <td>{{ voo.aeroporto_origem }}</td>
+            <td>{{ voo.aeroporto_destino }}</td>
+            <td>{{ voo.data | date: 'dd/MM/yyyy HH:mm'}}</td>
           </tr>
         </ng-container>
         <ng-template #noVoos>

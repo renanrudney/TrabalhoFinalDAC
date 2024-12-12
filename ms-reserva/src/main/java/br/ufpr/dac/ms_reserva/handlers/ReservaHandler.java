@@ -44,14 +44,14 @@ public class ReservaHandler {
 
   @RabbitListener(queues = FILA_RESERVAS_REALIZADO)
   private void realizarVooReservas(String codVoo) throws JsonProcessingException {
-    List<ReservaRead> reservasRead = readRepository.findByCod_voo(codVoo);
+    List<ReservaRead> reservasRead = readRepository.findByCodVoo(codVoo);
     List<Reserva> reservasToUpdate = new ArrayList<Reserva>();
 
     Optional<EstadoReservaRead> embarcado = estadoRepository.findBySigla("EMB");
     Optional<EstadoReservaRead> realizado = estadoRepository.findBySigla("RD");
     Optional<EstadoReservaRead> naoRealizado = estadoRepository.findBySigla("NRD");
 
-    if (embarcado.isEmpty() || realizado.isEmpty() || naoRealizado.isPresent())
+    if (embarcado.isEmpty() || realizado.isEmpty() || naoRealizado.isEmpty())
       throw new IllegalArgumentException("Estados de reserva indisponíveis");
 
     for (ReservaRead reservaRead : reservasRead) {
@@ -69,12 +69,12 @@ public class ReservaHandler {
 
   @RabbitListener(queues = FILA_RESERVAS_CANCELADO)
   private void cancelarVooReservas(String codVoo) throws JsonProcessingException {
-    List<ReservaRead> reservasRead = readRepository.findByCod_voo(codVoo);
+    List<ReservaRead> reservasRead = readRepository.findByCodVoo(codVoo);
     List<Reserva> reservasToUpdate = new ArrayList<Reserva>();
 
     Optional<EstadoReservaRead> canceladoVoo = estadoRepository.findBySigla("CAVOO");
 
-    if (canceladoVoo.isPresent())
+    if (canceladoVoo.isEmpty())
       throw new IllegalArgumentException("Estados de reserva indisponíveis");
 
     for (ReservaRead reservaRead : reservasRead) {

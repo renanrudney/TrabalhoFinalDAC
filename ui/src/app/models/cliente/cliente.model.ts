@@ -10,6 +10,6 @@ export class Cliente {
     public cidade: string,
     public estado: string,
     public milhas: number,
-    public id?: number
+    public id?: string
   ) {}
 }

@@ -23,7 +23,8 @@ export class CrudFuncionarioComponent implements OnInit{
   ngOnInit(): void {
     this.funcionarioService.getFuncionarios().subscribe(
       (data) => {
-        this.funcionarios = data; // Armazena os funcionários retornados no array
+        console.log(data)
+        this.funcionarios = data.filter((data: Funcionario) => data.ativo == true); // Armazena os funcionários retornados no array
       },
       (error) => {
         console.error('Erro ao carregar funcionários:', error);
@@ -31,7 +32,7 @@ export class CrudFuncionarioComponent implements OnInit{
     );
   }
 
-  alterarFuncionario(id: number | undefined): void {
+  alterarFuncionario(id: string | undefined): void {
     this.router.navigate(['/alterar-funcionario', id]);
   }
 

@@ -29,7 +29,7 @@ export class ConsultarReservaComponent {
       (reserva) => {
         if (reserva) {
           this.reserva = reserva;
-          this.vooService.getVoo(reserva.codigoVoo).subscribe(
+          this.vooService.getVoo(reserva.codVoo).subscribe(
             (voo) => {
               if (voo) {
                 console.log('Voo encontrado:', voo);
@@ -72,7 +72,7 @@ export class ConsultarReservaComponent {
     }
 
     // Busca o voo correspondente à reserva
-    const dataHora = this.voo?.dataHora;
+    const dataHora = this.voo?.data;
     
     // Verifica se o voo foi encontrado e se está dentro do intervalo de 48 horas
     if (dataHora) {

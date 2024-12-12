@@ -61,13 +61,13 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
+ui/.angular/cache/*
+ui/.sass-cache/
+ui/connect.lock
+ui/coverage
+ui/libpeerconnection.log
+ui/testem.log
+ui/typings
 
 # System files
 .DS_Store

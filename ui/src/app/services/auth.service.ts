@@ -7,21 +7,23 @@ export class AuthService {
 
   constructor() { }
 
-  logar(token: string, userId: number, userType: string): void {
+  logar(token: string, userId: number, userType: string, login: string): void {
     // Armazena o token e os dados do usuário no localStorage
     localStorage.setItem('authToken', token);
     localStorage.setItem('userId', userId.toString());
+    localStorage.setItem('login', login.toString());
     localStorage.setItem('userType', userType);
   
     console.log('Dados armazenados no localStorage:');
-    console.log(`Token: ${token}, UserId: ${userId}, UserType: ${userType}`);
+    console.log(`Token: ${token}, UserId: ${userId}, login: ${login}, UserType: ${userType}`);
   }
 
   logout(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userId');
+    localStorage.removeItem('login');
     localStorage.removeItem('userType');
-  }  
+  }
 
   isAuthenticated(): boolean {
     // Verifica se `localStorage` está disponível

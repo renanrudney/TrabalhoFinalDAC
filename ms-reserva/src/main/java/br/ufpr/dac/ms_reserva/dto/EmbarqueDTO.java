@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmbarqueDTO {
-  private String cod_voo;
+  private String codVoo;
 }
